@@ -1,10 +1,11 @@
 package com.sivalabs.bookstore;
 
+import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BookstoreApplicationTests {
+class BookstoreApplicationTests extends AbstractIntegrationTest {
 
     @Test
     void contextLoads() {
