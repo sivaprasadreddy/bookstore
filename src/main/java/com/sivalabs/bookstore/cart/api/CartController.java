@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CartController {
     private final ProductService productService;
-    private final CartRepository cartService;
+    private final CartRepository cartRepository;
 
     @GetMapping
     public ResponseEntity<Cart> getCart(@RequestParam(name = "cartId", required = false) String cartId) {
         if (!StringUtils.hasText(cartId)) {
             return ResponseEntity.ok(Cart.withNewId());
         }
-        Cart cart = cartService.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart not found"));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart not found"));
         return ResponseEntity.ok(cart);
     }
 
@@ -45,7 +45,7 @@ public class CartController {
         if (!StringUtils.hasText(cartId)) {
             cart = Cart.withNewId();
         } else {
-            cart = cartService.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+            cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         }
         log.info("Add productCode: {} to cart", cartItemRequest.getProductCode());
         Product product = productService.getProductByCode(cartItemRequest.getProductCode())
@@ -54,13 +54,13 @@ public class CartController {
                 product.getDescription(), product.getPrice(),
                 cartItemRequest.getQuantity() > 0 ? cartItemRequest.getQuantity() : 1);
         cart.addItem(cartItem);
-        return cartService.save(cart);
+        return cartRepository.save(cart);
     }
 
     @PutMapping
     public Cart updateCartItemQuantity(@RequestParam(name = "cartId") String cartId,
                                        @RequestBody CartItemRequestDTO cartItemRequest) {
-        Cart cart = cartService.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         log.info("Update quantity: {} for productCode:{} quantity in cart: {}", cartItemRequest.getQuantity(),
                 cartItemRequest.getProductCode(), cartId);
         Product product = productService.getProductByCode(cartItemRequest.getProductCode())
@@ -70,20 +70,20 @@ public class CartController {
         } else {
             cart.updateItemQuantity(product.getCode(), cartItemRequest.getQuantity());
         }
-        return cartService.save(cart);
+        return cartRepository.save(cart);
     }
 
     @DeleteMapping(value = "/items/{productCode}")
     public Cart removeCartItem(@RequestParam(name = "cartId") String cartId,
                                @PathVariable("productCode") String productCode) {
-        Cart cart = cartService.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         log.info("Remove cart line item productCode: {}", productCode);
         cart.removeItem(productCode);
-        return cartService.save(cart);
+        return cartRepository.save(cart);
     }
 
     @DeleteMapping
     public void removeCart(@RequestParam(name = "cartId") String cartId) {
-        cartService.deleteById(cartId);
+        cartRepository.deleteById(cartId);
     }
 }
