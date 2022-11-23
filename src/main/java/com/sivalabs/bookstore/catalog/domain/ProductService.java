@@ -7,7 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,9 +15,10 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<Product> getProducts() {
-        Pageable pageable = PageRequest.of(0, 120, Sort.Direction.ASC, "name");
-        return productRepository.findAll(pageable).getContent();
+    public PagedResult<Product> getProducts(int pageNo, int pageSize) {
+        int page = pageNo <= 1 ? 0 : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.ASC, "name");
+        return new PagedResult<>(productRepository.findAll(pageable));
     }
 
     public Optional<Product> getProductByCode(String code) {

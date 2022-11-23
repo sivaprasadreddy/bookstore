@@ -1,22 +1,40 @@
 package com.sivalabs.bookstore.catalog.api;
 
+import com.sivalabs.bookstore.catalog.domain.Product;
+import com.sivalabs.bookstore.catalog.domain.ProductRepository;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 class ProductControllerTest extends AbstractIntegrationTest {
     @LocalServerPort
     private Integer port;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    private List<Product> products = List.of(
+            new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN),
+            new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24))
+    );
+
     @BeforeEach
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
+        productRepository.deleteAllInBatch();
+        productRepository.saveAll(products);
     }
 
     @Test
@@ -27,6 +45,38 @@ class ProductControllerTest extends AbstractIntegrationTest {
                 .get("/api/products")
                 .then()
                 .statusCode(200)
-                .body(".", hasSize(3));
+                .body("data", hasSize(products.size()))
+                .body("totalElements", is(products.size()))
+                .body("pageNumber", is(1))
+                .body("totalPages", is(1))
+                .body("isFirst", is(true))
+                .body("isLast", is(true))
+                .body("hasNext", is(false))
+                .body("hasPrevious", is(false));
+    }
+
+    @Test
+    void shouldGetProductByCode() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/products/{code}", "P100")
+                .then()
+                .statusCode(200)
+                .body("code", is("P100"))
+                .body("name", is("Product 1"))
+                .body("description", is("Product 1 desc"))
+                .body("price", is(10))
+        ;
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenProductCodeNotExists() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/products/{code}", "invalid_product_code")
+                .then()
+                .statusCode(404);
     }
 }

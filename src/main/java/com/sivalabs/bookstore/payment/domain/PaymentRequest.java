@@ -1,5 +1,7 @@
 package com.sivalabs.bookstore.payment.domain;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequest {
+    @NotBlank(message = "cardNumber is required")
     private String cardNumber;
+    @NotBlank(message = "cvv is required")
     private String cvv;
-    private int expiryMonth;
-    private int expiryYear;
+    @NotNull(message = "expiryMonth is required")
+    private Integer expiryMonth;
+    @NotNull(message = "expiryYear is required")
+    private Integer expiryYear;
 }

@@ -1,5 +1,7 @@
 package com.sivalabs.bookstore.orders.api;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +16,7 @@ import java.util.Set;
 @Getter
 public class CreateOrderRequest {
 
+    @NotEmpty(message = "Items cannot be empty.")
     private Set<LineItem> items;
 
     @NotBlank(message = "Customer Name is required")
@@ -25,7 +28,6 @@ public class CreateOrderRequest {
 
     @NotBlank(message = "DeliveryAddress Line1 is required")
     private String deliveryAddressLine1;
-
 
     private String deliveryAddressLine2;
 
@@ -56,9 +58,12 @@ public class CreateOrderRequest {
     @Setter
     @Getter
     public static class LineItem {
+        @NotBlank(message = "productCode is required")
         private String productCode;
         private String productName;
         private BigDecimal productPrice;
+        @NotNull
+        @Min(1)
         private Integer quantity;
     }
 }
