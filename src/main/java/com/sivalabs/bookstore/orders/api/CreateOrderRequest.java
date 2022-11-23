@@ -43,8 +43,8 @@ public class CreateOrderRequest {
     @NotBlank(message = "DeliveryAddress Country is required")
     private String deliveryAddressCountry;
 
-    @NotBlank(message = "Credit Card Number is required")
-    private String creditCardNumber;
+    @NotBlank(message = "Card Number is required")
+    private String cardNumber;
 
     @NotBlank(message = "CVV is required")
     private String cvv;

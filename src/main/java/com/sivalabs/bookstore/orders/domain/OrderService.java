@@ -35,11 +35,12 @@ public class OrderService {
         log.info("Created Order ID=" + savedOrder.getId() + ", ref_num=" + savedOrder.getOrderId());
 
         PaymentRequest paymentRequest = new PaymentRequest(
-                orderRequest.getCreditCardNumber(), orderRequest.getCvv(),
+                orderRequest.getCardNumber(), orderRequest.getCvv(),
                 orderRequest.getExpiryMonth(), orderRequest.getExpiryYear());
         PaymentResponse paymentResponse = paymentService.authorize(paymentRequest);
         if(paymentResponse.getStatus() != PaymentResponse.PaymentStatus.ACCEPTED) {
-            this.updateOrderStatus(savedOrder.getOrderId(), OrderStatus.ERROR, "Payment rejected");
+            savedOrder.setStatus(OrderStatus.ERROR);
+            this.updateOrderStatus(savedOrder.getOrderId(), savedOrder.getStatus(), "Payment rejected");
         } else {
             kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent(savedOrder.getOrderId()));
             log.info("Published OrderCreatedEvent for orderId:{}", savedOrder.getOrderId());

@@ -19,20 +19,20 @@ public abstract class AbstractIntegrationTest {
 
     @BeforeAll
     static void beforeAll() {
-        System.out.println("=================beforeAll=====================");
+        //System.out.println("=================beforeAll=====================");
         Startables.deepStart(postgres, redis, kafka).join();
     }
 
     @AfterAll
     static void afterAll() {
-        System.out.println("=================afterAll=====================");
+        //System.out.println("=================afterAll=====================");
         kafka.stop();
         redis.stop();
         postgres.stop();
     }
 
     protected static void overridePropertiesInternal(DynamicPropertyRegistry registry) {
-        System.out.println("=================overridePropertiesInternal=====================");
+        //System.out.println("=================overridePropertiesInternal=====================");
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
