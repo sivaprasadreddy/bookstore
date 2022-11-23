@@ -26,9 +26,9 @@ public abstract class AbstractIntegrationTest {
     @AfterAll
     static void afterAll() {
         //System.out.println("=================afterAll=====================");
-        kafka.stop();
-        redis.stop();
-        postgres.stop();
+        // kafka.stop();
+        // redis.stop();
+        // postgres.stop();
     }
 
     protected static void overridePropertiesInternal(DynamicPropertyRegistry registry) {
