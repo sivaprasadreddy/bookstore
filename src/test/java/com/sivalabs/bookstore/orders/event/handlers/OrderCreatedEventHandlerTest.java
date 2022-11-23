@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.UUID;
 
@@ -22,6 +24,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
+
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        overridePropertiesInternal(registry);
+    }
 
     @Autowired
     private OrderRepository orderRepository;
@@ -60,7 +67,7 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
         orderRepository.save(order);
 
-        kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent("non-existing-order_id"));
+        kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent(order.getOrderId()));
 
         await().atMost(5, SECONDS).untilAsserted(() -> {
             verify(notificationService, never()).sendConfirmationNotification(any(Order.class));

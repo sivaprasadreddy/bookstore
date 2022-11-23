@@ -14,6 +14,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
@@ -78,7 +79,7 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                 .body("orderStatus", is("NEW"))
                 .extract().body().as(OrderConfirmationDTO.class);
 
-        await().atMost(30, SECONDS).until(() -> {
+        await().pollInterval(Duration.ofSeconds(5)).atMost(20, SECONDS).until(() -> {
             Optional<Order> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
             return orderOptional.isPresent() && orderOptional.get().getStatus() == OrderStatus.DELIVERED;
         });
