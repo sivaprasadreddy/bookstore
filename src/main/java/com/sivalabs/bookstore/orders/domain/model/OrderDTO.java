@@ -2,8 +2,8 @@ package com.sivalabs.bookstore.orders.domain.model;
 
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class OrderDTO {
     private Long id;
     private String orderId;

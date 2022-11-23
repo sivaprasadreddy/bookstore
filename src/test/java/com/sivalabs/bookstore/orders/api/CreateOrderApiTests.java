@@ -22,7 +22,7 @@ import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-class OrderControllerTest extends AbstractIntegrationTest {
+class CreateOrderApiTests extends AbstractIntegrationTest {
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {

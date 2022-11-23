@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.event.handlers;
 
 import com.sivalabs.bookstore.events.OrderCancelledEvent;
-import com.sivalabs.bookstore.events.OrderDeliveredEvent;
+import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OrderCancelledEventHandler {
     private final OrderService orderService;
+    private final NotificationService notificationService;
 
     @KafkaListener(topics = "${app.cancelled-orders-topic}", groupId = "bookstore")
     public void handle(OrderCancelledEvent event) {
@@ -23,17 +24,6 @@ public class OrderCancelledEventHandler {
             log.info("Received invalid OrderCancelledEvent with orderId:{}: ", event.getOrderId());
             return;
         }
-        String email = """
-                Hi %s,
-                This email is to notify you that your order : %s is cancelled.
-                
-                Thanks,
-                BookStore Team
-                """.formatted(order.getCustomerName(), order.getOrderId());
-        log.info("==========================================================");
-        log.info("                    Order Cancellation Notification       ");
-        log.info("==========================================================");
-        log.info(email);
-        log.info("==========================================================");
+        notificationService.sendCancelledNotification(order);
     }
 }

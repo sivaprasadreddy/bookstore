@@ -1,6 +1,7 @@
 package com.sivalabs.bookstore.orders.event.handlers;
 
 import com.sivalabs.bookstore.events.OrderDeliveredEvent;
+import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OrderDeliveredEventHandler {
     private final OrderService orderService;
+    private final NotificationService notificationService;
 
     @KafkaListener(topics = "${app.delivered-orders-topic}", groupId = "bookstore")
     public void handle(OrderDeliveredEvent event) {
@@ -22,17 +24,6 @@ public class OrderDeliveredEventHandler {
             log.info("Received invalid OrderDeliveredEvent with orderId:{}: ", event.getOrderId());
             return;
         }
-        String email = """
-                Hi %s,
-                This email is to notify you that your order : %s is delivered.
-                
-                Thanks,
-                BookStore Team
-                """.formatted(order.getCustomerName(), order.getOrderId());
-        log.info("==========================================================");
-        log.info("                    Order Delivery Confirmation           ");
-        log.info("==========================================================");
-        log.info(email);
-        log.info("==========================================================");
+        notificationService.sendDeliveredNotification(order);
     }
 }

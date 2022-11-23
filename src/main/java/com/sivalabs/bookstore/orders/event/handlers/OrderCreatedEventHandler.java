@@ -4,6 +4,7 @@ import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.events.OrderCancelledEvent;
 import com.sivalabs.bookstore.events.OrderCreatedEvent;
 import com.sivalabs.bookstore.events.OrderDeliveredEvent;
+import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
@@ -22,6 +23,7 @@ public class OrderCreatedEventHandler {
     private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
 
     private final OrderService orderService;
+    private final NotificationService notificationService;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ApplicationProperties properties;
 
@@ -29,16 +31,19 @@ public class OrderCreatedEventHandler {
     public void handle(OrderCreatedEvent event) {
         log.info("Received a OrderCreatedEvent with orderId:{}: ", event.getOrderId());
         Order order = orderService.findOrderByOrderId(event.getOrderId()).orElse(null);
-        if(order == null) {
-            log.info("Received a OrderCreatedEvent with invalid orderId:{}: ", event.getOrderId());
+        if (order == null) {
+            log.warn("Received a OrderCreatedEvent with invalid orderId:{}: ", event.getOrderId());
             return;
         }
-        if(order.getStatus() != OrderStatus.NEW) {
-            log.info("Received a OrderCreatedEvent with invalid status:{} for orderId:{}: ", order.getStatus(), event.getOrderId());
+        if (order.getStatus() != OrderStatus.NEW) {
+            log.warn("Received a OrderCreatedEvent with invalid status:{} for orderId:{}: ", order.getStatus(), event.getOrderId());
+            orderService.updateOrderStatus(order.getOrderId(), OrderStatus.ERROR,
+                    "Received a new order with invalid status=" + order.getStatus());
             return;
         }
+        notificationService.sendConfirmationNotification(order);
         // logic to process order delivery
-        if(canBeDelivered(order)) {
+        if (canBeDelivered(order)) {
             orderService.updateOrderStatus(order.getOrderId(), OrderStatus.DELIVERED, null);
             kafkaTemplate.send(properties.deliveredOrdersTopic(), new OrderDeliveredEvent(order.getOrderId()));
         } else {
