@@ -78,7 +78,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                 .body("orderStatus", is("NEW"))
                 .extract().body().as(OrderConfirmationDTO.class);
 
-        await().atMost(5, SECONDS).until(() -> {
+        await().atMost(15, SECONDS).until(() -> {
             Optional<Order> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
             return orderOptional.isPresent() && orderOptional.get().getStatus() == OrderStatus.DELIVERED;
         });
@@ -190,7 +190,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                 .body("orderStatus", is("NEW"))
                 .extract().body().as(OrderConfirmationDTO.class);
 
-        await().atMost(5, SECONDS).until(() -> {
+        await().atMost(15, SECONDS).until(() -> {
             Optional<Order> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
             return orderOptional.isPresent() && orderOptional.get().getStatus() == OrderStatus.CANCELLED;
         });
