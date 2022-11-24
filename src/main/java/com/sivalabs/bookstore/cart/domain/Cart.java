@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -65,11 +66,9 @@ public class Cart {
         items = new HashSet<>();
     }
 
-    public int itemCount() {
-        int count = 0;
-        for (CartItem cartItem : items) {
-            count += cartItem.getQuantity();
-        }
-        return count;
+    public BigDecimal getCartTotal() {
+        return items.stream()
+                .map(CartItem::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -32,7 +32,8 @@ public class CartController {
     @GetMapping
     public ResponseEntity<Cart> getCart(@RequestParam(name = "cartId", required = false) String cartId) {
         if (!StringUtils.hasText(cartId)) {
-            return ResponseEntity.ok(Cart.withNewId());
+            Cart cart = cartRepository.save(Cart.withNewId());
+            return ResponseEntity.ok(cart);
         }
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart not found"));
         return ResponseEntity.ok(cart);
