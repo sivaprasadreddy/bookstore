@@ -40,7 +40,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     @BeforeEach
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
-        productRepository.deleteAllInBatch();
+        productRepository.deleteAll();
         productRepository.saveAll(products);
     }
 

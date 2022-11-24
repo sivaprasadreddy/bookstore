@@ -3,10 +3,12 @@ package com.sivalabs.bookstore.catalog.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,24 +16,26 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:tc:postgresql:15-alpine:///dbname"
-})
+@DataMongoTest
+@Testcontainers
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
+    @Container
+    static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.2").withExposedPorts(27017);
+
+    @DynamicPropertySource
+    static void overridePropertiesInternal(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
+    }
 
     @BeforeEach
     void setUp() {
-        productRepository.deleteAllInBatch();
+        productRepository.deleteAll();
 
-        entityManager.persist( new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN));
-        entityManager.persist(new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
+        productRepository.save( new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN));
+        productRepository.save(new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
     }
 
     @Test

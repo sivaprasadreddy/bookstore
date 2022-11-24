@@ -1,19 +1,6 @@
-create sequence product_id_seq start with 1 increment by 1;
 create sequence order_id_seq start with 1 increment by 1;
 create sequence order_item_id_seq start with 1 increment by 1;
 create sequence cc_item_id_seq start with 1 increment by 1;
-
-create table products
-(
-    id          bigint           DEFAULT nextval('product_id_seq') not null,
-    code        varchar(255),
-    name        varchar(255),
-    description text,
-    image_url   varchar(512),
-    price       numeric not null default 0,
-    primary key (id),
-    CONSTRAINT product_code_unique UNIQUE (code)
-);
 
 create table orders
 (
