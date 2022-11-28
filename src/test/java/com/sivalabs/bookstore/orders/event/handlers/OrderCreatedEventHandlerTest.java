@@ -3,16 +3,12 @@ package com.sivalabs.bookstore.orders.event.handlers;
 import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.events.OrderCreatedEvent;
-import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderRepository;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.UUID;
 
@@ -25,11 +21,6 @@ import static org.mockito.Mockito.verify;
 
 class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        overridePropertiesInternal(registry);
-    }
-
     @Autowired
     private OrderRepository orderRepository;
 
@@ -38,9 +29,6 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
     @Autowired
     private ApplicationProperties properties;
-
-    @MockBean
-    private NotificationService notificationService;
 
     @Test
     void shouldIgnoreOrderCreatedEventWhenOrderNotFound() {
@@ -65,7 +53,7 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
         order.setDeliveryAddressZipCode("500072");
         order.setDeliveryAddressCountry("India");
 
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
 
         kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent(order.getOrderId()));
 
@@ -89,7 +77,7 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
         order.setDeliveryAddressZipCode("500072");
         order.setDeliveryAddressCountry("India");
 
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
 
         kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent(order.getOrderId()));
 
@@ -113,7 +101,7 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
         order.setDeliveryAddressZipCode("500072");
         order.setDeliveryAddressCountry("Japan");
 
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
 
         kafkaTemplate.send(properties.newOrdersTopic(), new OrderCreatedEvent(order.getOrderId()));
 

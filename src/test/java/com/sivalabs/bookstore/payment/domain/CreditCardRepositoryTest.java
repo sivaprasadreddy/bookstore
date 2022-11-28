@@ -29,8 +29,8 @@ class CreditCardRepositoryTest {
     void setUp() {
         creditCardRepository.deleteAllInBatch();
 
-        entityManager.persist( new CreditCard(null, "Siva", "1111222233334444", "123", 2, 2025));
-        entityManager.persist( new CreditCard(null, "John", "1234123412341234", "456", 3, 2026));
+        entityManager.persist( new CreditCard(null, "Siva", "1111222233334444", "123", 2, 2030));
+        entityManager.persist( new CreditCard(null, "John", "1234123412341234", "456", 3, 2030));
     }
 
     @Test
@@ -46,7 +46,7 @@ class CreditCardRepositoryTest {
         assertThat(optionalCreditCard.get().getCardNumber()).isEqualTo("1111222233334444");
         assertThat(optionalCreditCard.get().getCvv()).isEqualTo("123");
         assertThat(optionalCreditCard.get().getExpiryMonth()).isEqualTo(2);
-        assertThat(optionalCreditCard.get().getExpiryYear()).isEqualTo(2025);
+        assertThat(optionalCreditCard.get().getExpiryYear()).isEqualTo(2030);
     }
 
     @Test

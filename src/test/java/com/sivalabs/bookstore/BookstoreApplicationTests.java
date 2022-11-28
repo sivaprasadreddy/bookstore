@@ -2,15 +2,8 @@ package com.sivalabs.bookstore;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 class BookstoreApplicationTests extends AbstractIntegrationTest {
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        overridePropertiesInternal(registry);
-    }
 
     @Test
     void contextLoads() {

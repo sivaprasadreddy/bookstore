@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -24,11 +22,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 class CreateOrderApiTests extends AbstractIntegrationTest {
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        overridePropertiesInternal(registry);
-    }
 
     @LocalServerPort
     private Integer port;
@@ -59,7 +52,7 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                                     "cardNumber": "1111222233334444",
                                     "cvv": "123",
                                     "expiryMonth": 2,
-                                    "expiryYear": 2024,
+                                    "expiryYear": 2030,
                                     "items": [
                                         {
                                             "productCode": "P100",
@@ -171,7 +164,7 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                                     "cardNumber": "1111222233334444",
                                     "cvv": "123",
                                     "expiryMonth": 2,
-                                    "expiryYear": 2024,
+                                    "expiryYear": 2030,
                                     "items": [
                                         {
                                             "productCode": "P100",

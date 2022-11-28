@@ -3,15 +3,12 @@ package com.sivalabs.bookstore.orders.event.handlers;
 import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.events.OrderCancelledEvent;
-import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderRepository;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.UUID;
 
@@ -21,12 +18,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+@Slf4j
 class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        overridePropertiesInternal(registry);
-    }
 
     @Autowired
     private OrderRepository orderRepository;
@@ -36,9 +29,6 @@ class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
 
     @Autowired
     private ApplicationProperties properties;
-
-    @MockBean
-    private NotificationService notificationService;
 
     @Test
     void shouldHandleOrderCancelledEvent() {
@@ -53,8 +43,8 @@ class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
         order.setDeliveryAddressZipCode("500072");
         order.setDeliveryAddressCountry("India");
 
-        orderRepository.save(order);
-
+        orderRepository.saveAndFlush(order);
+        log.info("Cancelling OrderId:{}", order.getOrderId());
         kafkaTemplate.send(properties.cancelledOrdersTopic(), new OrderCancelledEvent(order.getOrderId()));
 
         await().atMost(10, SECONDS).untilAsserted(() -> {

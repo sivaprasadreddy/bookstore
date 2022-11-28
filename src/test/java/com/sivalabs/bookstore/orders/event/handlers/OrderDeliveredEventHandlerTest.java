@@ -3,15 +3,11 @@ package com.sivalabs.bookstore.orders.event.handlers;
 import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.events.OrderDeliveredEvent;
-import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderRepository;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.UUID;
 
@@ -23,11 +19,6 @@ import static org.mockito.Mockito.verify;
 
 class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
 
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        overridePropertiesInternal(registry);
-    }
-
     @Autowired
     private OrderRepository orderRepository;
 
@@ -36,9 +27,6 @@ class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
 
     @Autowired
     private ApplicationProperties properties;
-
-    @MockBean
-    private NotificationService notificationService;
 
     @Test
     void shouldHandleOrderDeliveredEvent() {
@@ -53,7 +41,7 @@ class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
         order.setDeliveryAddressZipCode("500072");
         order.setDeliveryAddressCountry("India");
 
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
 
         kafkaTemplate.send(properties.deliveredOrdersTopic(), new OrderDeliveredEvent(order.getOrderId()));
 
