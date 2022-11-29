@@ -6,11 +6,10 @@ executors:
     machine:
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
-    environment:
-      architecture: "amd64"
-      platform: "linux/amd64"
 workflows:
   maven_test:
     jobs:
       - maven/test:
-          executor: machine_executor_amd64
+          executor:
+            name: machine_executor_amd64
+            tag: 17.0
