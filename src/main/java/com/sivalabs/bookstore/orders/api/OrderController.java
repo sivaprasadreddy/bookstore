@@ -2,12 +2,10 @@ package com.sivalabs.bookstore.orders.api;
 
 import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.entity.Order;
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,20 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/orders")
-@RequiredArgsConstructor
-@Slf4j
 public class OrderController {
     private final OrderService orderService;
 
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public OrderConfirmationDTO placeOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
+    public OrderConfirmationDTO createOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
         return orderService.createOrder(orderRequest);
     }
 
     @GetMapping(value = "/{orderId}")
     public OrderDTO getOrder(@PathVariable(value = "orderId") String orderId) {
-        Order order = orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
-        return new OrderDTO(order);
+        return orderService
+                .findOrderByOrderId(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 }

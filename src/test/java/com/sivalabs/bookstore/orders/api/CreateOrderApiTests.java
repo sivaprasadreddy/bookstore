@@ -1,192 +1,156 @@
 package com.sivalabs.bookstore.orders.api;
 
-import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.entity.Order;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.server.LocalServerPort;
-
-import java.time.Duration;
-import java.util.Optional;
-
 import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import com.sivalabs.bookstore.common.AbstractIntegrationTest;
+import com.sivalabs.bookstore.orders.domain.OrderService;
+import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
+import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import io.restassured.http.ContentType;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 class CreateOrderApiTests extends AbstractIntegrationTest {
 
-    @LocalServerPort
-    private Integer port;
-
-    @Autowired
-    private OrderService orderService;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.baseURI = "http://localhost:" + port;
-    }
+    @Autowired private OrderService orderService;
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        OrderConfirmationDTO orderConfirmationDTO = given()
-                .contentType(ContentType.JSON)
-                .body(
-                        """
+        OrderConfirmationDTO orderConfirmationDTO =
+                given().contentType(ContentType.JSON)
+                        .body(
+                                """
                                 {
-                                    "customerName": "Siva",
-                                    "customerEmail": "siva@gmail.com",
-                                    "deliveryAddressLine1": "Birkelweg",
-                                    "deliveryAddressLine2": "Hans-Edenhofer-Straße 23",
-                                    "deliveryAddressCity": "Berlin",
-                                    "deliveryAddressState": "Berlin",
-                                    "deliveryAddressZipCode": "94258",
-                                    "deliveryAddressCountry": "Germany",
-                                    "cardNumber": "1111222233334444",
-                                    "cvv": "123",
-                                    "expiryMonth": 2,
-                                    "expiryYear": 2030,
+                                    "customer" : {
+                                        "name": "Siva",
+                                        "email": "siva@gmail.com",
+                                        "phone": "999999999"
+                                    },
+                                    "deliveryAddress" : {
+                                        "addressLine1": "Birkelweg",
+                                        "addressLine2": "Hans-Edenhofer-Straße 23",
+                                        "city": "Berlin",
+                                        "state": "Berlin",
+                                        "zipCode": "94258",
+                                        "country": "Germany"
+                                    },
+                                    "payment" : {
+                                        "cardNumber": "1111222233334444",
+                                        "cvv": "123",
+                                        "expiryMonth": 2,
+                                        "expiryYear": 2030
+                                    },
                                     "items": [
                                         {
-                                            "productCode": "P100",
-                                            "productName": "Product 1",
-                                            "productPrice": 25.50,
+                                            "code": "P100",
+                                            "name": "Product 1",
+                                            "price": 25.50,
                                             "quantity": 1
                                         }
                                     ]
                                 }
-                                """
-                )
-                .when()
-                .post("/api/orders")
-                .then()
-                .statusCode(202)
-                .body("orderId", notNullValue())
-                .body("orderStatus", is("NEW"))
-                .extract().body().as(OrderConfirmationDTO.class);
+                                """)
+                        .when()
+                        .post("/api/orders")
+                        .then()
+                        .statusCode(202)
+                        .body("orderId", notNullValue())
+                        .body("status", is("NEW"))
+                        .extract()
+                        .body()
+                        .as(OrderConfirmationDTO.class);
 
-        await().pollInterval(Duration.ofSeconds(5)).atMost(20, SECONDS).until(() -> {
-            Optional<Order> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
-            return orderOptional.isPresent() && orderOptional.get().getStatus() == OrderStatus.DELIVERED;
-        });
+        Optional<OrderDTO> orderOptional =
+                orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
+        assertThat(orderOptional).isPresent();
+        assertThat(orderOptional.get().getStatus()).isEqualTo(OrderStatus.NEW);
     }
 
     @Test
     void shouldCreateOrderWithErrorStatusWhenPaymentRejected() {
-        given()
-                .contentType(ContentType.JSON)
+        given().contentType(ContentType.JSON)
                 .body(
                         """
                         {
-                            "customerName": "Siva",
-                            "customerEmail": "siva@gmail.com",
-                            "deliveryAddressLine1": "Birkelweg",
-                            "deliveryAddressLine2": "Hans-Edenhofer-Straße 23",
-                            "deliveryAddressCity": "Berlin",
-                            "deliveryAddressState": "Berlin",
-                            "deliveryAddressZipCode": "94258",
-                            "deliveryAddressCountry": "Germany",
-                            "cardNumber": "1111222233334444",
-                            "cvv": "345",
-                            "expiryMonth": 2,
-                            "expiryYear": 2024,
+                            "customer" : {
+                                "name": "Siva",
+                                "email": "siva@gmail.com",
+                                "phone": "999999999"
+                            },
+                            "deliveryAddress" : {
+                                "addressLine1": "Birkelweg",
+                                "addressLine2": "Hans-Edenhofer-Straße 23",
+                                "city": "Berlin",
+                                "state": "Berlin",
+                                "zipCode": "94258",
+                                "country": "Germany"
+                            },
+                            "payment" : {
+                                "cardNumber": "1111222233334444",
+                                "cvv": "789",
+                                "expiryMonth": 2,
+                                "expiryYear": 2030
+                            },
                             "items": [
                                 {
-                                    "productCode": "P100",
-                                    "productName": "Product 1",
-                                    "productPrice": 25.50,
+                                    "code": "P100",
+                                    "name": "Product 1",
+                                    "price": 25.50,
                                     "quantity": 1
                                 }
                             ]
                         }
-                        """
-                )
+                        """)
                 .when()
                 .post("/api/orders")
                 .then()
                 .statusCode(202)
                 .body("orderId", notNullValue())
-                .body("orderStatus", is("ERROR"))
-        ;
+                .body("status", is("PAYMENT_REJECTED"));
     }
 
     @Test
     void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
-        given()
-                .contentType(ContentType.JSON)
+        given().contentType(ContentType.JSON)
                 .body(
                         """
                         {
-                            "cardNumber": "1111222233334444",
-                            "cvv": "345",
-                            "expiryMonth": 2,
-                            "expiryYear": 2024,
+                            "customer" : {
+                                "name": "Siva",
+                                "email": "siva@gmail.com",
+                                "phone": "999999999"
+                            },
+                            "deliveryAddress" : {
+                                "addressLine1": "Birkelweg",
+                                "addressLine2": "Hans-Edenhofer-Straße 23",
+                                "city": "Berlin",
+                                "state": "Berlin",
+                                "zipCode": "94258",
+                                "country": "Germany"
+                            },
+                            "payment" : {
+                                "cvv": "123",
+                                "expiryMonth": 2,
+                                "expiryYear": 2030
+                            },
                             "items": [
                                 {
-                                    "productCode": "P100",
-                                    "productName": "Product 1",
-                                    "productPrice": 25.50,
+                                    "code": "P100",
+                                    "name": "Product 1",
+                                    "price": 25.50,
                                     "quantity": 1
                                 }
                             ]
                         }
-                        """
-                )
+                        """)
                 .when()
                 .post("/api/orders")
                 .then()
-                .statusCode(400)
-        ;
-    }
-
-    @Test
-    void shouldCancelOrderWhenCanNotBeDelivered() {
-        OrderConfirmationDTO orderConfirmationDTO = given()
-                .contentType(ContentType.JSON)
-                .body(
-                        """
-                                {
-                                    "customerName": "Siva",
-                                    "customerEmail": "siva@gmail.com",
-                                    "deliveryAddressLine1": "Birkelweg",
-                                    "deliveryAddressLine2": "Hans-Edenhofer-Straße 23",
-                                    "deliveryAddressCity": "Turkey",
-                                    "deliveryAddressState": "Turkey",
-                                    "deliveryAddressZipCode": "94258",
-                                    "deliveryAddressCountry": "Turkey",
-                                    "cardNumber": "1111222233334444",
-                                    "cvv": "123",
-                                    "expiryMonth": 2,
-                                    "expiryYear": 2030,
-                                    "items": [
-                                        {
-                                            "productCode": "P100",
-                                            "productName": "Product 1",
-                                            "productPrice": 25.50,
-                                            "quantity": 1
-                                        }
-                                    ]
-                                }
-                                """
-                )
-                .when()
-                .post("/api/orders")
-                .then()
-                .statusCode(202)
-                .body("orderId", notNullValue())
-                .body("orderStatus", is("NEW"))
-                .extract().body().as(OrderConfirmationDTO.class);
-
-        await().atMost(15, SECONDS).until(() -> {
-            Optional<Order> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
-            return orderOptional.isPresent() && orderOptional.get().getStatus() == OrderStatus.CANCELLED;
-        });
+                .statusCode(400);
     }
 }

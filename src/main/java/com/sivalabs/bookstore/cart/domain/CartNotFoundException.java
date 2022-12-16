@@ -1,12 +1,26 @@
 package com.sivalabs.bookstore.cart.domain;
 
+import java.net.URI;
+import java.time.Instant;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.ErrorResponseException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class CartNotFoundException extends RuntimeException {
+public class CartNotFoundException extends ErrorResponseException {
 
     public CartNotFoundException(String cartId) {
-        super("Cart with id: " + cartId + " not found");
+        super(
+                HttpStatus.NOT_FOUND,
+                asProblemDetail("Cart with cartId: " + cartId + " not found"),
+                null);
+    }
+
+    private static ProblemDetail asProblemDetail(String message) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
+        problemDetail.setTitle("Cart Not Found");
+        problemDetail.setType(URI.create("https://api.sivalabs-bookstore.com/errors/not-found"));
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
     }
 }

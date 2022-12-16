@@ -1,39 +1,36 @@
 package com.sivalabs.bookstore.cart.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @RedisHash("carts")
 public class Cart {
-    @Id
-    private String id;
+    @Id private String id;
     private Set<CartItem> items = new HashSet<>();
+
+    public Cart() {}
 
     public Cart(String id) {
         this.id = id;
         this.items = new HashSet<>();
     }
 
+    public Cart(String id, Set<CartItem> items) {
+        this.id = id;
+        this.items = items;
+    }
+
     public static Cart withNewId() {
-       return new Cart(UUID.randomUUID().toString());
+        return new Cart(UUID.randomUUID().toString());
     }
 
     public void addItem(CartItem item) {
         for (CartItem cartItem : items) {
-            if (cartItem.getProductCode().equals(item.getProductCode())) {
+            if (cartItem.getCode().equals(item.getCode())) {
                 cartItem.setQuantity(cartItem.getQuantity() + 1);
                 return;
             }
@@ -41,18 +38,18 @@ public class Cart {
         this.items.add(item);
     }
 
-    public void updateItemQuantity(String productCode, int quantity) {
+    public void updateItemQuantity(String code, int quantity) {
         for (CartItem cartItem : items) {
-            if (cartItem.getProductCode().equals(productCode)) {
+            if (cartItem.getCode().equals(code)) {
                 cartItem.setQuantity(quantity);
             }
         }
     }
 
-    public void removeItem(String productCode) {
+    public void removeItem(String code) {
         CartItem item = null;
         for (CartItem cartItem : items) {
-            if (cartItem.getProductCode().equals(productCode)) {
+            if (cartItem.getCode().equals(code)) {
                 item = cartItem;
                 break;
             }
@@ -67,8 +64,22 @@ public class Cart {
     }
 
     public BigDecimal getCartTotal() {
-        return items.stream()
-                .map(CartItem::getSubTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream().map(CartItem::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Set<CartItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<CartItem> items) {
+        this.items = items;
     }
 }
