@@ -1,11 +1,6 @@
 package com.sivalabs.bookstore.cart.api;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
-@Setter
-@Getter
-public class CartItemRequestDTO {
-    private String productCode;
-    private int quantity;
-}
+public record CartItemRequestDTO(@NotEmpty String code, @Min(0) int quantity) {}

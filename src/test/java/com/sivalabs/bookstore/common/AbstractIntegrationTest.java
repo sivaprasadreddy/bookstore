@@ -1,63 +1,86 @@
 package com.sivalabs.bookstore.common;
 
+import com.sivalabs.bookstore.catalog.domain.Product;
+import com.sivalabs.bookstore.catalog.domain.ProductRepository;
 import com.sivalabs.bookstore.notifications.NotificationService;
-import org.junit.jupiter.api.AfterAll;
+import com.sivalabs.bookstore.payment.domain.CreditCard;
+import com.sivalabs.bookstore.payment.domain.CreditCardRepository;
+import io.restassured.RestAssured;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
-import org.mockserver.client.MockServerClient;
-import org.mockserver.model.Header;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MockServerContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
 
-import java.math.BigDecimal;
-
-import static org.mockserver.model.HttpRequest.request;
-import static org.mockserver.model.HttpResponse.response;
-import static org.mockserver.model.JsonBody.json;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
-    protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+    protected static final PostgreSQLContainer<?> postgres =
+            new PostgreSQLContainer<>("postgres:15-alpine");
     protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.2");
-    protected static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
-    protected static final GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:7.0.5-alpine")).withExposedPorts(6379);
-    protected static final MockServerContainer mockServer = new MockServerContainer(DockerImageName.parse("jamesdbloom/mockserver:mockserver-5.13.2"));
+    protected static final KafkaContainer kafka =
+            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
+    protected static final GenericContainer<?> redis =
+            new GenericContainer<>(DockerImageName.parse("redis:7.0.5-alpine"))
+                    .withExposedPorts(6379);
 
-    protected static MockServerClient mockServerClient;
+    @LocalServerPort private Integer port;
 
-    @MockBean
-    protected NotificationService notificationService;
+    @Autowired private ProductRepository productRepository;
+    @Autowired private CreditCardRepository creditCardRepository;
+
+    @MockBean protected NotificationService notificationService;
+
+    protected final List<Product> products =
+            List.of(
+                    new Product(
+                            null,
+                            "P100",
+                            "Product 1",
+                            "Product 1 desc",
+                            null,
+                            BigDecimal.TEN,
+                            BigDecimal.valueOf(2.5)),
+                    new Product(
+                            null,
+                            "P101",
+                            "Product 2",
+                            "Product 2 desc",
+                            null,
+                            BigDecimal.valueOf(24),
+                            BigDecimal.ZERO));
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.baseURI = "http://localhost:" + port;
+        productRepository.deleteAll();
+        productRepository.saveAll(products);
+        creditCardRepository.deleteAllInBatch();
+
+        creditCardRepository.save(new CreditCard(null, "Siva", "1111222233334444", "123", 2, 2030));
+        creditCardRepository.save(new CreditCard(null, "John", "1234123412341234", "123", 3, 2030));
+    }
 
     @BeforeAll
     static void beforeAll() {
-        //System.out.println("=================beforeAll=====================");
-        Startables.deepStart(mongodb, postgres, redis, kafka, mockServer).join();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        //System.out.println("=================afterAll=====================");
-//        mockServer.stop();
-//        kafka.stop();
-//        redis.stop();
-//        postgres.stop();
-//        mongodb.stop();
+        Startables.deepStart(mongodb, postgres, redis, kafka).join();
     }
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
-        //System.out.println("=================overridePropertiesInternal=====================");
         registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
@@ -65,49 +88,5 @@ public abstract class AbstractIntegrationTest {
         registry.add("spring.data.redis.host", redis::getHost);
         registry.add("spring.data.redis.port", redis::getFirstMappedPort);
         registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-        registry.add("app.promotion-service-url", mockServer::getEndpoint);
-        mockServerClient = new MockServerClient(mockServer.getHost(), mockServer.getServerPort());
-    }
-
-    protected static void mockGetPromotions() {
-        mockServerClient.when(
-                        request().withMethod("GET").withPath("/api/promotions?productCodes=.*"))
-                .respond(
-                        response()
-                                .withStatusCode(200)
-                                .withHeaders(new Header("Content-Type", "application/json; charset=utf-8"))
-                                .withBody(json(
-                                        """
-                                                [
-                                                    {
-                                                        "productCode": "P100",
-                                                        "discount": 2.5
-                                                    },
-                                                    {
-                                                        "productCode": "P101",
-                                                        "discount": 1.5
-                                                    }
-                                                ]
-                                                """
-                                ))
-                );
-    }
-
-    protected static void mockGetPromotion(String productCode, BigDecimal discount) {
-        mockServerClient.when(
-                        request().withMethod("GET").withPath("/api/promotions/.*"))
-                .respond(
-                        response()
-                                .withStatusCode(200)
-                                .withHeaders(new Header("Content-Type", "application/json; charset=utf-8"))
-                                .withBody(json(
-                                        """
-                                            {
-                                                "productCode": "%s",
-                                                "discount": %f
-                                            }
-                                        """.formatted(productCode, discount.doubleValue())
-                                ))
-                );
     }
 }

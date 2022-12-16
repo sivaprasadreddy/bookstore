@@ -1,16 +1,31 @@
 package com.sivalabs.bookstore.orders.domain.model;
 
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderConfirmationDTO {
     private String orderId;
-    private OrderStatus orderStatus;
+    private OrderStatus status;
+
+    public OrderConfirmationDTO(String orderId, OrderStatus status) {
+        this.orderId = orderId;
+        this.status = status;
+    }
+
+    public OrderConfirmationDTO() {}
+
+    public String getOrderId() {
+        return this.orderId;
+    }
+
+    public OrderStatus getStatus() {
+        return this.status;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }

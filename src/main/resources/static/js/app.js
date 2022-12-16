@@ -3,8 +3,32 @@ new Vue({
     data: {
         products: [],
         cart: { items: [] },
-        orderForm: {},
-        orderDetails: {}
+        orderForm: {
+            customer: {
+                name: "Siva",
+                email: "siva@gmail.com",
+                phone: "999999999999"
+            },
+            payment: {
+                cardNumber: "1111222233334444",
+                cvv: "123",
+                expiryMonth: 2,
+                expiryYear: 2030
+            },
+            deliveryAddress: {
+                addressLine1: "KPHB",
+                addressLine2: "Kukatpally",
+                city:"Hyderabad",
+                state: "TS",
+                zipCode: "500072",
+                country: "India"
+            }
+        },
+        orderDetails: {
+            items: [],
+            customer: {},
+            deliveryAddress: {}
+        }
     },
     created: function () {
         this.loadProducts();
@@ -37,9 +61,10 @@ new Vue({
                     count = count + item.quantity;
                 });
                 $('#cart-item-count').text('('+count+')');
-            });
+            })
+            .fail(function() { self.removeCart(); });
         },
-        addToCart(productCode) {
+        addToCart(code) {
             let self = this;
             const cartId = localStorage.getItem("cartId");
             let cartParam = "";
@@ -51,13 +76,13 @@ new Vue({
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
-                data : '{"productCode":"'+ productCode +'"}"',
+                data : '{"code":"'+ code +'"}"',
                 complete: function() {
                     self.updateCartItemCount();
                 }
             });
         },
-        updateItemQuantity(productCode, quantity) {
+        updateItemQuantity(code, quantity) {
             let self = this;
             const cartId = localStorage.getItem("cartId");
             let cartParam = "";
@@ -69,7 +94,7 @@ new Vue({
                 type: "PUT",
                 dataType: "json",
                 contentType: "application/json",
-                data : '{"productCode":"'+ productCode +'", "quantity":"'+quantity+'"}"',
+                data : '{"code":"'+ code +'", "quantity":"'+quantity+'"}"',
                 complete: function() {
                     self.updateCartItemCount();
                 }
@@ -118,7 +143,7 @@ new Vue({
             let self = this;
             $.getJSON("/api/orders/"+orderId, function (data) {
                 console.log("Get Order Resp:", data)
-                self.orderDetails = data.data
+                self.orderDetails = data
             });
         }
     }

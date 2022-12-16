@@ -1,66 +1,111 @@
 package com.sivalabs.bookstore.orders.domain.model;
 
+import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Setter
-@Getter
-@NoArgsConstructor
 public class OrderDTO {
     private Long id;
     private String orderId;
     private Set<OrderItemDTO> items;
-    private String customerName;
-    private String customerEmail;
-    private String deliveryAddressLine1;
-    private String deliveryAddressLine2;
-    private String deliveryAddressCity;
-    private String deliveryAddressState;
-    private String deliveryAddressZipCode;
-    private String deliveryAddressCountry;
+    private Customer customer;
+    private Address deliveryAddress;
     private OrderStatus status;
     private String comments;
 
     public OrderDTO(Order order) {
         this.setId(order.getId());
         this.setOrderId(order.getOrderId());
-        this.setCustomerName(order.getCustomerName());
-        this.setCustomerEmail(order.getCustomerEmail());
-        this.setDeliveryAddressLine1(order.getDeliveryAddressLine1());
-        this.setDeliveryAddressLine2(order.getDeliveryAddressLine2());
-        this.setDeliveryAddressCity(order.getDeliveryAddressCity());
-        this.setDeliveryAddressState(order.getDeliveryAddressState());
-        this.setDeliveryAddressZipCode(order.getDeliveryAddressZipCode());
-        this.setDeliveryAddressCountry(order.getDeliveryAddressCountry());
+        this.setCustomer(
+                new Customer(
+                        order.getCustomerName(),
+                        order.getCustomerEmail(),
+                        order.getCustomerPhone()));
+
+        this.setDeliveryAddress(
+                new Address(
+                        order.getDeliveryAddressLine1(),
+                        order.getDeliveryAddressLine2(),
+                        order.getDeliveryAddressCity(),
+                        order.getDeliveryAddressState(),
+                        order.getDeliveryAddressZipCode(),
+                        order.getDeliveryAddressCountry()));
         this.setStatus(order.getStatus());
         this.setComments(order.getComments());
 
-        Set<OrderItemDTO> orderItemDTOs = order.getItems().stream().map(item -> {
-            OrderItemDTO itemDTO = new OrderItemDTO();
-            itemDTO.setId(item.getId());
-            itemDTO.setProductCode(item.getProductCode());
-            itemDTO.setProductName(item.getProductName());
-            itemDTO.setProductPrice(item.getProductPrice());
-            itemDTO.setQuantity(itemDTO.getQuantity());
-            return itemDTO;
-        }).collect(Collectors.toSet());
+        Set<OrderItemDTO> orderItemDTOs =
+                order.getItems().stream()
+                        .map(
+                                item -> {
+                                    OrderItemDTO itemDTO = new OrderItemDTO();
+                                    itemDTO.setCode(item.getCode());
+                                    itemDTO.setName(item.getName());
+                                    itemDTO.setPrice(item.getPrice());
+                                    itemDTO.setQuantity(item.getQuantity());
+                                    return itemDTO;
+                                })
+                        .collect(Collectors.toSet());
         this.setItems(orderItemDTOs);
     }
 
-    @Getter
-    @Setter
-    public static class OrderItemDTO {
-        private Long id;
-        private String productCode;
-        private String productName;
-        private BigDecimal productPrice;
-        private Integer quantity;
+    public OrderDTO() {}
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getOrderId() {
+        return this.orderId;
+    }
+
+    public Set<OrderItemDTO> getItems() {
+        return this.items;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public Address getDeliveryAddress() {
+        return this.deliveryAddress;
+    }
+
+    public OrderStatus getStatus() {
+        return this.status;
+    }
+
+    public String getComments() {
+        return this.comments;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setItems(Set<OrderItemDTO> items) {
+        this.items = items;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

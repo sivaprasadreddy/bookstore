@@ -4,8 +4,7 @@ import com.sivalabs.bookstore.payment.domain.PaymentRequest;
 import com.sivalabs.bookstore.payment.domain.PaymentResponse;
 import com.sivalabs.bookstore.payment.domain.PaymentService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/payments")
-@RequiredArgsConstructor
-@Slf4j
 public class PaymentController {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PaymentController.class);
     private final PaymentService paymentService;
 
-    @PostMapping("/authorize")
-    public PaymentResponse authorize(@Valid @RequestBody PaymentRequest paymentRequest) {
-        return paymentService.authorize(paymentRequest);
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
+    @PostMapping("/validate")
+    public PaymentResponse validate(@Valid @RequestBody PaymentRequest paymentRequest) {
+        return paymentService.validate(paymentRequest);
     }
 }

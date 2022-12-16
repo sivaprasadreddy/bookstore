@@ -37,9 +37,97 @@
     <div id="app" class="container">
         <div style="padding-top: 90px;">
             <h2>Your Order placed successfully</h2>
-            <h3>Order Number: <span th:text="${orderId}">OrderId</span></h3>
+            <h3>Order Number:{{orderDetails.orderId}}</h3>
             <hr/>
-            <h3><a href="/" >Continue shopping</a></h3>
+            <div class="pb-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Sub Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr v-for="item in orderDetails.items">
+                        <td>{{item.name}}</td>
+                        <td>{{item.price}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.quantity * item.price}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <form class="row g-3" method="post">
+                    <div class="col-md-6">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control"
+                               id="customerName"
+                               name="customerName"
+                               readonly
+                               :value="orderDetails.customer.name"
+                               />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="customerEmail" class="form-label">Customer Email</label>
+                        <input type="email" class="form-control"
+                               id="customerEmail"
+                               name="customerEmail"
+                               readonly
+                               :value="orderDetails.customer.email">
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine1" class="form-label">Delivery Address Line 1</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine1"
+                               name="deliveryAddressLine1"
+                               readonly
+                               :value="orderDetails.deliveryAddress.addressLine1"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine2" class="form-label">Delivery Address Line 2</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine2"
+                               name="deliveryAddressLine2"
+                               readonly
+                               :value="orderDetails.deliveryAddress.addressLine2"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCity" class="form-label">Delivery Address City</label>
+                        <input class="form-control"
+                               id="deliveryAddressCity"
+                               name="deliveryAddressCity"
+                               readonly
+                               :value="orderDetails.deliveryAddress.city"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressState" class="form-label">Delivery Address State</label>
+                        <input class="form-control"
+                               id="deliveryAddressState"
+                               name="deliveryAddressState"
+                               readonly
+                               :value="orderDetails.deliveryAddress.state"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressZipCode" class="form-label">Delivery Address ZipCode</label>
+                        <input class="form-control"
+                               id="deliveryAddressZipCode"
+                               name="deliveryAddressZipCode"
+                               readonly
+                               :value="orderDetails.deliveryAddress.zipCode"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCountry" class="form-label">Delivery Address Country</label>
+                        <input class="form-control"
+                               id="deliveryAddressCountry"
+                               name="deliveryAddressCountry"
+                               readonly
+                               :value="orderDetails.deliveryAddress.country"/>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </main>

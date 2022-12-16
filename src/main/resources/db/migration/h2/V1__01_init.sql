@@ -6,8 +6,9 @@ create table orders
 (
     id                        bigint DEFAULT nextval('order_id_seq') not null,
     order_id                  varchar(100),
-    customer_email            varchar(100),
     customer_name             varchar(100),
+    customer_email            varchar(100),
+    customer_phone            varchar(100),
     delivery_address_line1    varchar(255),
     delivery_address_line2    varchar(255),
     delivery_address_city     varchar(255),
@@ -24,9 +25,9 @@ create table orders
 create table order_items
 (
     id            bigint DEFAULT nextval('order_item_id_seq') not null,
-    product_code  varchar(255)                                not null,
-    product_name  varchar(1024)                               not null,
-    product_price numeric                                     not null,
+    code  varchar(255)                                not null,
+    name  varchar(1024)                               not null,
+    price numeric                                     not null,
     quantity      integer                                     not null,
     order_id      bigint                                      not null references orders (id),
     primary key (id)

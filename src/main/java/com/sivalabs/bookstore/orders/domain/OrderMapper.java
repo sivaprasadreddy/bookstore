@@ -1,14 +1,14 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.orders.api.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderItem;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import org.springframework.stereotype.Component;
-
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.domain.model.OrderItemDTO;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMapper {
@@ -17,21 +17,22 @@ public class OrderMapper {
         Order newOrder = new Order();
         newOrder.setOrderId(UUID.randomUUID().toString());
         newOrder.setStatus(OrderStatus.NEW);
-        newOrder.setCustomerName(orderRequest.getCustomerName());
-        newOrder.setCustomerEmail(orderRequest.getCustomerEmail());
-        newOrder.setDeliveryAddressLine1(orderRequest.getDeliveryAddressLine1());
-        newOrder.setDeliveryAddressLine2(orderRequest.getDeliveryAddressLine2());
-        newOrder.setDeliveryAddressCity(orderRequest.getDeliveryAddressCity());
-        newOrder.setDeliveryAddressState(orderRequest.getDeliveryAddressState());
-        newOrder.setDeliveryAddressZipCode(orderRequest.getDeliveryAddressZipCode());
-        newOrder.setDeliveryAddressCountry(orderRequest.getDeliveryAddressCountry());
+        newOrder.setCustomerName(orderRequest.getCustomer().name());
+        newOrder.setCustomerEmail(orderRequest.getCustomer().email());
+        newOrder.setCustomerPhone(orderRequest.getCustomer().phone());
+        newOrder.setDeliveryAddressLine1(orderRequest.getDeliveryAddress().addressLine1());
+        newOrder.setDeliveryAddressLine2(orderRequest.getDeliveryAddress().addressLine2());
+        newOrder.setDeliveryAddressCity(orderRequest.getDeliveryAddress().city());
+        newOrder.setDeliveryAddressState(orderRequest.getDeliveryAddress().state());
+        newOrder.setDeliveryAddressZipCode(orderRequest.getDeliveryAddress().zipCode());
+        newOrder.setDeliveryAddressCountry(orderRequest.getDeliveryAddress().country());
 
         Set<OrderItem> orderItems = new HashSet<>();
-        for (CreateOrderRequest.LineItem item : orderRequest.getItems()) {
+        for (OrderItemDTO item : orderRequest.getItems()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setProductCode(item.getProductCode());
-            orderItem.setProductName(item.getProductName());
-            orderItem.setProductPrice(item.getProductPrice());
+            orderItem.setCode(item.getCode());
+            orderItem.setName(item.getName());
+            orderItem.setPrice(item.getPrice());
             orderItem.setQuantity(item.getQuantity());
             orderItem.setOrder(newOrder);
             orderItems.add(orderItem);
