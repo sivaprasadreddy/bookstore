@@ -24,16 +24,16 @@ create table orders
 
 create table order_items
 (
-    id            bigint DEFAULT nextval('order_item_id_seq') not null,
-    code  varchar(255)                                not null,
-    name  varchar(1024)                               not null,
-    price numeric                                     not null,
-    quantity      integer                                     not null,
-    order_id      bigint                                      not null references orders (id),
+    id       bigint DEFAULT nextval('order_item_id_seq') not null,
+    code     varchar(255)                                not null,
+    name     varchar(1024)                               not null,
+    price    numeric                                     not null,
+    quantity integer                                     not null,
+    order_id bigint                                      not null references orders (id),
     primary key (id)
 );
 
-create table creditcards
+create table credit_cards
 (
     id            bigint DEFAULT nextval('cc_id_seq') not null,
     customer_name varchar(100)                        not null,

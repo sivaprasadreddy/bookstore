@@ -1,10 +1,6 @@
-create sequence order_id_seq start with 1 increment by 1;
-create sequence order_item_id_seq start with 1 increment by 1;
-create sequence cc_id_seq start with 1 increment by 1;
-
 create table orders
 (
-    id                        bigint DEFAULT nextval('order_id_seq') not null,
+    id                        bigserial not null,
     order_id                  varchar,
     customer_name             varchar,
     customer_email            varchar,
@@ -24,23 +20,23 @@ create table orders
 
 create table order_items
 (
-    id            bigint DEFAULT nextval('order_item_id_seq') not null,
-    code  varchar                                     not null,
-    name  varchar(1024)                               not null,
-    price numeric                                     not null,
-    quantity      integer                                     not null,
-    order_id      bigint                                      not null references orders (id),
+    id       bigserial not null,
+    code     varchar   not null,
+    name     varchar   not null,
+    price    numeric   not null,
+    quantity integer   not null,
+    order_id bigint    not null references orders (id),
     primary key (id)
 );
 
-create table creditcards
+create table credit_cards
 (
-    id            bigint DEFAULT nextval('cc_id_seq') not null,
-    customer_name varchar                             not null,
-    card_number   varchar(16)                         not null,
-    cvv           varchar(6)                          not null,
-    expiry_month  numeric                             not null,
-    expiry_year   numeric                             not null,
+    id            bigserial not null,
+    customer_name varchar   not null,
+    card_number   varchar   not null,
+    cvv           varchar   not null,
+    expiry_month  numeric   not null,
+    expiry_year   numeric   not null,
     primary key (id),
     CONSTRAINT cc_card_num_unique UNIQUE (card_number)
 );

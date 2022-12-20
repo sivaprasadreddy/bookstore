@@ -1,12 +1,15 @@
 package com.sivalabs.bookstore.orders.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderDTO {
     private Long id;
     private String orderId;
@@ -52,6 +55,14 @@ public class OrderDTO {
     }
 
     public OrderDTO() {}
+
+    public BigDecimal getTotalAmount() {
+        BigDecimal amount = new BigDecimal("0.0");
+        for (OrderItemDTO orderItem : items) {
+            amount = amount.add(orderItem.getSubTotal());
+        }
+        return amount;
+    }
 
     public Long getId() {
         return this.id;
