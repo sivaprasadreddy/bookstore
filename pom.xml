@@ -20,7 +20,7 @@
         <testcontainers.version>1.17.6</testcontainers.version>
         <webjars-locator.version>0.46</webjars-locator.version>
         <bootstrap.version>5.2.3</bootstrap.version>
-        <jquery.version>3.6.1</jquery.version>
+        <jquery.version>3.6.4</jquery.version>
         <font_awesome.version>6.2.0</font_awesome.version>
         <vue.version>2.6.14</vue.version>
         <mockserver-netty.version>5.13.2</mockserver-netty.version>
