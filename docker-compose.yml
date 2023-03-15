@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   bookstore-db:
-    image: postgres:15-alpine
+    image: postgres:15.2-alpine
     container_name: bookstore-db
     environment:
       - POSTGRES_USER=postgres
@@ -11,7 +11,7 @@ services:
       - "5432:5432"
 
   mongodb:
-    image: mongo:4.2
+    image: mongo:4.4
     container_name: mongodb
     ports:
       - "27017:27017"
@@ -20,7 +20,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongo
 
   redis:
-    image: redis:7.0.5-alpine
+    image: redis:7.0.9-alpine
     ports:
       - "6379:6379"
     environment:

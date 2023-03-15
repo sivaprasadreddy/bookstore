@@ -22,7 +22,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 class ProductRepositoryTest {
     @Autowired private ProductRepository productRepository;
 
-    @Container static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.2");
+    @Container static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {

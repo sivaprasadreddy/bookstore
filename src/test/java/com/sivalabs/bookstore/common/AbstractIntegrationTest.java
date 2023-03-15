@@ -29,12 +29,12 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class AbstractIntegrationTest {
 
     protected static final PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:15-alpine");
-    protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.2");
+            new PostgreSQLContainer<>("postgres:15.2-alpine");
+    protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
     protected static final KafkaContainer kafka =
             new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
     protected static final GenericContainer<?> redis =
-            new GenericContainer<>(DockerImageName.parse("redis:7.0.5-alpine"))
+            new GenericContainer<>(DockerImageName.parse("redis:7.0.9-alpine"))
                     .withExposedPorts(6379);
 
     @LocalServerPort private Integer port;
