@@ -32,7 +32,7 @@ public abstract class AbstractIntegrationTest {
             new PostgreSQLContainer<>("postgres:15.2-alpine");
     protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
     protected static final KafkaContainer kafka =
-            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.1"));
+            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
     protected static final GenericContainer<?> redis =
             new GenericContainer<>(DockerImageName.parse("redis:7.0.9-alpine"))
                     .withExposedPorts(6379);
