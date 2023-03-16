@@ -30,7 +30,7 @@ public abstract class AbstractIntegrationTest {
 
     protected static final PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:15.2-alpine");
-    protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
+    protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
     protected static final KafkaContainer kafka =
             new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
     protected static final GenericContainer<?> redis =
