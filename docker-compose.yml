@@ -38,7 +38,7 @@ services:
       - "9081:8081"
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.2
+    image: confluentinc/cp-zookeeper:7.4.0
     hostname: zookeeper
     container_name: zookeeper
     ports:
