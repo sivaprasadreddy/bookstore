@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   bookstore-db:
-    image: postgres:15.2-alpine
+    image: postgres:15.3-alpine
     container_name: bookstore-db
     environment:
       - POSTGRES_USER=postgres
