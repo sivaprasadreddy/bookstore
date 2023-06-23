@@ -16,15 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class RemoveCartItemApiTests extends AbstractIntegrationTest {
 
-    @Autowired private CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     void shouldRemoveItemFromCart() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().when()
                 .delete("/api/carts/items/{code}?cartId={cartId}", "P100", cartId)
                 .then()

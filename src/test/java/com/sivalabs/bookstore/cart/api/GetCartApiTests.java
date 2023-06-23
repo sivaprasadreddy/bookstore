@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class GetCartApiTests extends AbstractIntegrationTest {
 
-    @Autowired private CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     void shouldGetNewCart() {

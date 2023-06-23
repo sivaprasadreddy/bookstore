@@ -11,13 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderErrorNotificationEventHandler {
-    private static final Logger log =
-            LoggerFactory.getLogger(OrderErrorNotificationEventHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderErrorNotificationEventHandler.class);
     private final NotificationService notificationService;
     private final ObjectMapper objectMapper;
 
-    public OrderErrorNotificationEventHandler(
-            NotificationService notificationService, ObjectMapper objectMapper) {
+    public OrderErrorNotificationEventHandler(NotificationService notificationService, ObjectMapper objectMapper) {
         this.notificationService = notificationService;
         this.objectMapper = objectMapper;
     }

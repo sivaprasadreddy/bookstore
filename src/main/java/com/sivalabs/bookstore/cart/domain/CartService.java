@@ -33,32 +33,24 @@ public class CartService {
         if (!StringUtils.hasText(cartId)) {
             cart = Cart.withNewId();
         } else {
-            cart =
-                    cartRepository
-                            .findById(cartId)
-                            .orElseThrow(() -> new CartNotFoundException(cartId));
+            cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         }
         log.info("Add code: {} to cart", cartItemRequest.code());
-        ProductModel product =
-                productService
-                        .getProductByCode(cartItemRequest.code())
-                        .orElseThrow(() -> new ProductNotFoundException(cartItemRequest.code()));
-        CartItem cartItem =
-                new CartItem(
-                        product.getCode(),
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        cartItemRequest.quantity() > 0 ? cartItemRequest.quantity() : 1);
+        ProductModel product = productService
+                .getProductByCode(cartItemRequest.code())
+                .orElseThrow(() -> new ProductNotFoundException(cartItemRequest.code()));
+        CartItem cartItem = new CartItem(
+                product.getCode(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                cartItemRequest.quantity() > 0 ? cartItemRequest.quantity() : 1);
         cart.addItem(cartItem);
         return cartRepository.save(cart);
     }
 
     public Cart updateCartItemQuantity(String cartId, CartItemRequestDTO cartItemRequest) {
-        Cart cart =
-                cartRepository
-                        .findById(cartId)
-                        .orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         log.info(
                 "Update quantity: {} for code:{} quantity in cart: {}",
                 cartItemRequest.quantity(),
@@ -68,21 +60,16 @@ public class CartService {
         if (cartItemRequest.quantity() <= 0) {
             cart.removeItem(cartItemRequest.code());
         } else {
-            ProductModel product =
-                    productService
-                            .getProductByCode(cartItemRequest.code())
-                            .orElseThrow(
-                                    () -> new ProductNotFoundException(cartItemRequest.code()));
+            ProductModel product = productService
+                    .getProductByCode(cartItemRequest.code())
+                    .orElseThrow(() -> new ProductNotFoundException(cartItemRequest.code()));
             cart.updateItemQuantity(product.getCode(), cartItemRequest.quantity());
         }
         return cartRepository.save(cart);
     }
 
     public Cart removeCartItem(String cartId, String code) {
-        Cart cart =
-                cartRepository
-                        .findById(cartId)
-                        .orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
         log.info("Remove cart line item code: {}", code);
         cart.removeItem(code);
         return cartRepository.save(cart);

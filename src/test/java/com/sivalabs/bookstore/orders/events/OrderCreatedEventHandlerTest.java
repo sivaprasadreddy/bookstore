@@ -25,11 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
     private static final Logger log = LoggerFactory.getLogger(OrderCreatedEventHandlerTest.class);
-    @Autowired private OrderRepository orderRepository;
 
-    @Autowired private KafkaHelper kafkaHelper;
+    @Autowired
+    private OrderRepository orderRepository;
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private KafkaHelper kafkaHelper;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderCreatedEvent() {
@@ -48,31 +52,21 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
         orderRepository.saveAndFlush(order);
 
-        OrderCreatedEvent event =
-                new OrderCreatedEvent(
-                        order.getOrderId(),
-                        Set.of(),
-                        new Customer("Siva", "siva@gmail.com", "9999999999"),
-                        new Address(
-                                "addr line 1",
-                                "addr line 2",
-                                "Hyderabad",
-                                "Telangana",
-                                "500072",
-                                "India"));
+        OrderCreatedEvent event = new OrderCreatedEvent(
+                order.getOrderId(),
+                Set.of(),
+                new Customer("Siva", "siva@gmail.com", "9999999999"),
+                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India"));
 
         log.info("Created OrderId:{}", event.orderId());
 
         kafkaHelper.send(properties.newOrdersTopic(), event);
 
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            Optional<Order> orderOptional =
-                                    orderRepository.findByOrderId(event.orderId());
-                            assertThat(orderOptional).isNotEmpty();
-                            assertThat(orderOptional.get().getOrderId()).isEqualTo(event.orderId());
-                            assertThat(orderOptional.get().getStatus()).isEqualTo(DELIVERED);
-                        });
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            Optional<Order> orderOptional = orderRepository.findByOrderId(event.orderId());
+            assertThat(orderOptional).isNotEmpty();
+            assertThat(orderOptional.get().getOrderId()).isEqualTo(event.orderId());
+            assertThat(orderOptional.get().getStatus()).isEqualTo(DELIVERED);
+        });
     }
 }

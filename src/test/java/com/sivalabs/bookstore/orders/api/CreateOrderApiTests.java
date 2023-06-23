@@ -17,14 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class CreateOrderApiTests extends AbstractIntegrationTest {
 
-    @Autowired private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        OrderConfirmationDTO orderConfirmationDTO =
-                given().contentType(ContentType.JSON)
-                        .body(
-                                """
+        OrderConfirmationDTO orderConfirmationDTO = given().contentType(ContentType.JSON)
+                .body(
+                        """
                                 {
                                     "customer" : {
                                         "name": "Siva",
@@ -55,18 +55,17 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                                     ]
                                 }
                                 """)
-                        .when()
-                        .post("/api/orders")
-                        .then()
-                        .statusCode(202)
-                        .body("orderId", notNullValue())
-                        .body("status", is("NEW"))
-                        .extract()
-                        .body()
-                        .as(OrderConfirmationDTO.class);
+                .when()
+                .post("/api/orders")
+                .then()
+                .statusCode(202)
+                .body("orderId", notNullValue())
+                .body("status", is("NEW"))
+                .extract()
+                .body()
+                .as(OrderConfirmationDTO.class);
 
-        Optional<OrderDTO> orderOptional =
-                orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
+        Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
         assertThat(orderOptional).isPresent();
         assertThat(orderOptional.get().getStatus()).isEqualTo(OrderStatus.NEW);
     }

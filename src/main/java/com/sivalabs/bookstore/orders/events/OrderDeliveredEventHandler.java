@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderDeliveredEventHandler {
-    private static final Logger log =
-            org.slf4j.LoggerFactory.getLogger(OrderDeliveredEventHandler.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderDeliveredEventHandler.class);
     private final OrderService orderService;
     private final ObjectMapper objectMapper;
 

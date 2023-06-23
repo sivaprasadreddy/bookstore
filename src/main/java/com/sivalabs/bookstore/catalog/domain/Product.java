@@ -10,7 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "products")
 public class Product {
-    @Id private String id;
+    @Id
+    private String id;
 
     @Indexed(unique = true)
     @NotEmpty(message = "Product code must not be null/empty")
@@ -23,8 +24,7 @@ public class Product {
 
     private String imageUrl;
 
-    @NotNull(message = "Product price must not be null")
-    @DecimalMin("0.1")
+    @NotNull(message = "Product price must not be null") @DecimalMin("0.1")
     private BigDecimal price;
 
     private BigDecimal discount;

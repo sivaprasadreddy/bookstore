@@ -9,15 +9,11 @@ import org.springframework.web.ErrorResponseException;
 public class OrderNotFoundException extends ErrorResponseException {
 
     public OrderNotFoundException(String orderId) {
-        super(
-                HttpStatus.NOT_FOUND,
-                asProblemDetail("Order with orderId " + orderId + " not found"),
-                null);
+        super(HttpStatus.NOT_FOUND, asProblemDetail("Order with orderId " + orderId + " not found"), null);
     }
 
     private static ProblemDetail asProblemDetail(String message) {
-        ProblemDetail problemDetail =
-                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
         problemDetail.setTitle("Order Not Found");
         problemDetail.setType(URI.create("https://api.sivalabs-bookstore.com/errors/not-found"));
         problemDetail.setProperty("timestamp", Instant.now());

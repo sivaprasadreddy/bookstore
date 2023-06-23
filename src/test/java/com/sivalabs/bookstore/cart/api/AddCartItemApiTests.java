@@ -18,7 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class AddCartItemApiTests extends AbstractIntegrationTest {
 
-    @Autowired private CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     void shouldAddItemToNewCart() {
@@ -96,9 +97,7 @@ class AddCartItemApiTests extends AbstractIntegrationTest {
     void shouldAddItemIncreaseQuantityWhenAddingSameProduct() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().contentType(ContentType.JSON)
                 .body(
                         """
@@ -121,9 +120,7 @@ class AddCartItemApiTests extends AbstractIntegrationTest {
     void shouldAddDifferentProduct() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().contentType(ContentType.JSON)
                 .body(
                         """

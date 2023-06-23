@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class GetOrderApiTests extends AbstractIntegrationTest {
 
-    @Autowired private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
     @Test
     void shouldCreateOrderSuccessfully() {
@@ -27,9 +28,7 @@ class GetOrderApiTests extends AbstractIntegrationTest {
         Customer customer = new Customer("Siva", "siva@gmail.com", "99999999999");
         createOrderRequest.setCustomer(customer);
 
-        Address address =
-                new Address(
-                        "addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India");
+        Address address = new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India");
         createOrderRequest.setDeliveryAddress(address);
 
         Payment payment = new Payment();
@@ -39,18 +38,16 @@ class GetOrderApiTests extends AbstractIntegrationTest {
         payment.setExpiryYear(2025);
         createOrderRequest.setPayment(payment);
 
-        createOrderRequest.setItems(
-                Set.of(new OrderItemDTO("P100", "Product 1", BigDecimal.TEN, 1)));
+        createOrderRequest.setItems(Set.of(new OrderItemDTO("P100", "Product 1", BigDecimal.TEN, 1)));
         OrderConfirmationDTO orderConfirmationDTO = orderService.createOrder(createOrderRequest);
 
-        OrderDTO orderDTO =
-                given().when()
-                        .get("/api/orders/{orderId}", orderConfirmationDTO.getOrderId())
-                        .then()
-                        .statusCode(200)
-                        .extract()
-                        .body()
-                        .as(OrderDTO.class);
+        OrderDTO orderDTO = given().when()
+                .get("/api/orders/{orderId}", orderConfirmationDTO.getOrderId())
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(OrderDTO.class);
 
         assertThat(orderDTO.getOrderId()).isEqualTo(orderConfirmationDTO.getOrderId());
         assertThat(orderDTO.getItems()).hasSize(1);
@@ -58,6 +55,9 @@ class GetOrderApiTests extends AbstractIntegrationTest {
 
     @Test
     void shouldReturnNotFoundWhenOrderIdNotExist() {
-        given().when().get("/api/orders/{orderId}", "non-existing-order-id").then().statusCode(404);
+        given().when()
+                .get("/api/orders/{orderId}", "non-existing-order-id")
+                .then()
+                .statusCode(404);
     }
 }

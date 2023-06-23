@@ -19,29 +19,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class OrderErrorNotificationEventHandlerTest extends AbstractIntegrationTest {
-    private static final Logger log =
-            LoggerFactory.getLogger(OrderErrorNotificationEventHandlerTest.class);
-    @Autowired private KafkaHelper kafkaHelper;
+    private static final Logger log = LoggerFactory.getLogger(OrderErrorNotificationEventHandlerTest.class);
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private KafkaHelper kafkaHelper;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderErrorEvent() {
         Customer customer = new Customer("Siva", "siva@gmail.com", "999999999");
         OrderErrorEvent event =
-                new OrderErrorEvent(
-                        UUID.randomUUID().toString(), "test error", Set.of(), customer, null);
+                new OrderErrorEvent(UUID.randomUUID().toString(), "test error", Set.of(), customer, null);
         log.info("OrderErrorEvent with OrderId:{}", event.orderId());
 
         kafkaHelper.send(properties.errorOrdersTopic(), event);
 
         ArgumentCaptor<OrderErrorEvent> captor = ArgumentCaptor.forClass(OrderErrorEvent.class);
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            verify(notificationService).sendErrorNotification(captor.capture());
-                            OrderErrorEvent orderErrorEvent = captor.getValue();
-                            assertThat(orderErrorEvent.orderId()).isEqualTo(event.orderId());
-                        });
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            verify(notificationService).sendErrorNotification(captor.capture());
+            OrderErrorEvent orderErrorEvent = captor.getValue();
+            assertThat(orderErrorEvent.orderId()).isEqualTo(event.orderId());
+        });
     }
 }

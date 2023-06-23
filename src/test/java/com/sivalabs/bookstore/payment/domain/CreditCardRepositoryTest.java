@@ -16,9 +16,11 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {"spring.datasource.url=jdbc:tc:postgresql:15-alpine:///dbname"})
 class CreditCardRepositoryTest {
-    @Autowired private CreditCardRepository creditCardRepository;
+    @Autowired
+    private CreditCardRepository creditCardRepository;
 
-    @Autowired private TestEntityManager entityManager;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @BeforeEach
     void setUp() {
@@ -36,8 +38,7 @@ class CreditCardRepositoryTest {
 
     @Test
     void shouldGetCreditCardByCardNumber() {
-        Optional<CreditCard> optionalCreditCard =
-                creditCardRepository.findByCardNumber("1111222233334444");
+        Optional<CreditCard> optionalCreditCard = creditCardRepository.findByCardNumber("1111222233334444");
         assertThat(optionalCreditCard).isNotEmpty();
         assertThat(optionalCreditCard.get().getCardNumber()).isEqualTo("1111222233334444");
         assertThat(optionalCreditCard.get().getCvv()).isEqualTo("123");
@@ -47,8 +48,7 @@ class CreditCardRepositoryTest {
 
     @Test
     void shouldReturnEmptyWhenCardNumberNotFound() {
-        Optional<CreditCard> optionalCreditCard =
-                creditCardRepository.findByCardNumber("1111111111111");
+        Optional<CreditCard> optionalCreditCard = creditCardRepository.findByCardNumber("1111111111111");
         assertThat(optionalCreditCard).isEmpty();
     }
 }

@@ -29,13 +29,7 @@ public class CreditCard {
     @Column(nullable = false)
     private int expiryYear;
 
-    public CreditCard(
-            Long id,
-            String customerName,
-            String cardNumber,
-            String cvv,
-            int expiryMonth,
-            int expiryYear) {
+    public CreditCard(Long id, String customerName, String cardNumber, String cvv, int expiryMonth, int expiryYear) {
         this.id = id;
         this.customerName = customerName;
         this.cardNumber = cardNumber;

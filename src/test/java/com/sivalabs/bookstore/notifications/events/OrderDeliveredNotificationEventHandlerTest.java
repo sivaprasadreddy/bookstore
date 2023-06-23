@@ -20,29 +20,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class OrderDeliveredNotificationEventHandlerTest extends AbstractIntegrationTest {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(OrderDeliveredNotificationEventHandlerTest.class);
-    @Autowired private KafkaHelper kafkaHelper;
+    private static final Logger log = LoggerFactory.getLogger(OrderDeliveredNotificationEventHandlerTest.class);
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private KafkaHelper kafkaHelper;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderDeliveredEvent() {
         Customer customer = new Customer("Siva", "siva@gmail.com", "999999999");
-        OrderDeliveredEvent event =
-                new OrderDeliveredEvent(UUID.randomUUID().toString(), Set.of(), customer, null);
+        OrderDeliveredEvent event = new OrderDeliveredEvent(UUID.randomUUID().toString(), Set.of(), customer, null);
         log.info("Delivered OrderId:{}", event.orderId());
 
         kafkaHelper.send(properties.deliveredOrdersTopic(), event);
-        ArgumentCaptor<OrderDeliveredEvent> captor =
-                ArgumentCaptor.forClass(OrderDeliveredEvent.class);
+        ArgumentCaptor<OrderDeliveredEvent> captor = ArgumentCaptor.forClass(OrderDeliveredEvent.class);
 
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            verify(notificationService).sendDeliveredNotification(captor.capture());
-                            OrderDeliveredEvent orderDeliveredEvent = captor.getValue();
-                            assertThat(orderDeliveredEvent.orderId()).isEqualTo(event.orderId());
-                        });
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            verify(notificationService).sendDeliveredNotification(captor.capture());
+            OrderDeliveredEvent orderDeliveredEvent = captor.getValue();
+            assertThat(orderDeliveredEvent.orderId()).isEqualTo(event.orderId());
+        });
     }
 }

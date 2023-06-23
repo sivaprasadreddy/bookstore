@@ -14,11 +14,9 @@ public class OrderItemDTO {
     @NotBlank(message = "Name is required")
     private String name;
 
-    @NotNull(message = "Price is required")
-    private BigDecimal price;
+    @NotNull(message = "Price is required") private BigDecimal price;
 
-    @NotNull
-    @Min(1)
+    @NotNull @Min(1)
     private Integer quantity;
 
     public OrderItemDTO(String code, String name, BigDecimal price, Integer quantity) {

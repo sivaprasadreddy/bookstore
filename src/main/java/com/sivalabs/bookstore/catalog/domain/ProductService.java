@@ -22,8 +22,7 @@ public class ProductService {
     public PagedResult<ProductModel> getProducts(int pageNo) {
         int page = pageNo <= 1 ? 0 : pageNo - 1;
         Pageable pageable = PageRequest.of(page, PAGE_SIZE, Sort.Direction.ASC, "name");
-        Page<ProductModel> productsPage =
-                productRepository.findAll(pageable).map(productMapper::toModel);
+        Page<ProductModel> productsPage = productRepository.findAll(pageable).map(productMapper::toModel);
         return new PagedResult<>(productsPage);
     }
 

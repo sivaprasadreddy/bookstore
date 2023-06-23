@@ -20,9 +20,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @DataMongoTest
 @Testcontainers
 class ProductRepositoryTest {
-    @Autowired private ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    @Container static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
+    @Container
+    static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -33,24 +35,10 @@ class ProductRepositoryTest {
     void setUp() {
         productRepository.deleteAll();
 
-        productRepository.save(
-                new Product(
-                        null,
-                        "P100",
-                        "Product 1",
-                        "Product 1 desc",
-                        null,
-                        BigDecimal.TEN,
-                        BigDecimal.valueOf(2.5)));
-        productRepository.save(
-                new Product(
-                        null,
-                        "P101",
-                        "Product 2",
-                        "Product 2 desc",
-                        null,
-                        BigDecimal.valueOf(24),
-                        BigDecimal.ZERO));
+        productRepository.save(new Product(
+                null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN, BigDecimal.valueOf(2.5)));
+        productRepository.save(new Product(
+                null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24), BigDecimal.ZERO));
     }
 
     @Test
@@ -61,15 +49,7 @@ class ProductRepositoryTest {
 
     @Test
     void shouldFailToSaveProductWithDuplicateCode() {
-        var product =
-                new Product(
-                        null,
-                        "P100",
-                        "Product name",
-                        "Product desc",
-                        null,
-                        BigDecimal.TEN,
-                        BigDecimal.ZERO);
+        var product = new Product(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN, BigDecimal.ZERO);
         assertThrows(DuplicateKeyException.class, () -> productRepository.save(product));
     }
 

@@ -152,8 +152,7 @@ public class ProductModel {
         }
 
         public ProductModel build() {
-            return new ProductModel(
-                    id, code, name, description, imageUrl, price, discount, salePrice);
+            return new ProductModel(id, code, name, description, imageUrl, price, discount, salePrice);
         }
 
         public String toString() {

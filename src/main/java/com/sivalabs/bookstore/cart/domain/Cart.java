@@ -9,7 +9,9 @@ import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("carts")
 public class Cart {
-    @Id private String id;
+    @Id
+    private String id;
+
     private Set<CartItem> items = new HashSet<>();
 
     public Cart() {}

@@ -11,14 +11,12 @@ public class OrderCancellationException extends ErrorResponseException {
     public OrderCancellationException(String orderId, String reason) {
         super(
                 HttpStatus.BAD_REQUEST,
-                asProblemDetail(
-                        "Order with orderId " + orderId + " can't be cancelled. Reason: " + reason),
+                asProblemDetail("Order with orderId " + orderId + " can't be cancelled. Reason: " + reason),
                 null);
     }
 
     private static ProblemDetail asProblemDetail(String message) {
-        ProblemDetail problemDetail =
-                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, message);
         problemDetail.setTitle("Order Not Found");
         problemDetail.setType(URI.create("https://api.sivalabs-bookstore.com/errors/not-found"));
         problemDetail.setProperty("timestamp", Instant.now());

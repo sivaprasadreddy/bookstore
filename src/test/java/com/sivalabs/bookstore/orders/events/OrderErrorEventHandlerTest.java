@@ -25,11 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 class OrderErrorEventHandlerTest extends AbstractIntegrationTest {
     private static final Logger log = LoggerFactory.getLogger(OrderErrorEventHandlerTest.class);
 
-    @Autowired private OrderRepository orderRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
-    @Autowired private KafkaHelper kafkaHelper;
+    @Autowired
+    private KafkaHelper kafkaHelper;
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderErrorEvent() {
@@ -55,21 +58,12 @@ class OrderErrorEventHandlerTest extends AbstractIntegrationTest {
                         "testing",
                         Set.of(),
                         new Customer("Siva", "siva@gmail.com", "9999999999"),
-                        new Address(
-                                "addr line 1",
-                                "addr line 2",
-                                "Hyderabad",
-                                "Telangana",
-                                "500072",
-                                "India")));
+                        new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
 
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            Optional<Order> orderOptional =
-                                    orderRepository.findByOrderId(order.getOrderId());
-                            assertThat(orderOptional).isPresent();
-                            assertThat(orderOptional.get().getStatus()).isEqualTo(ERROR);
-                        });
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            Optional<Order> orderOptional = orderRepository.findByOrderId(order.getOrderId());
+            assertThat(orderOptional).isPresent();
+            assertThat(orderOptional.get().getStatus()).isEqualTo(ERROR);
+        });
     }
 }

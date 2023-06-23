@@ -15,15 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class RemoveCartApiTests extends AbstractIntegrationTest {
 
-    @Autowired private CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     void shouldRemoveCart() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().when().delete("/api/carts?cartId={cartId}", cartId).then().statusCode(200);
         assertThat(cartRepository.findById(cartId)).isEmpty();
     }

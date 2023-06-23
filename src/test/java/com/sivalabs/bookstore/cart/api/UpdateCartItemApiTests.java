@@ -17,15 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class UpdateCartItemApiTests extends AbstractIntegrationTest {
 
-    @Autowired private CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     void shouldUpdateItemQuantity() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().contentType(ContentType.JSON)
                 .body(
                         """
@@ -48,9 +47,7 @@ class UpdateCartItemApiTests extends AbstractIntegrationTest {
     void shouldRemoveItemWhenUpdatedItemQuantityIsZero() {
         String cartId = UUID.randomUUID().toString();
         cartRepository.save(
-                new Cart(
-                        cartId,
-                        Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
+                new Cart(cartId, Set.of(new CartItem("P100", "Product 1", "P100 desc", BigDecimal.TEN, 2))));
         given().contentType(ContentType.JSON)
                 .body(
                         """

@@ -12,8 +12,7 @@ public class PaymentService {
     }
 
     public PaymentResponse validate(PaymentRequest request) {
-        Optional<CreditCard> creditCardOptional =
-                creditCardRepository.findByCardNumber(request.cardNumber());
+        Optional<CreditCard> creditCardOptional = creditCardRepository.findByCardNumber(request.cardNumber());
         if (creditCardOptional.isEmpty()) {
             return new PaymentResponse(PaymentResponse.PaymentStatus.REJECTED);
         }

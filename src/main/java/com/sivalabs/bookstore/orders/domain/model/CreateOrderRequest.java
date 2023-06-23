@@ -11,11 +11,14 @@ public class CreateOrderRequest {
     @NotEmpty(message = "Items cannot be empty.")
     private Set<OrderItemDTO> items;
 
-    @Valid private Customer customer;
+    @Valid
+    private Customer customer;
 
-    @Valid private Address deliveryAddress;
+    @Valid
+    private Address deliveryAddress;
 
-    @Valid private Payment payment;
+    @Valid
+    private Payment payment;
 
     public Set<OrderItemDTO> getItems() {
         return this.items;

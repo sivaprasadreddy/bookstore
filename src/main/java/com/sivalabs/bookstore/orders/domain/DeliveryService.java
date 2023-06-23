@@ -17,17 +17,13 @@ import org.springframework.stereotype.Service;
 public class DeliveryService {
     private static final Logger log = LoggerFactory.getLogger(DeliveryService.class);
 
-    private static final List<String> DELIVERY_ALLOWED_COUNTRIES =
-            List.of("INDIA", "USA", "GERMANY", "UK");
+    private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
 
     private final OrderRepository orderRepository;
     private final KafkaHelper kafkaHelper;
     private final ApplicationProperties properties;
 
-    public DeliveryService(
-            OrderRepository orderRepository,
-            KafkaHelper kafkaHelper,
-            ApplicationProperties properties) {
+    public DeliveryService(OrderRepository orderRepository, KafkaHelper kafkaHelper, ApplicationProperties properties) {
         this.orderRepository = orderRepository;
         this.kafkaHelper = kafkaHelper;
         this.properties = properties;
@@ -37,8 +33,7 @@ public class DeliveryService {
         try {
             if (canBeDelivered(event)) {
                 this.updateOrderStatus(event.orderId(), OrderStatus.DELIVERED);
-                kafkaHelper.send(
-                        properties.deliveredOrdersTopic(), buildOrderDeliveredEvent(event));
+                kafkaHelper.send(properties.deliveredOrdersTopic(), buildOrderDeliveredEvent(event));
             } else {
                 this.updateOrderStatus(event.orderId(), OrderStatus.CANCELLED);
                 kafkaHelper.send(
@@ -47,8 +42,7 @@ public class DeliveryService {
             }
         } catch (RuntimeException e) {
             this.updateOrderStatus(event.orderId(), OrderStatus.ERROR);
-            kafkaHelper.send(
-                    properties.cancelledOrdersTopic(), buildOrderErrorEvent(event, e.getMessage()));
+            kafkaHelper.send(properties.cancelledOrdersTopic(), buildOrderErrorEvent(event, e.getMessage()));
         }
     }
 
@@ -59,12 +53,12 @@ public class DeliveryService {
     }
 
     private boolean canBeDelivered(OrderCreatedEvent order) {
-        return DELIVERY_ALLOWED_COUNTRIES.contains(order.deliveryAddress().country().toUpperCase());
+        return DELIVERY_ALLOWED_COUNTRIES.contains(
+                order.deliveryAddress().country().toUpperCase());
     }
 
     private OrderDeliveredEvent buildOrderDeliveredEvent(OrderCreatedEvent order) {
-        return new OrderDeliveredEvent(
-                order.orderId(), order.items(), order.customer(), order.deliveryAddress());
+        return new OrderDeliveredEvent(order.orderId(), order.items(), order.customer(), order.deliveryAddress());
     }
 
     private OrderCancelledEvent buildOrderCancelledEvent(OrderCreatedEvent order, String reason) {
@@ -73,7 +67,6 @@ public class DeliveryService {
     }
 
     private OrderErrorEvent buildOrderErrorEvent(OrderCreatedEvent order, String reason) {
-        return new OrderErrorEvent(
-                order.orderId(), reason, order.items(), order.customer(), order.deliveryAddress());
+        return new OrderErrorEvent(order.orderId(), reason, order.items(), order.customer(), order.deliveryAddress());
     }
 }

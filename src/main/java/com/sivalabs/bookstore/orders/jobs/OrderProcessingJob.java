@@ -24,8 +24,7 @@ public class OrderProcessingJob {
     private final KafkaHelper kafkaHelper;
     private final ApplicationProperties properties;
 
-    public OrderProcessingJob(
-            OrderService orderService, KafkaHelper kafkaHelper, ApplicationProperties properties) {
+    public OrderProcessingJob(OrderService orderService, KafkaHelper kafkaHelper, ApplicationProperties properties) {
         this.orderService = orderService;
         this.kafkaHelper = kafkaHelper;
         this.properties = properties;
@@ -54,36 +53,22 @@ public class OrderProcessingJob {
 
     private OrderCreatedEvent buildOrderCreatedEvent(Order order) {
         return new OrderCreatedEvent(
-                order.getOrderId(),
-                getOrderItems(order),
-                getCustomer(order),
-                getDeliveryAddress(order));
+                order.getOrderId(), getOrderItems(order), getCustomer(order), getDeliveryAddress(order));
     }
 
     private OrderErrorEvent buildOrderErrorEvent(Order order, String reason) {
         return new OrderErrorEvent(
-                order.getOrderId(),
-                reason,
-                getOrderItems(order),
-                getCustomer(order),
-                getDeliveryAddress(order));
+                order.getOrderId(), reason, getOrderItems(order), getCustomer(order), getDeliveryAddress(order));
     }
 
     private Set<OrderItem> getOrderItems(Order order) {
         return order.getItems().stream()
-                .map(
-                        item ->
-                                new OrderItem(
-                                        item.getCode(),
-                                        item.getName(),
-                                        item.getPrice(),
-                                        item.getQuantity()))
+                .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
     }
 
     private Customer getCustomer(Order order) {
-        return new Customer(
-                order.getCustomerName(), order.getCustomerEmail(), order.getCustomerPhone());
+        return new Customer(order.getCustomerName(), order.getCustomerEmail(), order.getCustomerPhone());
     }
 
     private Address getDeliveryAddress(Order order) {

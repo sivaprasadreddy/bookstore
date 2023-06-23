@@ -28,40 +28,28 @@ import org.testcontainers.utility.DockerImageName;
 @ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
-    protected static final PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:15.2-alpine");
+    protected static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.3-alpine");
     protected static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
     protected static final KafkaContainer kafka =
-            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
+            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
     protected static final GenericContainer<?> redis =
-            new GenericContainer<>(DockerImageName.parse("redis:7.0.9-alpine"))
-                    .withExposedPorts(6379);
+            new GenericContainer<>(DockerImageName.parse("redis:7.0.11-alpine")).withExposedPorts(6379);
 
-    @LocalServerPort private Integer port;
+    @LocalServerPort
+    private Integer port;
 
-    @Autowired private ProductRepository productRepository;
-    @Autowired private CreditCardRepository creditCardRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    @MockBean protected NotificationService notificationService;
+    @Autowired
+    private CreditCardRepository creditCardRepository;
 
-    protected final List<Product> products =
-            List.of(
-                    new Product(
-                            null,
-                            "P100",
-                            "Product 1",
-                            "Product 1 desc",
-                            null,
-                            BigDecimal.TEN,
-                            BigDecimal.valueOf(2.5)),
-                    new Product(
-                            null,
-                            "P101",
-                            "Product 2",
-                            "Product 2 desc",
-                            null,
-                            BigDecimal.valueOf(24),
-                            BigDecimal.ZERO));
+    @MockBean
+    protected NotificationService notificationService;
+
+    protected final List<Product> products = List.of(
+            new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN, BigDecimal.valueOf(2.5)),
+            new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24), BigDecimal.ZERO));
 
     @BeforeEach
     void setUp() {

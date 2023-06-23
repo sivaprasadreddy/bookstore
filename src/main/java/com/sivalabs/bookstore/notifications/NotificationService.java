@@ -51,8 +51,7 @@ public class NotificationService {
                 BookStore Team
                 """
                         .formatted(event.customer().name(), event.orderId());
-        emailService.sendEmail(
-                event.customer().email(), "Order Cancellation Confirmation", content);
+        emailService.sendEmail(event.customer().email(), "Order Cancellation Confirmation", content);
     }
 
     public void sendErrorNotification(OrderErrorEvent event) {

@@ -20,30 +20,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class OrderCancelledNotificationEventHandlerTest extends AbstractIntegrationTest {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(OrderCancelledNotificationEventHandlerTest.class);
-    @Autowired private KafkaHelper kafkaHelper;
+    private static final Logger log = LoggerFactory.getLogger(OrderCancelledNotificationEventHandlerTest.class);
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private KafkaHelper kafkaHelper;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderCancelledEvent() {
         Customer customer = new Customer("Siva", "siva@gmail.com", "999999999");
         OrderCancelledEvent event =
-                new OrderCancelledEvent(
-                        UUID.randomUUID().toString(), "test error", Set.of(), customer, null);
+                new OrderCancelledEvent(UUID.randomUUID().toString(), "test error", Set.of(), customer, null);
         log.info("Cancelling OrderId:{}", event.orderId());
 
         kafkaHelper.send(properties.cancelledOrdersTopic(), event);
 
-        ArgumentCaptor<OrderCancelledEvent> captor =
-                ArgumentCaptor.forClass(OrderCancelledEvent.class);
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            verify(notificationService).sendCancelledNotification(captor.capture());
-                            OrderCancelledEvent orderCancelledEvent = captor.getValue();
-                            assertThat(orderCancelledEvent.orderId()).isEqualTo(event.orderId());
-                        });
+        ArgumentCaptor<OrderCancelledEvent> captor = ArgumentCaptor.forClass(OrderCancelledEvent.class);
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            verify(notificationService).sendCancelledNotification(captor.capture());
+            OrderCancelledEvent orderCancelledEvent = captor.getValue();
+            assertThat(orderCancelledEvent.orderId()).isEqualTo(event.orderId());
+        });
     }
 }

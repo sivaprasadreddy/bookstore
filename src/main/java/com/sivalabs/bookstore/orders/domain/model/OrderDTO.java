@@ -22,35 +22,28 @@ public class OrderDTO {
     public OrderDTO(Order order) {
         this.setId(order.getId());
         this.setOrderId(order.getOrderId());
-        this.setCustomer(
-                new Customer(
-                        order.getCustomerName(),
-                        order.getCustomerEmail(),
-                        order.getCustomerPhone()));
+        this.setCustomer(new Customer(order.getCustomerName(), order.getCustomerEmail(), order.getCustomerPhone()));
 
-        this.setDeliveryAddress(
-                new Address(
-                        order.getDeliveryAddressLine1(),
-                        order.getDeliveryAddressLine2(),
-                        order.getDeliveryAddressCity(),
-                        order.getDeliveryAddressState(),
-                        order.getDeliveryAddressZipCode(),
-                        order.getDeliveryAddressCountry()));
+        this.setDeliveryAddress(new Address(
+                order.getDeliveryAddressLine1(),
+                order.getDeliveryAddressLine2(),
+                order.getDeliveryAddressCity(),
+                order.getDeliveryAddressState(),
+                order.getDeliveryAddressZipCode(),
+                order.getDeliveryAddressCountry()));
         this.setStatus(order.getStatus());
         this.setComments(order.getComments());
 
-        Set<OrderItemDTO> orderItemDTOs =
-                order.getItems().stream()
-                        .map(
-                                item -> {
-                                    OrderItemDTO itemDTO = new OrderItemDTO();
-                                    itemDTO.setCode(item.getCode());
-                                    itemDTO.setName(item.getName());
-                                    itemDTO.setPrice(item.getPrice());
-                                    itemDTO.setQuantity(item.getQuantity());
-                                    return itemDTO;
-                                })
-                        .collect(Collectors.toSet());
+        Set<OrderItemDTO> orderItemDTOs = order.getItems().stream()
+                .map(item -> {
+                    OrderItemDTO itemDTO = new OrderItemDTO();
+                    itemDTO.setCode(item.getCode());
+                    itemDTO.setName(item.getName());
+                    itemDTO.setPrice(item.getPrice());
+                    itemDTO.setQuantity(item.getQuantity());
+                    return itemDTO;
+                })
+                .collect(Collectors.toSet());
         this.setItems(orderItemDTOs);
     }
 

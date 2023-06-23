@@ -20,29 +20,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class OrderCreatedNotificationEventHandlerTest extends AbstractIntegrationTest {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(OrderCreatedNotificationEventHandlerTest.class);
-    @Autowired private KafkaHelper kafkaHelper;
+    private static final Logger log = LoggerFactory.getLogger(OrderCreatedNotificationEventHandlerTest.class);
 
-    @Autowired private ApplicationProperties properties;
+    @Autowired
+    private KafkaHelper kafkaHelper;
+
+    @Autowired
+    private ApplicationProperties properties;
 
     @Test
     void shouldHandleOrderCreatedEvent() {
         Customer customer = new Customer("Siva", "siva@gmail.com", "999999999");
-        OrderCreatedEvent event =
-                new OrderCreatedEvent(UUID.randomUUID().toString(), Set.of(), customer, null);
+        OrderCreatedEvent event = new OrderCreatedEvent(UUID.randomUUID().toString(), Set.of(), customer, null);
         log.info("Delivered OrderId:{}", event.orderId());
 
         kafkaHelper.send(properties.newOrdersTopic(), event);
 
         ArgumentCaptor<OrderCreatedEvent> captor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
-        await().atMost(30, SECONDS)
-                .untilAsserted(
-                        () -> {
-                            verify(notificationService)
-                                    .sendConfirmationNotification(captor.capture());
-                            OrderCreatedEvent orderCreatedEvent = captor.getValue();
-                            assertThat(orderCreatedEvent.orderId()).isEqualTo(event.orderId());
-                        });
+        await().atMost(30, SECONDS).untilAsserted(() -> {
+            verify(notificationService).sendConfirmationNotification(captor.capture());
+            OrderCreatedEvent orderCreatedEvent = captor.getValue();
+            assertThat(orderCreatedEvent.orderId()).isEqualTo(event.orderId());
+        });
     }
 }

@@ -21,8 +21,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public PagedResult<ProductModel> getProducts(
-            @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    public PagedResult<ProductModel> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         return productService.getProducts(pageNo);
     }
 
