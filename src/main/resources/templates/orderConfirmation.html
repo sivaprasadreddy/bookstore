@@ -7,7 +7,8 @@
 <body>
 <div layout:fragment="content">
     <h2>Your Order placed successfully</h2>
-    <h3>Order Number:{{orderDetails.orderId}}</h3>
+    <h4>Order Number:{{orderDetails.orderId}}</h4>
+    <h4>Order Status: <span>{{orderDetails.status}}</span></h4>
     <hr/>
     <div class="pb-3">
         <table class="table">
@@ -106,6 +107,7 @@
     console.log("OrderId:", orderId);
     /*]]>*/
 </script>
+<script src="/js/orderDetails.js"></script>
 </div>
 </body>
 </html>

@@ -23,4 +23,9 @@ public class ShopController {
         model.addAttribute("orderId", orderId);
         return "orderConfirmation";
     }
+
+    @GetMapping("/orders")
+    public String showOrderAllOrders() {
+        return "orders";
+    }
 }

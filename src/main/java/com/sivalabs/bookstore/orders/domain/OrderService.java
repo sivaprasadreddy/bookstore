@@ -5,6 +5,7 @@ import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import com.sivalabs.bookstore.orders.domain.model.Payment;
 import com.sivalabs.bookstore.payment.domain.PaymentRequest;
 import com.sivalabs.bookstore.payment.domain.PaymentResponse;
@@ -70,5 +71,9 @@ public class OrderService {
         order.setStatus(status);
         order.setComments(comments);
         orderRepository.save(order);
+    }
+
+    public List<OrderSummary> findAllOrderSummaries() {
+        return orderRepository.findAllOrderSummaries();
     }
 }

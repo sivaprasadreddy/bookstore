@@ -5,7 +5,9 @@ import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,11 @@ public class OrderController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public OrderConfirmationDTO createOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
         return orderService.createOrder(orderRequest);
+    }
+
+    @GetMapping
+    public List<OrderSummary> getOrders() {
+        return orderService.findAllOrderSummaries();
     }
 
     @GetMapping(value = "/{orderId}")
