@@ -15,7 +15,7 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgres() {
-        return new PostgreSQLContainer<>("postgres:15.3-alpine");
+        return new PostgreSQLContainer<>("postgres:15.4-alpine");
     }
 
     @Bean
@@ -27,12 +27,12 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     KafkaContainer kafka() {
-        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
+        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.1"));
     }
 
     @Bean
     @ServiceConnection(name = "redis")
     GenericContainer<?> redis() {
-        return new GenericContainer<>(DockerImageName.parse("redis:7.0.11-alpine")).withExposedPorts(6379);
+        return new GenericContainer<>(DockerImageName.parse("redis:7.2.0-alpine")).withExposedPorts(6379);
     }
 }

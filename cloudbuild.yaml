@@ -1,8 +1,0 @@
-steps:
-  - name: 'eclipse-temurin:17.0.7_7-jdk-focal'
-    args:
-      - '-c'
-      - |
-        ./mvnw verify
-    dir: '${_APP_NAME}'
-    entrypoint: bash

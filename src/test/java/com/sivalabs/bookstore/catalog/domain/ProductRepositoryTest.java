@@ -10,9 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -24,12 +23,8 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Container
+    @ServiceConnection
     static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
-
-    @DynamicPropertySource
-    static void overrideProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
-    }
 
     @BeforeEach
     void setUp() {
