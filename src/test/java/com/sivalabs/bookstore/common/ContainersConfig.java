@@ -21,7 +21,7 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     MongoDBContainer mongodb() {
-        return new MongoDBContainer("mongo:6.0");
+        return new MongoDBContainer("mongo:7.0");
     }
 
     @Bean
