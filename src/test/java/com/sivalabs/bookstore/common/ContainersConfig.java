@@ -27,7 +27,7 @@ public class ContainersConfig {
     @Bean
     @ServiceConnection
     KafkaContainer kafka() {
-        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.1"));
+        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.0"));
     }
 
     @Bean
