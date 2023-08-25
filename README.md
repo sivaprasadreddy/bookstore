@@ -7,9 +7,9 @@ A bookstore application built using SpringBoot as a monolith.
 * Spring Boot
 * Spring Data JPA
 * Spring Data Mongo
-* Spring Data Redis(Cache)
+* Spring Data Redis
 * Kafka
-* Thymeleaf + VueJS
+* Thymeleaf + AlpineJS
 
 ## How to run?
 
