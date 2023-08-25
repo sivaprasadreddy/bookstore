@@ -49,7 +49,7 @@ services:
       ZOOKEEPER_SERVERS: zookeeper:2888:3888
 
   kafka:
-    image: confluentinc/cp-kafka:7.4.1
+    image: confluentinc/cp-kafka:7.5.0
     hostname: kafka
     container_name: kafka
     ports:
