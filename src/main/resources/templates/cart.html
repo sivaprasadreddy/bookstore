@@ -6,139 +6,141 @@
       layout:decorate="~{layout}">
 <body>
 <div layout:fragment="content">
-    <div class="col-md-8 offset-md-2">
+    <div x-data="initData()">
+        <div class="col-md-8 offset-md-2">
 
-        <div v-if="cart.items.length == 0">
-            <h3>Your cart is empty. <a href="/">Continue shopping</a></h3>
-        </div>
-        <div v-if="cart.items.length > 0" class="pb-3">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Sub Total</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div x-show="cart.items.length == 0">
+                <h3>Your cart is empty. <a href="/">Continue shopping</a></h3>
+            </div>
+            <div x-show="cart.items.length > 0" class="pb-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Sub Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <template x-for="item in cart.items">
+                        <tr>
+                            <td x-text="item.name">name</td>
+                            <td x-text="item.price">price</td>
+                            <td>
+                                <input type="number" min="0" x-model="item.quantity"
+                                       @change="updateItemQuantity(item.code, $event.target.value)"/>
+                            </td>
+                            <td x-text="item.quantity * item.price">subTotal</td>
+                        </tr>
+                    </template>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="3"></th>
+                        <th colspan="1" style="text-align: left">
+                            Total Amount: <span x-text="cart.cartTotal">cartTotal</span>
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
 
-                <tr v-for="item in cart.items">
-                    <td>{{item.name}}</td>
-                    <td>{{item.price}}</td>
-                    <td>
-                        <input type="number" min="0" :value="item.quantity"
-                               @change="updateItemQuantity(item.code, $event.target.value)"/>
-                    </td>
-                    <td>{{item.quantity * item.price}}</td>
-                </tr>
-
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th colspan="3"></th>
-                    <th colspan="1" style="text-align: left">
-                        Total Amount: {{cart.cartTotal}}
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
-
-            <form class="row g-3" method="post" @submit.prevent="createOrder">
-                <div class="col-md-6">
-                    <label for="customerName" class="form-label">Customer Name</label>
-                    <input type="text" class="form-control"
-                           id="customerName"
-                           name="customerName"
-                           v-model="orderForm.customer.name"
-                           value=""/>
-                </div>
-                <div class="col-md-6">
-                    <label for="customerEmail" class="form-label">Customer Email</label>
-                    <input type="email" class="form-control"
-                           id="customerEmail"
-                           name="customerEmail"
-                           v-model="orderForm.customer.email"
-                           value="">
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressLine1" class="form-label">Delivery Address Line 1</label>
-                    <input class="form-control"
-                           id="deliveryAddressLine1"
-                           name="deliveryAddressLine1"
-                           v-model="orderForm.deliveryAddress.addressLine1"/>
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressLine2" class="form-label">Delivery Address Line 2</label>
-                    <input class="form-control"
-                           id="deliveryAddressLine2"
-                           name="deliveryAddressLine2"
-                           v-model="orderForm.deliveryAddress.addressLine2"/>
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressCity" class="form-label">Delivery Address City</label>
-                    <input class="form-control"
-                           id="deliveryAddressCity"
-                           name="deliveryAddressCity"
-                           v-model="orderForm.deliveryAddress.city"/>
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressState" class="form-label">Delivery Address State</label>
-                    <input class="form-control"
-                           id="deliveryAddressState"
-                           name="deliveryAddressState"
-                           v-model="orderForm.deliveryAddress.state"/>
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressZipCode" class="form-label">Delivery Address ZipCode</label>
-                    <input class="form-control"
-                           id="deliveryAddressZipCode"
-                           name="deliveryAddressZipCode"
-                           v-model="orderForm.deliveryAddress.zipCode"/>
-                </div>
-                <div class="col-6">
-                    <label for="deliveryAddressCountry" class="form-label">Delivery Address Country</label>
-                    <input class="form-control"
-                           id="deliveryAddressCountry"
-                           name="deliveryAddressCountry"
-                           v-model="orderForm.deliveryAddress.country"/>
-                </div>
-                <div class="col-6">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <input type="text" class="form-control"
-                           id="cardNumber"
-                           name="cardNumber"
-                           value=""
-                           v-model="orderForm.payment.cardNumber">
-                </div>
-                <div class="col-md-6">
-                    <label for="cvv" class="form-label">CVV</label>
-                    <input type="text" class="form-control"
-                           id="cvv"
-                           name="cvv"
-                           value=""
-                           v-model="orderForm.payment.cvv">
-                </div>
-                <div class="col-6">
-                    <label for="expiryMonth" class="form-label">ExpiryMonth</label>
-                    <input type="text" class="form-control"
-                           id="expiryMonth"
-                           name="expiryMonth"
-                           value=""
-                           v-model="orderForm.payment.expiryMonth">
-                </div>
-                <div class="col-md-6">
-                    <label for="expiryYear" class="form-label">ExpiryYear</label>
-                    <input type="text" class="form-control"
-                           id="expiryYear"
-                           name="expiryYear"
-                           value=""
-                           v-model="orderForm.payment.expiryYear">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Place Order</button>
-                </div>
-            </form>
+                <form class="row g-3" method="post" @submit.prevent="createOrder">
+                    <div class="col-md-6">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control"
+                               id="customerName"
+                               name="customerName"
+                               x-model="orderForm.customer.name"
+                               value=""/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="customerEmail" class="form-label">Customer Email</label>
+                        <input type="email" class="form-control"
+                               id="customerEmail"
+                               name="customerEmail"
+                               x-model="orderForm.customer.email"
+                               value="">
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine1" class="form-label">Delivery Address Line 1</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine1"
+                               name="deliveryAddressLine1"
+                               x-model="orderForm.deliveryAddress.addressLine1"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine2" class="form-label">Delivery Address Line 2</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine2"
+                               name="deliveryAddressLine2"
+                               x-model="orderForm.deliveryAddress.addressLine2"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCity" class="form-label">Delivery Address City</label>
+                        <input class="form-control"
+                               id="deliveryAddressCity"
+                               name="deliveryAddressCity"
+                               x-model="orderForm.deliveryAddress.city"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressState" class="form-label">Delivery Address State</label>
+                        <input class="form-control"
+                               id="deliveryAddressState"
+                               name="deliveryAddressState"
+                               x-model="orderForm.deliveryAddress.state"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressZipCode" class="form-label">Delivery Address ZipCode</label>
+                        <input class="form-control"
+                               id="deliveryAddressZipCode"
+                               name="deliveryAddressZipCode"
+                               x-model="orderForm.deliveryAddress.zipCode"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCountry" class="form-label">Delivery Address Country</label>
+                        <input class="form-control"
+                               id="deliveryAddressCountry"
+                               name="deliveryAddressCountry"
+                               x-model="orderForm.deliveryAddress.country"/>
+                    </div>
+                    <div class="col-6">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control"
+                               id="cardNumber"
+                               name="cardNumber"
+                               value=""
+                               x-model="orderForm.payment.cardNumber">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cvv" class="form-label">CVV</label>
+                        <input type="text" class="form-control"
+                               id="cvv"
+                               name="cvv"
+                               value=""
+                               x-model="orderForm.payment.cvv">
+                    </div>
+                    <div class="col-6">
+                        <label for="expiryMonth" class="form-label">ExpiryMonth</label>
+                        <input type="text" class="form-control"
+                               id="expiryMonth"
+                               name="expiryMonth"
+                               value=""
+                               x-model="orderForm.payment.expiryMonth">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="expiryYear" class="form-label">ExpiryYear</label>
+                        <input type="text" class="form-control"
+                               id="expiryYear"
+                               name="expiryYear"
+                               value=""
+                               x-model="orderForm.payment.expiryYear">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Place Order</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

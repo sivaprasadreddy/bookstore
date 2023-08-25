@@ -1,26 +1,22 @@
-new Vue({
-    el: '#app',
-    data: {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('initData', (orderId) => ({
+        id: orderId,
         cart: { items: [] },
         orderDetails: {
             items: [],
             customer: {},
             deliveryAddress: {}
-        }
-    },
-    created: function () {
-        updateCartItemCount();
-        if(window.orderId) {
-            this.getOrderDetails(window.orderId)
-        }
-    },
-    methods: {
+        },
+        init() {
+            updateCartItemCount();
+            this.getOrderDetails(this.id)
+        },
         getOrderDetails(orderId) {
-            let self = this;
-            $.getJSON("/api/orders/"+orderId, function (data) {
-                console.log("Get Order Resp:", data)
-                self.orderDetails = data
+            $.getJSON("/api/orders/"+ orderId, (data) => {
+                //console.log("Get Order Resp:", data)
+                this.orderDetails = data
             });
         }
-    }
+
+    }))
 });

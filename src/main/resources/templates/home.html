@@ -6,33 +6,39 @@
       layout:decorate="~{layout}">
 <body>
 <div layout:fragment="content">
-    <div class="row row-cols-1 row-cols-md-4">
-        <div class="col mb-3" v-for="product in products">
-            <div class="card h-100 product">
+    <div x-data="initData()">
+        <div class="row row-cols-1 row-cols-md-4">
+            <template x-for="product in products">
+                <div class="col mb-3">
+                    <div class="card h-100 product">
 
-                <img :src="product.imageUrl"
-                     onerror="this.onerror=null; this.src='/images/image-not-found.png'"
-                     class="card-img-top" alt="Movie"
-                     height="300" width="200"
-                />
+                        <img :src="product.imageUrl"
+                             onerror="this.onerror=null; this.src='/images/image-not-found.png'"
+                             class="card-img-top" alt="Movie"
+                             height="300" width="200"
+                        />
 
-                <div class="card-body">
-                    <h5 class="card-title"
-                        data-toggle="tooltip"
-                        data-placement="top">{{product.name}}</h5>
-                    <p class="card-text"
-                       data-toggle="tooltip"
-                       data-placement="top"
-                    >{{product.description}}</p>
-                </div>
-                <div class="card-footer" style="background: transparent; border-top: 0;">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" v-on:click="addToCart(product.code)">
-                            Add to Cart
-                        </button>
+                        <div class="card-body">
+                            <h5 class="card-title"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                x-text="product.name">product.name</h5>
+                            <p class="card-text"
+                               data-toggle="tooltip"
+                               data-placement="top"
+                               x-text="product.description"
+                            >product.description</p>
+                        </div>
+                        <div class="card-footer" style="background: transparent; border-top: 0;">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" @click="addToCart(product.code)">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
 </div>

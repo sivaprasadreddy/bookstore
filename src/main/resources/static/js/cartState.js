@@ -5,7 +5,7 @@ function updateCartItemCount() {
         cartParam = "?cartId=" + cartId;
     }
     $.getJSON("/api/carts" + cartParam, function (data) {
-        console.log("Cart Count Resp:", data)
+        //console.log("Cart Count Resp:", data)
         localStorage.setItem("cartId", data.id);
         let count = 0;
         data.items.forEach(item => {

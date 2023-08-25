@@ -1,6 +1,5 @@
-new Vue({
-    el: '#app',
-    data: {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('initData', () => ({
         cart: { items: [] },
         orderForm: {
             customer: {
@@ -22,28 +21,25 @@ new Vue({
                 zipCode: "500072",
                 country: "India"
             }
-        }
-    },
-    created: function () {
-        updateCartItemCount();
-        this.loadCart();
-    },
-    methods: {
+        },
+
+        init() {
+            updateCartItemCount();
+            this.loadCart();
+        },
         loadCart() {
-            let self = this;
             const cartId = localStorage.getItem("cartId");
             if(cartId) {
-                $.getJSON("/api/carts?cartId=" + cartId, function (data) {
+                $.getJSON("/api/carts?cartId=" + cartId, (data) => {
                     //console.log("Cart Resp:", data)
-                    self.cart = data;
+                    this.cart = data;
                 })
-                .fail(function () {
+                .fail( () => {
                     alert("Error loading cart");
                 });
             }
         },
         updateItemQuantity(code, quantity) {
-            let self = this;
             const cartId = localStorage.getItem("cartId");
             let cartParam = "";
             if(cartId) {
@@ -55,13 +51,13 @@ new Vue({
                 dataType: "json",
                 contentType: "application/json",
                 data : '{"code":"'+ code +'", "quantity":"'+quantity+'"}"',
-                complete: function() {
+                complete: () => {
                     updateCartItemCount();
+                    this.loadCart();
                 }
             });
         },
         removeCart() {
-            let self = this;
             const cartId = localStorage.getItem("cartId");
             if(cartId) {
                 $.ajax ({
@@ -77,25 +73,24 @@ new Vue({
             }
         },
         createOrder() {
-            console.log("Current Cart:",this.cart)
-            console.log("Order Form", this.orderForm);
+            //console.log("Current Cart:",this.cart)
+            //console.log("Order Form", this.orderForm);
             let order = Object.assign({}, this.orderForm, {items: this.cart.items});
-            console.log("Order ", order);
+            //console.log("Order ", order);
 
-            let self = this;
             $.ajax ({
                 url: '/api/orders',
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 data : JSON.stringify(order),
-                complete: function(resp) {
-                    console.log("Order Resp:", resp.responseJSON)
-                    self.removeCart();
-                    alert("Order placed successfully")
+                complete: (resp) => {
+                    //console.log("Order Resp:", resp.responseJSON)
+                    this.removeCart();
+                    //alert("Order placed successfully")
                     window.location = "/order/"+resp.responseJSON.orderId;
                 }
             });
-        }
-    }
+        },
+    }))
 });

@@ -1,23 +1,20 @@
-new Vue({
-    el: '#app',
-    data: {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('initData', () => ({
         products: [],
-        cart: { items: [] }
-    },
-    created: function () {
-        this.loadProducts();
-        updateCartItemCount();
-    },
-    methods: {
+        cart: { items: [] },
+
+        init() {
+            this.loadProducts();
+            updateCartItemCount();
+        },
         loadProducts() {
             let self = this;
-            $.getJSON("/api/products", function (data) {
+            $.getJSON("/api/products", (data)=> {
                 console.log("Products Resp:", data)
-                self.products = data.data
+                this.products = data.data
             });
         },
         addToCart(code) {
-            let self = this;
             const cartId = localStorage.getItem("cartId");
             let cartParam = "";
             if(cartId) {
@@ -34,5 +31,5 @@ new Vue({
                 }
             });
         },
-    }
+    }))
 });
