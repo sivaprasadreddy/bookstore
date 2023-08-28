@@ -8,7 +8,6 @@ document.addEventListener('alpine:init', () => {
             updateCartItemCount();
         },
         loadProducts() {
-            let self = this;
             $.getJSON("/api/products", (data)=> {
                 console.log("Products Resp:", data)
                 this.products = data.data
@@ -26,8 +25,15 @@ document.addEventListener('alpine:init', () => {
                 dataType: "json",
                 contentType: "application/json",
                 data : '{"code":"'+ code +'"}"',
-                complete: function() {
+                success: (data) => {
+                    localStorage.setItem("cartId", data.id);
                     updateCartItemCount();
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    if(jqXHR.status === 404) {
+                        localStorage.removeItem("cartId");
+                        this.addToCart(code);
+                    }
                 }
             });
         },

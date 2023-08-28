@@ -51,7 +51,7 @@ document.addEventListener('alpine:init', () => {
                 dataType: "json",
                 contentType: "application/json",
                 data : '{"code":"'+ code +'", "quantity":"'+quantity+'"}"',
-                complete: () => {
+                success: () => {
                     updateCartItemCount();
                     this.loadCart();
                 }
@@ -65,7 +65,7 @@ document.addEventListener('alpine:init', () => {
                     type: "DELETE",
                     dataType: "json",
                     contentType: "application/json",
-                    complete: function() {
+                    success: function() {
                         localStorage.removeItem("cartId");
                         updateCartItemCount();
                     }
@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
                 dataType: "json",
                 contentType: "application/json",
                 data : JSON.stringify(order),
-                complete: (resp) => {
+                success: (resp) => {
                     //console.log("Order Resp:", resp.responseJSON)
                     this.removeCart();
                     //alert("Order placed successfully")
