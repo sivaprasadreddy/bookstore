@@ -23,7 +23,7 @@
         <jquery.version>3.7.0</jquery.version>
         <font_awesome.version>6.4.2</font_awesome.version>
         <alpinejs.version>3.13.0</alpinejs.version>
-        <spotless.version>2.38.0</spotless.version>
+        <spotless.version>2.39.0</spotless.version>
     </properties>
     <dependencies>
         <dependency>
