@@ -4,7 +4,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import com.sivalabs.bookstore.catalog.domain.Product;
 import com.sivalabs.bookstore.catalog.domain.ProductRepository;
-import com.sivalabs.bookstore.notifications.NotificationService;
 import com.sivalabs.bookstore.payment.domain.CreditCard;
 import com.sivalabs.bookstore.payment.domain.CreditCardRepository;
 import io.restassured.RestAssured;
@@ -13,7 +12,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,9 +29,6 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired
     private CreditCardRepository creditCardRepository;
-
-    @MockBean
-    protected NotificationService notificationService;
 
     protected final List<Product> products = List.of(
             new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN),
