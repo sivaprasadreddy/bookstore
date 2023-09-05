@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "code": "#{productCode}",
+      "name": "#{productName}",
+      "price": "#{productPrice}",
+      "quantity": "#{randomQuantity}"
+    }
+  ],
+  "customer": {
+    "name": "Siva",
+    "email": "siva@gmail.com",
+    "phone": "99999999"
+  },
+  "deliveryAddress": {
+    "addressLine1": "KPHB",
+    "addressLine2": "Kukatpally",
+    "city": "Hyderabad",
+    "state": "TS",
+    "zipCode": "500072",
+    "country": "India"
+  },
+  "payment": {
+    "cardNumber": "1111222233334444",
+    "cvv": "123",
+    "expiryMonth": 2,
+    "expiryYear": 2030
+  }
+}

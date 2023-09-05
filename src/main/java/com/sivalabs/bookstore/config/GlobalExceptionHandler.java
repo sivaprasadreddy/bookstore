@@ -1,6 +1,5 @@
 package com.sivalabs.bookstore.config;
 
-import com.sivalabs.bookstore.cart.domain.CartNotFoundException;
 import com.sivalabs.bookstore.catalog.domain.ProductNotFoundException;
 import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import java.net.URI;
@@ -29,16 +28,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Order Not Found");
         problemDetail.setType(URI.create("https://api.orders.com/errors/not-found"));
-        problemDetail.setProperty("errorCategory", "Generic");
-        problemDetail.setProperty("timestamp", Instant.now());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(CartNotFoundException.class)
-    ProblemDetail handleCartNotFoundException(CartNotFoundException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
-        problemDetail.setTitle("Cart Not Found");
-        problemDetail.setType(URI.create("https://api.cart.com/errors/not-found"));
         problemDetail.setProperty("errorCategory", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
