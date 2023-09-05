@@ -1,15 +1,13 @@
 package com.sivalabs.bookstore.payment.domain;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentService {
     private final CreditCardRepository creditCardRepository;
-
-    public PaymentService(CreditCardRepository creditCardRepository) {
-        this.creditCardRepository = creditCardRepository;
-    }
 
     public PaymentResponse validate(PaymentRequest request) {
         Optional<CreditCard> creditCardOptional = creditCardRepository.findByCardNumber(request.cardNumber());

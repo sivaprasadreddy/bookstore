@@ -36,8 +36,8 @@ public abstract class AbstractIntegrationTest {
     protected NotificationService notificationService;
 
     protected final List<Product> products = List.of(
-            new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN, BigDecimal.valueOf(2.5)),
-            new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24), BigDecimal.ZERO));
+            new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN),
+            new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
 
     @BeforeEach
     void setUp() {

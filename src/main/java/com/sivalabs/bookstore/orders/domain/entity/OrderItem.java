@@ -9,9 +9,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "order_items")
+@Setter
+@Getter
 public class OrderItem {
 
     @Id
@@ -32,56 +36,4 @@ public class OrderItem {
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
-
-    public BigDecimal getSubTotal() {
-        return price.multiply(new BigDecimal(quantity));
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public Integer getQuantity() {
-        return this.quantity;
-    }
-
-    public Order getOrder() {
-        return this.order;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

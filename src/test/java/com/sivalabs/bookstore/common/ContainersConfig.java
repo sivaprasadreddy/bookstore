@@ -5,7 +5,6 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -16,12 +15,6 @@ public class ContainersConfig {
     @ServiceConnection
     PostgreSQLContainer<?> postgres() {
         return new PostgreSQLContainer<>("postgres:15.4-alpine");
-    }
-
-    @Bean
-    @ServiceConnection
-    MongoDBContainer mongodb() {
-        return new MongoDBContainer("mongo:7.0");
     }
 
     @Bean

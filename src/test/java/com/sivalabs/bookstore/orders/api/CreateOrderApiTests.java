@@ -65,9 +65,9 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                 .body()
                 .as(OrderConfirmationDTO.class);
 
-        Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.getOrderId());
+        Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.orderId());
         assertThat(orderOptional).isPresent();
-        assertThat(orderOptional.get().getStatus()).isEqualTo(OrderStatus.NEW);
+        assertThat(orderOptional.get().status()).isEqualTo(OrderStatus.NEW);
     }
 
     @Test

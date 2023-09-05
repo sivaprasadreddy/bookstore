@@ -4,10 +4,14 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("carts")
+@Setter
+@Getter
 public class Cart {
     @Id
     private String id;
@@ -67,21 +71,5 @@ public class Cart {
 
     public BigDecimal getCartTotal() {
         return items.stream().map(CartItem::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Set<CartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(Set<CartItem> items) {
-        this.items = items;
     }
 }

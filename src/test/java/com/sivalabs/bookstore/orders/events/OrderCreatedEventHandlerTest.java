@@ -5,9 +5,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.common.KafkaHelper;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
@@ -17,23 +15,17 @@ import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
-
-    private static final Logger log = LoggerFactory.getLogger(OrderCreatedEventHandlerTest.class);
-
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
-    private KafkaHelper kafkaHelper;
-
-    @Autowired
-    private ApplicationProperties properties;
+    private OrderEventPublisher orderEventPublisher;
 
     @Test
     void shouldHandleOrderCreatedEvent() {
@@ -60,7 +52,7 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
         log.info("Created OrderId:{}", event.orderId());
 
-        kafkaHelper.send(properties.newOrdersTopic(), event);
+        orderEventPublisher.send(event);
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
             Optional<Order> orderOptional = orderRepository.findByOrderId(event.orderId());

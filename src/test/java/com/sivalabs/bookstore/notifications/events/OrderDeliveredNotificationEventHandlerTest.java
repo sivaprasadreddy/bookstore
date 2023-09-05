@@ -5,28 +5,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.verify;
 
-import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.common.KafkaHelper;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.Set;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 class OrderDeliveredNotificationEventHandlerTest extends AbstractIntegrationTest {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderDeliveredNotificationEventHandlerTest.class);
-
     @Autowired
-    private KafkaHelper kafkaHelper;
-
-    @Autowired
-    private ApplicationProperties properties;
+    private OrderEventPublisher orderEventPublisher;
 
     @Test
     void shouldHandleOrderDeliveredEvent() {
@@ -34,7 +28,7 @@ class OrderDeliveredNotificationEventHandlerTest extends AbstractIntegrationTest
         OrderDeliveredEvent event = new OrderDeliveredEvent(UUID.randomUUID().toString(), Set.of(), customer, null);
         log.info("Delivered OrderId:{}", event.orderId());
 
-        kafkaHelper.send(properties.deliveredOrdersTopic(), event);
+        orderEventPublisher.send(event);
         ArgumentCaptor<OrderDeliveredEvent> captor = ArgumentCaptor.forClass(OrderDeliveredEvent.class);
 
         await().atMost(30, SECONDS).untilAsserted(() -> {

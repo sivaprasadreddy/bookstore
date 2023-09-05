@@ -7,7 +7,6 @@ import static org.awaitility.Awaitility.await;
 
 import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.common.KafkaHelper;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
@@ -30,7 +29,7 @@ public class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
     private OrderRepository orderRepository;
 
     @Autowired
-    private KafkaHelper kafkaHelper;
+    private OrderEventPublisher orderEventPublisher;
 
     @Autowired
     private ApplicationProperties properties;
@@ -52,14 +51,12 @@ public class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
 
         orderRepository.saveAndFlush(order);
         log.info("Cancelling OrderId:{}", order.getOrderId());
-        kafkaHelper.send(
-                properties.cancelledOrdersTopic(),
-                new OrderCancelledEvent(
-                        order.getOrderId(),
-                        "testing",
-                        Set.of(),
-                        new Customer("Siva", "siva@gmail.com", "9999999999"),
-                        new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
+        orderEventPublisher.send(new OrderCancelledEvent(
+                order.getOrderId(),
+                "testing",
+                Set.of(),
+                new Customer("Siva", "siva@gmail.com", "9999999999"),
+                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
             Optional<Order> orderOptional = orderRepository.findByOrderId(order.getOrderId());

@@ -4,16 +4,13 @@ import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.common.model.OrderErrorEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
-
     private final EmailService emailService;
-
-    public NotificationService(EmailService emailService) {
-        this.emailService = emailService;
-    }
 
     public void sendConfirmationNotification(OrderCreatedEvent event) {
         String content =

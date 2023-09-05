@@ -9,31 +9,24 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.dao.DuplicateKeyException;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
-@DataMongoTest
-@Testcontainers
+@DataJpaTest(
+        properties = {
+            "spring.test.database.replace=none",
+            "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///bookstore"
+        })
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Container
-    @ServiceConnection
-    static final MongoDBContainer mongodb = new MongoDBContainer("mongo:6.0");
-
     @BeforeEach
     void setUp() {
-        productRepository.deleteAll();
+        productRepository.deleteAllInBatch();
 
-        productRepository.save(new Product(
-                null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN, BigDecimal.valueOf(2.5)));
-        productRepository.save(new Product(
-                null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24), BigDecimal.ZERO));
+        productRepository.save(new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN));
+        productRepository.save(new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
     }
 
     @Test
@@ -44,8 +37,8 @@ class ProductRepositoryTest {
 
     @Test
     void shouldFailToSaveProductWithDuplicateCode() {
-        var product = new Product(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN, BigDecimal.ZERO);
-        assertThrows(DuplicateKeyException.class, () -> productRepository.save(product));
+        var product = new Product(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN);
+        assertThrows(DataIntegrityViolationException.class, () -> productRepository.save(product));
     }
 
     @Test
@@ -56,6 +49,5 @@ class ProductRepositoryTest {
         assertThat(optionalProduct.get().getName()).isEqualTo("Product 1");
         assertThat(optionalProduct.get().getDescription()).isEqualTo("Product 1 desc");
         assertThat(optionalProduct.get().getPrice()).isEqualTo(BigDecimal.TEN);
-        assertThat(optionalProduct.get().getDiscount()).isEqualTo(BigDecimal.valueOf(2.5));
     }
 }

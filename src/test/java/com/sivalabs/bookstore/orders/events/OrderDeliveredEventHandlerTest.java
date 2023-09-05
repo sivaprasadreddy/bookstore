@@ -5,9 +5,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.common.KafkaHelper;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
@@ -26,10 +24,7 @@ public class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
     private OrderRepository orderRepository;
 
     @Autowired
-    private KafkaHelper kafkaHelper;
-
-    @Autowired
-    private ApplicationProperties properties;
+    private OrderEventPublisher orderEventPublisher;
 
     @Test
     void shouldHandleOrderDeliveredEvent() {
@@ -48,13 +43,11 @@ public class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
 
         orderRepository.saveAndFlush(order);
 
-        kafkaHelper.send(
-                properties.deliveredOrdersTopic(),
-                new OrderDeliveredEvent(
-                        order.getOrderId(),
-                        Set.of(),
-                        new Customer("Siva", "siva@gmail.com", "9999999999"),
-                        new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
+        orderEventPublisher.send(new OrderDeliveredEvent(
+                order.getOrderId(),
+                Set.of(),
+                new Customer("Siva", "siva@gmail.com", "9999999999"),
+                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
             Optional<Order> orderOptional = orderRepository.findByOrderId(order.getOrderId());

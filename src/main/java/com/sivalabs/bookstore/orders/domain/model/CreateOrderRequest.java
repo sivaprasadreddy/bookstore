@@ -2,53 +2,25 @@ package com.sivalabs.bookstore.orders.domain.model;
 
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
+import com.sivalabs.bookstore.common.model.OrderItem;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Set;
 
-public class CreateOrderRequest {
+public record CreateOrderRequest(
+        @NotEmpty(message = "Items cannot be empty.") Set<OrderItem> items,
+        @Valid Customer customer,
+        @Valid Address deliveryAddress,
+        @Valid Payment payment)
+        implements Serializable {
 
-    @NotEmpty(message = "Items cannot be empty.")
-    private Set<OrderItemDTO> items;
-
-    @Valid
-    private Customer customer;
-
-    @Valid
-    private Address deliveryAddress;
-
-    @Valid
-    private Payment payment;
-
-    public Set<OrderItemDTO> getItems() {
-        return this.items;
-    }
-
-    public Customer getCustomer() {
-        return this.customer;
-    }
-
-    public Address getDeliveryAddress() {
-        return this.deliveryAddress;
-    }
-
-    public Payment getPayment() {
-        return this.payment;
-    }
-
-    public void setItems(Set<OrderItemDTO> items) {
-        this.items = items;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
+    public record Payment(
+            @NotBlank(message = "Card Number is required") String cardNumber,
+            @NotBlank(message = "CVV is required") String cvv,
+            @NotNull Integer expiryMonth,
+            @NotNull Integer expiryYear)
+            implements Serializable {}
 }

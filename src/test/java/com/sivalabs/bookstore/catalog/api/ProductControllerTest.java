@@ -38,9 +38,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
                 .body("code", is("P100"))
                 .body("name", is("Product 1"))
                 .body("description", is("Product 1 desc"))
-                .body("price", equalTo(10))
-                .body("discount", is(2.5f))
-                .body("salePrice", is(7.5f));
+                .body("price", equalTo(10));
     }
 
     @Test

@@ -1,23 +1,37 @@
 package com.sivalabs.bookstore.catalog.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Document(collection = "products")
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "products")
 public class Product {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Indexed(unique = true)
+    @Column(nullable = false, unique = true)
     @NotEmpty(message = "Product code must not be null/empty")
     private String code;
 
     @NotEmpty(message = "Product name must not be null/empty")
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -25,82 +39,6 @@ public class Product {
     private String imageUrl;
 
     @NotNull(message = "Product price must not be null") @DecimalMin("0.1")
+    @Column(nullable = false)
     private BigDecimal price;
-
-    private BigDecimal discount;
-
-    public Product() {}
-
-    public Product(
-            String id,
-            String code,
-            String name,
-            String description,
-            String imageUrl,
-            BigDecimal price,
-            BigDecimal discount) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.discount = discount;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getImageUrl() {
-        return this.imageUrl;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public BigDecimal getDiscount() {
-        return this.discount;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
 }

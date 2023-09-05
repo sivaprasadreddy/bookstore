@@ -4,20 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.notifications.NotificationService;
-import org.slf4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class OrderCancelledNotificationEventHandler {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderCancelledNotificationEventHandler.class);
     private final NotificationService notificationService;
     private final ObjectMapper objectMapper;
-
-    public OrderCancelledNotificationEventHandler(NotificationService notificationService, ObjectMapper objectMapper) {
-        this.notificationService = notificationService;
-        this.objectMapper = objectMapper;
-    }
 
     @KafkaListener(topics = "${app.cancelled-orders-topic}", groupId = "notifications")
     public void handle(String payload) {

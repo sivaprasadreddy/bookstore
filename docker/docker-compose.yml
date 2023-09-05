@@ -2,7 +2,7 @@ version: '3.8'
 services:
   bookstore:
     #image: sivaprasadreddy/bookstore
-    build: .
+    build: ..
     container_name: bookstore
     environment:
       - SPRING_PROFILES_ACTIVE=docker
@@ -12,14 +12,12 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_DATA_REDIS_HOST=bookstore-redis
       - SPRING_DATA_REDIS_PORT=6379
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo:mongo@bookstore-mongodb:27017/catalog?authSource=admin
       - KAFKA_BROKER=kafka:9092
     ports:
       - "8080:8080"
     restart: unless-stopped
     depends_on:
       - bookstore-postgres
-      - bookstore-mongodb
       - bookstore-redis
       - kafka
     profiles:
@@ -34,15 +32,6 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
-
-  bookstore-mongodb:
-    image: mongo:7.0
-    container_name: bookstore-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
 
   bookstore-redis:
     image: redis:7.2.0-alpine
@@ -63,17 +52,6 @@ services:
 #    ports:
 #      - "9081:8081"
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_SERVERS: zookeeper:2888:3888
-
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     hostname: kafka
@@ -83,18 +61,13 @@ services:
       - "29092:29092"
       - "9101:9101"
     environment:
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: localhost
-    depends_on:
-      - zookeeper
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    volumes:
+        - ./run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"

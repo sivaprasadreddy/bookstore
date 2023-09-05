@@ -6,20 +6,17 @@ import com.sivalabs.bookstore.common.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import org.slf4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class OrderErrorEventHandler {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderErrorEventHandler.class);
     private final OrderService orderService;
     private final ObjectMapper objectMapper;
-
-    public OrderErrorEventHandler(OrderService orderService, ObjectMapper objectMapper) {
-        this.orderService = orderService;
-        this.objectMapper = objectMapper;
-    }
 
     @KafkaListener(topics = "${app.error-orders-topic}", groupId = "orders")
     public void handle(String payload) {

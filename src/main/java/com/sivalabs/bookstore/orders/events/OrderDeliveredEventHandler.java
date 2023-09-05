@@ -6,20 +6,17 @@ import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import org.slf4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class OrderDeliveredEventHandler {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderDeliveredEventHandler.class);
     private final OrderService orderService;
     private final ObjectMapper objectMapper;
-
-    public OrderDeliveredEventHandler(OrderService orderService, ObjectMapper objectMapper) {
-        this.orderService = orderService;
-        this.objectMapper = objectMapper;
-    }
 
     @KafkaListener(topics = "${app.delivered-orders-topic}", groupId = "orders")
     public void handle(String payload) {
@@ -31,7 +28,7 @@ public class OrderDeliveredEventHandler {
                 log.info("Received invalid OrderDeliveredEvent with orderId:{}: ", event.orderId());
                 return;
             }
-            orderService.updateOrderStatus(order.getOrderId(), OrderStatus.DELIVERED, null);
+            orderService.updateOrderStatus(order.orderId(), OrderStatus.DELIVERED, null);
         } catch (RuntimeException | JsonProcessingException e) {
             log.error("Error processing OrderDeliveredEvent. Payload: {}", payload);
             log.error(e.getMessage(), e);

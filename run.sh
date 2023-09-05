@@ -2,7 +2,7 @@
 
 set -e
 
-declare dc_file="docker-compose.yml"
+declare dc_file="docker/docker-compose.yml"
 
 function build() {
     ./mvnw clean spotless:apply verify
@@ -28,7 +28,7 @@ function restart_infra() {
 }
 
 function start() {
-    #build_image
+    build_image
     docker-compose --profile app -f "${dc_file}" up --force-recreate -d
 }
 
