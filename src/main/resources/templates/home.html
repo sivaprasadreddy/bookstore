@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
     <div x-data="initData()">
-        <div class="row row-cols-1 row-cols-md-4">
+        <div class="row row-cols-1 row-cols-md-5">
             <template x-for="product in products">
                 <div class="col mb-3">
                     <div class="card h-100 product">
@@ -26,8 +26,8 @@
                             <p class="card-text"
                                data-toggle="tooltip"
                                data-placement="top"
-                               x-text="product.description"
-                            >product.description</p>
+                               x-text="'Price: $'+product.price"
+                            >product.price</p>
                         </div>
                         <div class="card-footer" style="background: transparent; border-top: 0;">
                             <div class="d-grid gap-2">

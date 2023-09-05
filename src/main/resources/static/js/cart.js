@@ -59,6 +59,7 @@ document.addEventListener('alpine:init', () => {
         },
         removeCart() {
             const cartId = localStorage.getItem("cartId");
+            localStorage.removeItem("cartId");
             if(cartId) {
                 $.ajax ({
                     url: "/api/carts?cartId="+cartId,
@@ -66,7 +67,6 @@ document.addEventListener('alpine:init', () => {
                     dataType: "json",
                     contentType: "application/json",
                     success: function() {
-                        localStorage.removeItem("cartId");
                         updateCartItemCount();
                     }
                 });
@@ -85,10 +85,10 @@ document.addEventListener('alpine:init', () => {
                 contentType: "application/json",
                 data : JSON.stringify(order),
                 success: (resp) => {
-                    //console.log("Order Resp:", resp.responseJSON)
+                    console.log("Order Resp:", resp)
                     this.removeCart();
                     //alert("Order placed successfully")
-                    window.location = "/order/"+resp.responseJSON.orderId;
+                    window.location = "/order/"+resp.orderId;
                 }
             });
         },
