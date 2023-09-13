@@ -25,6 +25,7 @@
         <font_awesome.version>6.4.2</font_awesome.version>
         <alpinejs.version>3.13.0</alpinejs.version>
         <spotless.version>2.39.0</spotless.version>
+        <dockerImageName>sivaprasadreddy/${project.artifactId}</dockerImageName>
     </properties>
     <dependencies>
         <dependency>
@@ -172,12 +173,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>${dockerImageName}</name>
+                    </image>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>build-info</goal>
                         </goals>
                     </execution>
+
                 </executions>
             </plugin>
             <plugin>
