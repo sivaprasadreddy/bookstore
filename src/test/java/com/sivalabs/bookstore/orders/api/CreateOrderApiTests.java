@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import io.restassured.http.ContentType;
