@@ -8,7 +8,6 @@ document.addEventListener('alpine:init', () => {
             updateCartItemCount();
         },
         loadOrders() {
-            let self = this;
             $.getJSON("/api/orders", (data) => {
                 //console.log("orders :", data)
                 this.orders = data
