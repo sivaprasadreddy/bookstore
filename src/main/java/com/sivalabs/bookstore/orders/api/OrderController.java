@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/{orderId}")
-    public OrderDTO getOrder(@PathVariable(value = "orderId") String orderId) {
+    public OrderDTO getOrder(@PathVariable String orderId) {
         return orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 }

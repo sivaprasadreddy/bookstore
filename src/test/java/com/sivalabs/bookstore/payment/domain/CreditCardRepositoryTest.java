@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 @DataJpaTest(
         properties = {
             "spring.test.database.replace=none",
-            "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///bookstore"
+            "spring.datasource.url=jdbc:tc:postgresql:16-alpine:///bookstore"
         })
 class CreditCardRepositoryTest {
     @Autowired

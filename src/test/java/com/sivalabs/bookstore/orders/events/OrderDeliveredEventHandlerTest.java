@@ -18,7 +18,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
+class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
 
     @Autowired
     private OrderRepository orderRepository;
