@@ -1,6 +1,6 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('initData', () => ({
-        cart: { items: [] },
+        cart: { items: [], totalAmount: 0 },
         orderForm: {
             customer: {
                 name: "Siva",
@@ -26,6 +26,7 @@ document.addEventListener('alpine:init', () => {
         init() {
             updateCartItemCount();
             this.loadCart();
+            this.cart.totalAmount = getCartTotal();
         },
         loadCart() {
             this.cart = getCart()
@@ -33,6 +34,7 @@ document.addEventListener('alpine:init', () => {
         updateItemQuantity(code, quantity) {
             updateProductQuantity(code, quantity);
             updateCartItemCount();
+            this.cart.totalAmount = getCartTotal();
         },
         removeCart() {
             deleteCart()

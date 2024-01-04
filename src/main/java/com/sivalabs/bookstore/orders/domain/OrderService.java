@@ -71,17 +71,21 @@ public class OrderService {
     }
 
     public void processNewOrders() {
+        log.info("Processing new orders");
         List<Order> newOrders = this.findOrdersByStatus(OrderStatus.NEW);
+        log.info("Found {} new orders", newOrders.size());
         for (Order order : newOrders) {
+            this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
             OrderCreatedEvent orderCreatedEvent = this.buildOrderCreatedEvent(order);
             orderEventPublisher.send(orderCreatedEvent);
             log.info("Published OrderCreatedEvent for orderId:{}", order.getOrderId());
-            this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
         }
     }
 
     public void processPaymentRejectedOrders() {
+        log.info("Processing payment rejected orders");
         List<Order> orders = this.findOrdersByStatus(OrderStatus.PAYMENT_REJECTED);
+        log.info("Found {} payment rejected orders", orders.size());
         for (Order order : orders) {
             OrderErrorEvent orderErrorEvent = this.buildOrderErrorEvent(order, "Payment rejected");
             orderEventPublisher.send(orderErrorEvent);

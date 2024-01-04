@@ -6,7 +6,6 @@ A bookstore application built using SpringBoot as a monolith.
 ## Tech Stack:
 * Spring Boot
 * Spring Data JPA
-* Kafka
 * Thymeleaf + AlpineJS
 
 ## How to run?

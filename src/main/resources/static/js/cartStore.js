@@ -53,3 +53,12 @@ function updateCartItemCount() {
     });
     $('#cart-item-count').text('(' + count + ')');
 }
+
+function getCartTotal() {
+    let cart = getCart();
+    let totalAmount = 0;
+    cart.items.forEach(item => {
+        totalAmount = totalAmount + (item.price * item.quantity);
+    });
+    return totalAmount;
+}
