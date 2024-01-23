@@ -24,7 +24,7 @@
         <jquery.version>3.7.1</jquery.version>
         <font_awesome.version>6.5.1</font_awesome.version>
         <alpinejs.version>3.13.3</alpinejs.version>
-        <spotless.version>2.41.1</spotless.version>
+        <spotless.version>2.43.0</spotless.version>
         <dockerImageName>sivaprasadreddy/${project.artifactId}</dockerImageName>
     </properties>
     <dependencies>
