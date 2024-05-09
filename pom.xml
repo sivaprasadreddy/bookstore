@@ -23,7 +23,7 @@
         <bootstrap.version>5.3.3</bootstrap.version>
         <jquery.version>3.7.1</jquery.version>
         <font_awesome.version>6.5.2</font_awesome.version>
-        <alpinejs.version>3.13.5</alpinejs.version>
+        <alpinejs.version>3.13.10</alpinejs.version>
         <spotless.version>2.43.0</spotless.version>
         <dockerImageName>sivaprasadreddy/${project.artifactId}</dockerImageName>
     </properties>
