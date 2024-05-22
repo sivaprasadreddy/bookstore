@@ -11,7 +11,7 @@ function build() {
 }
 
 function build_image() {
-  ./mvnw clean compile spring-boot:build-image -DskipTests -DdockerImageName=sivaprasadreddy/bookstore
+  ./mvnw -pl bookstore clean compile spring-boot:build-image -DskipTests -DdockerImageName=sivaprasadreddy/bookstore
 }
 
 function start_infra() {

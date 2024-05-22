@@ -42,7 +42,7 @@
             </table>
 
             <form class="row g-3" method="post">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="customerName" class="form-label">Customer Name</label>
                     <input type="text" class="form-control"
                            id="customerName"
@@ -58,6 +58,14 @@
                            name="customerEmail"
                            readonly
                            x-model="orderDetails.customer.email">
+                </div>
+                <div class="col-md-6">
+                    <label for="customerPhone" class="form-label">Customer Phone</label>
+                    <input type="text" class="form-control"
+                           id="customerPhone"
+                           name="customerPhone"
+                           readonly
+                           x-model="orderDetails.customer.phone">
                 </div>
                 <div class="col-6">
                     <label for="deliveryAddressLine1" class="form-label">Delivery Address Line 1</label>

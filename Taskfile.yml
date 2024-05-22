@@ -23,7 +23,7 @@ tasks:
 
   build_image:
     cmds:
-      - "{{.MVNW}} clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
+      - "{{.MVNW}} -pl bookstore clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
 
   start_infra:
     cmds:

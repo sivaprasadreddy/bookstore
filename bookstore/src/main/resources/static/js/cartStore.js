@@ -23,7 +23,8 @@ const addProductToCart = function(product) {
     } else {
         cart.items.push(Object.assign({}, product, {quantity: 1}));
     }
-    localStorage.setItem(BOOKSTORE_STATE_KEY, JSON.stringify(cart))
+    localStorage.setItem(BOOKSTORE_STATE_KEY, JSON.stringify(cart));
+    updateCartItemCount();
 }
 
 const updateProductQuantity = function(code, quantity) {
@@ -38,11 +39,13 @@ const updateProductQuantity = function(code, quantity) {
             console.log("Product code is not already in Cart, ignoring")
         }
     }
-    localStorage.setItem(BOOKSTORE_STATE_KEY, JSON.stringify(cart))
+    localStorage.setItem(BOOKSTORE_STATE_KEY, JSON.stringify(cart));
+    updateCartItemCount();
 }
 
 const deleteCart = function() {
-    localStorage.removeItem(BOOKSTORE_STATE_KEY)
+    localStorage.removeItem(BOOKSTORE_STATE_KEY);
+    updateCartItemCount();
 }
 
 function updateCartItemCount() {
@@ -52,4 +55,13 @@ function updateCartItemCount() {
         count = count + item.quantity;
     });
     $('#cart-item-count').text('(' + count + ')');
+}
+
+function getCartTotal() {
+    let cart = getCart();
+    let totalAmount = 0;
+    cart.items.forEach(item => {
+        totalAmount = totalAmount + (item.price * item.quantity);
+    });
+    return totalAmount;
 }
