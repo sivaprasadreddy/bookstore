@@ -38,7 +38,7 @@ class ProductRepositoryTest {
     @Test
     void shouldFailToSaveProductWithDuplicateCode() {
         var product = new Product(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN);
-        assertThrows(DataIntegrityViolationException.class, () -> productRepository.save(product));
+        assertThrows(DataIntegrityViolationException.class, () -> productRepository.saveAndFlush(product));
     }
 
     @Test
