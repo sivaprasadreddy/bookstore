@@ -8,7 +8,7 @@ import com.sivalabs.bookstore.common.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
@@ -34,7 +34,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderEventPublisher orderEventPublisher;
 
-    public OrderConfirmationDTO createOrder(CreateOrderRequest orderRequest) {
+    public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
         Order newOrder = orderMapper.convertToEntity(orderRequest);
 
         CreateOrderRequest.Payment payment = orderRequest.payment();
@@ -48,7 +48,7 @@ public class OrderService {
         }
         Order savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderId=" + savedOrder.getOrderId());
-        return new OrderConfirmationDTO(savedOrder.getOrderId(), savedOrder.getStatus());
+        return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }
 
     public Optional<OrderDTO> findOrderByOrderId(String orderId) {

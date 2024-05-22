@@ -3,7 +3,7 @@ package com.sivalabs.bookstore.orders.api;
 import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import jakarta.validation.Valid;
@@ -21,22 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
-public class OrderController {
+class OrderController {
     private final OrderService orderService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public OrderConfirmationDTO createOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
+    CreateOrderResponse createOrder(@Valid @RequestBody CreateOrderRequest orderRequest) {
         return orderService.createOrder(orderRequest);
     }
 
     @GetMapping
-    public List<OrderSummary> getOrders() {
+    List<OrderSummary> getOrders() {
         return orderService.findAllOrderSummaries();
     }
 
     @GetMapping(value = "/{orderId}")
-    public OrderDTO getOrder(@PathVariable String orderId) {
+    OrderDTO getOrder(@PathVariable String orderId) {
         return orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 }

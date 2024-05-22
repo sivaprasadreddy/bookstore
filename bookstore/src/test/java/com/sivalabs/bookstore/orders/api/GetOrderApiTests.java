@@ -9,7 +9,7 @@ import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -24,17 +24,17 @@ class GetOrderApiTests extends AbstractIntegrationTest {
     @Test
     void shouldGetOrderSuccessfully() {
         CreateOrderRequest createOrderRequest = getCreateOrderRequest();
-        OrderConfirmationDTO orderConfirmationDTO = orderService.createOrder(createOrderRequest);
+        CreateOrderResponse createOrderResponse = orderService.createOrder(createOrderRequest);
 
         OrderDTO orderDTO = given().when()
-                .get("/api/orders/{orderId}", orderConfirmationDTO.orderId())
+                .get("/api/orders/{orderId}", createOrderResponse.orderId())
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
                 .as(OrderDTO.class);
 
-        assertThat(orderDTO.orderId()).isEqualTo(orderConfirmationDTO.orderId());
+        assertThat(orderDTO.orderId()).isEqualTo(createOrderResponse.orderId());
         assertThat(orderDTO.items()).hasSize(1);
     }
 

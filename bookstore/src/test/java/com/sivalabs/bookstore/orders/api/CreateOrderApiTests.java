@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.model.OrderConfirmationDTO;
+import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import io.restassured.http.ContentType;
 import java.util.Optional;
@@ -21,7 +21,7 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
 
     @Test
     void shouldCreateOrderSuccessfully() {
-        OrderConfirmationDTO orderConfirmationDTO = given().contentType(ContentType.JSON)
+        CreateOrderResponse createOrderResponse = given().contentType(ContentType.JSON)
                 .body(
                         """
                                 {
@@ -62,9 +62,9 @@ class CreateOrderApiTests extends AbstractIntegrationTest {
                 .body("status", is("NEW"))
                 .extract()
                 .body()
-                .as(OrderConfirmationDTO.class);
+                .as(CreateOrderResponse.class);
 
-        Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(orderConfirmationDTO.orderId());
+        Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(createOrderResponse.orderId());
         assertThat(orderOptional).isPresent();
     }
 

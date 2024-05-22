@@ -3,7 +3,7 @@ package com.sivalabs.bookstore.notifications;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
+class EmailService {
 
     public void sendEmail(String to, String subject, String content) {
         System.out.println("=============================");

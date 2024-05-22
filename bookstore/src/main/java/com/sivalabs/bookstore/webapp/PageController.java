@@ -6,26 +6,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class ShopController {
+class PageController {
 
     @GetMapping("/")
-    public String home() {
+    String home() {
         return "home";
     }
 
     @GetMapping("/cart")
-    public String cart() {
+    String cart() {
         return "cart";
     }
 
     @GetMapping("/order/{orderId}")
-    public String showOrderConfirmation(@PathVariable String orderId, Model model) {
+    String showOrderDetails(@PathVariable String orderId, Model model) {
         model.addAttribute("orderId", orderId);
-        return "orderConfirmation";
+        return "order-details";
     }
 
     @GetMapping("/orders")
-    public String showOrderAllOrders() {
+    String showOrderAllOrders() {
         return "orders";
     }
 }

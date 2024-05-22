@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 public record CreateOrderRequest(
-        @NotEmpty(message = "Items cannot be empty.") Set<OrderItem> items,
+        @NotEmpty(message = "Items cannot be empty") @Valid Set<OrderItem> items,
         @Valid Customer customer,
         @Valid Address deliveryAddress,
         @Valid Payment payment)
