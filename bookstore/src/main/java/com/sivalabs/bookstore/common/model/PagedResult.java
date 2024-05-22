@@ -1,6 +1,5 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.common.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -9,10 +8,10 @@ public record PagedResult<T>(
         long totalElements,
         int pageNumber,
         int totalPages,
-        @JsonProperty("isFirst") boolean isFirst,
-        @JsonProperty("isLast") boolean isLast,
-        @JsonProperty("hasNext") boolean hasNext,
-        @JsonProperty("hasPrevious") boolean hasPrevious) {
+        boolean isFirst,
+        boolean isLast,
+        boolean hasNext,
+        boolean hasPrevious) {
 
     public PagedResult(Page<T> page) {
         this(
