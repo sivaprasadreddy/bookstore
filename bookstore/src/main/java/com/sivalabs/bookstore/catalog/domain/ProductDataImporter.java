@@ -7,7 +7,7 @@ import com.sivalabs.bookstore.ApplicationProperties;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.util.random.RandomGenerator;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -51,12 +51,24 @@ public class ProductDataImporter {
         product.setCode("P1000" + book.id());
         product.setName(book.title());
         product.setDescription(book.description());
-        product.setPrice(
-                new BigDecimal(String.valueOf(RandomGenerator.getDefault().nextInt(10, 80))));
+        product.setPrice(RandomGenerator.getBigDecimal());
         product.setImageUrl(book.coverImg());
         productRepository.save(product);
     }
 
     record Book(
             Long id, String title, String description, String language, @JsonProperty("cover_img") String coverImg) {}
+
+    record RandomGenerator() {
+        static Random r = new Random();
+        static int max = 100, min = 10;
+
+        public static int getInt() {
+            return r.nextInt(max - min + 1) + min;
+        }
+
+        public static BigDecimal getBigDecimal() {
+            return new BigDecimal(String.valueOf(getInt()));
+        }
+    }
 }
