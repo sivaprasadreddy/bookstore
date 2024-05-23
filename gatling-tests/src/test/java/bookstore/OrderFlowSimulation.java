@@ -30,7 +30,7 @@ public class OrderFlowSimulation extends Simulation {
             })
             .iterator();
     Iterator<Map<String, Object>> randomQuantity = Stream.generate((Supplier<Map<String, Object>>) () -> {
-                int randInt = RandomGenerator.getDefault().nextInt(4);
+                int randInt = RandomGenerator.getDefault().nextInt(1, 4);
                 return Collections.singletonMap("randomQuantity", randInt);
             })
             .iterator();
@@ -48,9 +48,8 @@ public class OrderFlowSimulation extends Simulation {
     ChainBuilder createOrderFlow = exec(createOrder).pause(1).exec(browseOrders);
 
     // ScenarioBuilder scnCreateOrder = scenario("Create Order").exec(createOrderFlow);
-    ScenarioBuilder scnCreateOrder = scenario("Create Order")
-            .during(Duration.ofSeconds(60 * 3), "Counter")
-            .on(createOrderFlow);
+    ScenarioBuilder scnCreateOrder =
+            scenario("Create Order").during(Duration.ofSeconds(60), "Counter").on(createOrderFlow);
 
     {
         setUp(scnCreateOrder.injectOpen(rampUsers(getConfig().getInt("users")).during(10)))

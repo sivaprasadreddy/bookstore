@@ -32,23 +32,15 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
         Order order = new Order();
         order.setOrderId(UUID.randomUUID().toString());
         order.setStatus(OrderStatus.NEW);
-        order.setCustomerName("Siva");
-        order.setCustomerEmail("siva@gmail.com");
-        order.setCustomerPhone("9999999999");
-        order.setDeliveryAddressLine1("addr line 1");
-        order.setDeliveryAddressLine2("addr line 2");
-        order.setDeliveryAddressCity("Hyderabad");
-        order.setDeliveryAddressState("Telangana");
-        order.setDeliveryAddressZipCode("500072");
-        order.setDeliveryAddressCountry("India");
+        Customer customer = new Customer("Siva", "siva@gmail.com", "9999999999");
+        Address deliveryAddress =
+                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India");
+        order.setCustomer(customer);
+        order.setDeliveryAddress(deliveryAddress);
 
         orderRepository.saveAndFlush(order);
 
-        OrderCreatedEvent event = new OrderCreatedEvent(
-                order.getOrderId(),
-                Set.of(),
-                new Customer("Siva", "siva@gmail.com", "9999999999"),
-                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India"));
+        OrderCreatedEvent event = new OrderCreatedEvent(order.getOrderId(), Set.of(), customer, deliveryAddress);
 
         log.info("Created OrderId:{}", event.orderId());
 

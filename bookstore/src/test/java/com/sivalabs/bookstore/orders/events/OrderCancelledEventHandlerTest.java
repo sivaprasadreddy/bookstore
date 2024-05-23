@@ -5,7 +5,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
@@ -31,32 +30,21 @@ class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
     @Autowired
     private OrderEventPublisher orderEventPublisher;
 
-    @Autowired
-    private ApplicationProperties properties;
-
     @Test
     void shouldHandleOrderCancelledEvent() {
         Order order = new Order();
         order.setOrderId(UUID.randomUUID().toString());
         order.setStatus(OrderStatus.NEW);
-        order.setCustomerName("Siva");
-        order.setCustomerEmail("siva@gmail.com");
-        order.setCustomerPhone("9999999999");
-        order.setDeliveryAddressLine1("addr line 1");
-        order.setDeliveryAddressLine2("addr line 2");
-        order.setDeliveryAddressCity("Hyderabad");
-        order.setDeliveryAddressState("Telangana");
-        order.setDeliveryAddressZipCode("500072");
-        order.setDeliveryAddressCountry("India");
+        Customer customer = new Customer("Siva", "siva@gmail.com", "9999999999");
+        Address deliveryAddress =
+                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India");
+        order.setCustomer(customer);
+        order.setDeliveryAddress(deliveryAddress);
 
         orderRepository.saveAndFlush(order);
         log.info("Cancelling OrderId:{}", order.getOrderId());
-        orderEventPublisher.send(new OrderCancelledEvent(
-                order.getOrderId(),
-                "testing",
-                Set.of(),
-                new Customer("Siva", "siva@gmail.com", "9999999999"),
-                new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India")));
+        orderEventPublisher.send(
+                new OrderCancelledEvent(order.getOrderId(), "testing", Set.of(), customer, deliveryAddress));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
             Optional<Order> orderOptional = orderRepository.findByOrderId(order.getOrderId());

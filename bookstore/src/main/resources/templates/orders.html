@@ -16,6 +16,7 @@
                 <tr>
                     <th scope="col">Order ID</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Created Date</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -23,6 +24,7 @@
                     <tr>
                         <td><a x-bind:href="'/order/'+order.orderId" x-text="order.orderId">OrderId</a></td>
                         <td x-text="order.status">status</td>
+                        <td x-text="order.createdAt">Date</td>
                     </tr>
                 </template>
                 </tbody>

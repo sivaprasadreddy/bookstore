@@ -6,14 +6,14 @@
       layout:decorate="~{layout}">
 <body>
 <div layout:fragment="content">
-    <div x-data="initData()">
+    <div th:x-data="|initData('${pageNo}')|">
+        <div th:insert="~{fragments/pagination :: pagination}"> </div>
         <div class="row row-cols-1 row-cols-md-5">
-            <template x-for="product in products">
+            <template x-for="product in products.data">
                 <div class="col mb-3">
                     <div class="card h-100 product">
 
                         <img :src="product.imageUrl"
-                             onerror="this.onerror=null; this.src='/images/image-not-found.png'"
                              class="card-img-top" alt="Movie"
                              height="300" width="200"
                         />

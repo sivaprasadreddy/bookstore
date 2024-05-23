@@ -1,27 +1,27 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class OrderDeliveredEventHandler {
-    private final OrderService orderService;
-    private final ObjectMapper objectMapper;
+    private static final Logger log = LoggerFactory.getLogger(OrderDeliveredEventHandler.class);
 
-    @KafkaListener(topics = "${app.delivered-orders-topic}", groupId = "orders")
-    public void handle(String payload) {
+    private final OrderService orderService;
+
+    public OrderDeliveredEventHandler(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @EventListener
+    public void handle(OrderDeliveredEvent event) {
         try {
-            OrderDeliveredEvent event = objectMapper.readValue(payload, OrderDeliveredEvent.class);
             log.info("Received a OrderDeliveredEvent with orderId:{}: ", event.orderId());
             OrderDTO order = orderService.findOrderByOrderId(event.orderId()).orElse(null);
             if (order == null) {
@@ -29,8 +29,8 @@ public class OrderDeliveredEventHandler {
                 return;
             }
             orderService.updateOrderStatus(order.orderId(), OrderStatus.DELIVERED, null);
-        } catch (RuntimeException | JsonProcessingException e) {
-            log.error("Error processing OrderDeliveredEvent. Payload: {}", payload);
+        } catch (RuntimeException e) {
+            log.error("Error processing OrderDeliveredEvent. event: {}", event);
             log.error(e.getMessage(), e);
         }
     }

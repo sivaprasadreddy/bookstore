@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +48,7 @@ public class OrderService {
             newOrder.setComments("Payment rejected");
         }
         Order savedOrder = this.orderRepository.save(newOrder);
-        log.info("Created Order with orderId=" + savedOrder.getOrderId());
+        log.info("Created Order with orderId={}", savedOrder.getOrderId());
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
     }
 
@@ -67,16 +68,17 @@ public class OrderService {
     }
 
     public List<OrderSummary> findAllOrderSummaries() {
-        return orderRepository.findAllOrderSummaries();
+        Sort sort = Sort.by(Sort.Order.desc("createdAt"));
+        return orderRepository.findAllOrderSummaries(sort);
     }
 
     public void processNewOrders() {
         List<Order> newOrders = this.findOrdersByStatus(OrderStatus.NEW);
         for (Order order : newOrders) {
+            this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
             OrderCreatedEvent orderCreatedEvent = this.buildOrderCreatedEvent(order);
             orderEventPublisher.send(orderCreatedEvent);
             log.info("Published OrderCreatedEvent for orderId:{}", order.getOrderId());
-            this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
         }
     }
 
@@ -106,16 +108,10 @@ public class OrderService {
     }
 
     private Customer getCustomer(Order order) {
-        return new Customer(order.getCustomerName(), order.getCustomerEmail(), order.getCustomerPhone());
+        return order.getCustomer();
     }
 
     private Address getDeliveryAddress(Order order) {
-        return new Address(
-                order.getDeliveryAddressLine1(),
-                order.getDeliveryAddressLine2(),
-                order.getDeliveryAddressCity(),
-                order.getDeliveryAddressState(),
-                order.getDeliveryAddressZipCode(),
-                order.getDeliveryAddressCountry());
+        return order.getDeliveryAddress();
     }
 }

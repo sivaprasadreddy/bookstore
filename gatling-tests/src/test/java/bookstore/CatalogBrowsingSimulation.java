@@ -17,7 +17,7 @@ public class CatalogBrowsingSimulation extends Simulation {
             exec(http("View Products").get("/api/products")).pause(1);
 
     ScenarioBuilder scnBrowseProducts = scenario("Browse Products")
-            .during(Duration.ofSeconds(60 * 3), "Counter")
+            .during(Duration.ofSeconds(60), "Counter")
             .on(browseProducts);
 
     // ScenarioBuilder scnBrowseProducts = scenario("Browse Products").exec(browseProducts);

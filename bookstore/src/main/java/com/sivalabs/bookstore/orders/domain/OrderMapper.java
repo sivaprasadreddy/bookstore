@@ -16,15 +16,8 @@ public class OrderMapper {
         Order newOrder = new Order();
         newOrder.setOrderId(UUID.randomUUID().toString());
         newOrder.setStatus(OrderStatus.NEW);
-        newOrder.setCustomerName(orderRequest.customer().name());
-        newOrder.setCustomerEmail(orderRequest.customer().email());
-        newOrder.setCustomerPhone(orderRequest.customer().phone());
-        newOrder.setDeliveryAddressLine1(orderRequest.deliveryAddress().addressLine1());
-        newOrder.setDeliveryAddressLine2(orderRequest.deliveryAddress().addressLine2());
-        newOrder.setDeliveryAddressCity(orderRequest.deliveryAddress().city());
-        newOrder.setDeliveryAddressState(orderRequest.deliveryAddress().state());
-        newOrder.setDeliveryAddressZipCode(orderRequest.deliveryAddress().zipCode());
-        newOrder.setDeliveryAddressCountry(orderRequest.deliveryAddress().country());
+        newOrder.setCustomer(orderRequest.customer());
+        newOrder.setDeliveryAddress(orderRequest.deliveryAddress());
 
         Set<OrderItem> orderItems = new HashSet<>();
         for (com.sivalabs.bookstore.common.model.OrderItem item : orderRequest.items()) {

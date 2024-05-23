@@ -37,14 +37,8 @@ public record OrderDTO(
                 order.getId(),
                 order.getOrderId(),
                 orderItems,
-                new Customer(order.getCustomerName(), order.getCustomerEmail(), order.getCustomerPhone()),
-                new Address(
-                        order.getDeliveryAddressLine1(),
-                        order.getDeliveryAddressLine2(),
-                        order.getDeliveryAddressCity(),
-                        order.getDeliveryAddressState(),
-                        order.getDeliveryAddressZipCode(),
-                        order.getDeliveryAddressCountry()),
+                order.getCustomer(),
+                order.getDeliveryAddress(),
                 order.getStatus(),
                 order.getComments());
     }
