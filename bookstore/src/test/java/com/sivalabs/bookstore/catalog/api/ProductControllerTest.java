@@ -1,14 +1,18 @@
 package com.sivalabs.bookstore.catalog.api;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
+import com.sivalabs.bookstore.catalog.domain.Product;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql("/test-products-data.sql")
 class ProductControllerTest extends AbstractIntegrationTest {
 
     @Test
@@ -18,27 +22,32 @@ class ProductControllerTest extends AbstractIntegrationTest {
                 .get("/api/products")
                 .then()
                 .statusCode(200)
-                .body("data", hasSize(products.size()))
-                .body("totalElements", is(products.size()))
+                .body("data", hasSize(10))
+                .body("totalElements", is(15))
                 .body("pageNumber", is(1))
-                .body("totalPages", is(1))
+                .body("totalPages", is(2))
                 .body("isFirst", is(true))
-                .body("isLast", is(true))
-                .body("hasNext", is(false))
+                .body("isLast", is(false))
+                .body("hasNext", is(true))
                 .body("hasPrevious", is(false));
     }
 
     @Test
     void shouldGetProductByCode() {
-        given().contentType(ContentType.JSON)
+        Product product = given().contentType(ContentType.JSON)
                 .when()
                 .get("/api/products/{code}", "P100")
                 .then()
                 .statusCode(200)
-                .body("code", is("P100"))
-                .body("name", is("Product 1"))
-                .body("description", is("Product 1 desc"))
-                .body("price", equalTo(10));
+                .assertThat()
+                .extract()
+                .body()
+                .as(Product.class);
+
+        assertThat(product.getCode()).isEqualTo("P100");
+        assertThat(product.getName()).isEqualTo("The Hunger Games");
+        assertThat(product.getDescription()).isEqualTo("Winning will make you famous. Losing means certain death...");
+        assertThat(product.getPrice()).isEqualTo(new BigDecimal("34.0"));
     }
 
     @Test

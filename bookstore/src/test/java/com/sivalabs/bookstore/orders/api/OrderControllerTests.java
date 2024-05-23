@@ -7,20 +7,16 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.model.Address;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.domain.model.Customer;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import com.sivalabs.bookstore.orders.domain.model.OrderItem;
 import io.restassured.http.ContentType;
-import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.Set;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql("/test-orders-data.sql")
 class OrderControllerTests extends AbstractIntegrationTest {
     @Autowired
     private OrderService orderService;
@@ -109,21 +105,20 @@ class OrderControllerTests extends AbstractIntegrationTest {
 
     @Nested
     class GetOrderApiTests {
+        String orderId = "order-123";
+
         @Test
         void shouldGetOrderSuccessfully() {
-            CreateOrderRequest createOrderRequest = getCreateOrderRequest();
-            CreateOrderResponse createOrderResponse = orderService.createOrder(createOrderRequest);
-
             OrderDTO orderDTO = given().when()
-                    .get("/api/orders/{orderId}", createOrderResponse.orderId())
+                    .get("/api/orders/{orderId}", orderId)
                     .then()
                     .statusCode(200)
                     .extract()
                     .body()
                     .as(OrderDTO.class);
 
-            assertThat(orderDTO.orderId()).isEqualTo(createOrderResponse.orderId());
-            assertThat(orderDTO.items()).hasSize(1);
+            assertThat(orderDTO.orderId()).isEqualTo(orderId);
+            assertThat(orderDTO.items()).hasSize(2);
         }
 
         @Test
@@ -132,15 +127,6 @@ class OrderControllerTests extends AbstractIntegrationTest {
                     .get("/api/orders/{orderId}", "non-existing-order-id")
                     .then()
                     .statusCode(404);
-        }
-
-        private static CreateOrderRequest getCreateOrderRequest() {
-            Customer customer = new Customer("Siva", "siva@gmail.com", "99999999999");
-
-            Address address = new Address("addr line 1", "addr line 2", "Hyderabad", "Telangana", "500072", "India");
-
-            Set<OrderItem> items = Set.of(new OrderItem("P100", "Product 1", new BigDecimal("25.50"), 1));
-            return new CreateOrderRequest(items, customer, address);
         }
     }
 }

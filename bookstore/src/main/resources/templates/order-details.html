@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
     <div th:x-data="|initData('${orderId}')|">
-        <h2>Your Order placed successfully</h2>
+        <h2>Order Details</h2>
         <h4>Order Number: <span x-text="orderDetails.orderId">orderId</span></h4>
         <h4>Order Status: <span x-text="orderDetails.status">status</span></h4>
         <hr/>
