@@ -1,6 +1,5 @@
 create sequence order_id_seq start with 100 increment by 50;
 create sequence order_item_id_seq start with 100 increment by 50;
-create sequence cc_id_seq start with 100 increment by 50;
 
 create table orders
 (
@@ -31,16 +30,4 @@ create table order_items
     quantity integer not null,
     order_id bigint  not null references orders (id),
     primary key (id)
-);
-
-create table credit_cards
-(
-    id            bigint  not null default nextval('cc_id_seq'),
-    customer_name varchar not null,
-    card_number   varchar not null,
-    cvv           varchar not null,
-    expiry_month  numeric not null,
-    expiry_year   numeric not null,
-    primary key (id),
-    CONSTRAINT cc_card_num_unique UNIQUE (card_number)
 );

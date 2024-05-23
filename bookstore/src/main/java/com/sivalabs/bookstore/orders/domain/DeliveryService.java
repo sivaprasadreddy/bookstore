@@ -1,11 +1,11 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
-import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
-import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
-import com.sivalabs.bookstore.common.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

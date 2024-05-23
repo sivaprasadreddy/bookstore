@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.domain.entity;
 
-import com.sivalabs.bookstore.common.model.Address;
-import com.sivalabs.bookstore.common.model.Customer;
+import com.sivalabs.bookstore.orders.domain.model.Address;
+import com.sivalabs.bookstore.orders.domain.model.Customer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;

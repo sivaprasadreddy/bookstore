@@ -16,9 +16,4 @@ public class OrderProcessingJob {
     public void processNewOrders() {
         orderService.processNewOrders();
     }
-
-    @Scheduled(cron = "${app.rejected-orders-job-cron}")
-    public void processPaymentRejectedOrders() {
-        orderService.processPaymentRejectedOrders();
-    }
 }

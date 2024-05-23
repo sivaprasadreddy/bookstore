@@ -1,7 +1,5 @@
 package com.sivalabs.bookstore.config;
 
-import com.sivalabs.bookstore.catalog.domain.ProductNotFoundException;
-import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import java.net.URI;
 import java.time.Instant;
 import org.springframework.http.HttpStatus;
@@ -13,21 +11,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    ProblemDetail handleProductNotFoundException(ProductNotFoundException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
-        problemDetail.setTitle("Product Not Found");
-        problemDetail.setType(URI.create("https://api.products.com/errors/not-found"));
-        problemDetail.setProperty("errorCategory", "Generic");
-        problemDetail.setProperty("timestamp", Instant.now());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(OrderNotFoundException.class)
-    ProblemDetail handleOrderNotFoundException(OrderNotFoundException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
-        problemDetail.setTitle("Order Not Found");
-        problemDetail.setType(URI.create("https://api.orders.com/errors/not-found"));
+    @ExceptionHandler(Exception.class)
+    ProblemDetail handleGenericException(Exception e) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        problemDetail.setTitle("Internal Server Error");
+        problemDetail.setType(URI.create("https://api.bookstore.com/errors/server-error"));
         problemDetail.setProperty("errorCategory", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;

@@ -1,23 +1,21 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
+import com.sivalabs.bookstore.orders.domain.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class OrderCancelledEventHandler {
-    private static final Logger log = LoggerFactory.getLogger(OrderCancelledEventHandler.class);
-
     private final OrderService orderService;
-
-    public OrderCancelledEventHandler(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private final NotificationService notificationService;
 
     @EventListener
     public void handle(OrderCancelledEvent event) {
@@ -29,6 +27,7 @@ public class OrderCancelledEventHandler {
                 return;
             }
             orderService.updateOrderStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
+            notificationService.sendCancelledNotification(event);
         } catch (RuntimeException e) {
             log.error("Error processing OrderCancelledEvent. event: {}", event);
             log.error(e.getMessage(), e);

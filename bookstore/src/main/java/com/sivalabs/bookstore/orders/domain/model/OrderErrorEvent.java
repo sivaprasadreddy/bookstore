@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.common.model;
+package com.sivalabs.bookstore.orders.domain.model;
 
 import java.util.Set;
 

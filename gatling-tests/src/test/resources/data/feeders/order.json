@@ -19,11 +19,5 @@
     "state": "TS",
     "zipCode": "500072",
     "country": "India"
-  },
-  "payment": {
-    "cardNumber": "1111222233334444",
-    "cvv": "123",
-    "expiryMonth": 2,
-    "expiryYear": 2030
   }
 }

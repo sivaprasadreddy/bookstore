@@ -1,20 +1,17 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.common.model.Address;
-import com.sivalabs.bookstore.common.model.Customer;
-import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
-import com.sivalabs.bookstore.common.model.OrderErrorEvent;
-import com.sivalabs.bookstore.common.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.model.Address;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
+import com.sivalabs.bookstore.orders.domain.model.Customer;
+import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
-import com.sivalabs.bookstore.payment.domain.PaymentRequest;
-import com.sivalabs.bookstore.payment.domain.PaymentResponse;
-import com.sivalabs.bookstore.payment.domain.PaymentService;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,22 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final PaymentService paymentService;
     private final OrderMapper orderMapper;
     private final OrderEventPublisher orderEventPublisher;
 
     public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
         Order newOrder = orderMapper.convertToEntity(orderRequest);
-
-        CreateOrderRequest.Payment payment = orderRequest.payment();
-        PaymentRequest paymentRequest = new PaymentRequest(
-                payment.cardNumber(), payment.cvv(),
-                payment.expiryMonth(), payment.expiryYear());
-        PaymentResponse paymentResponse = paymentService.validate(paymentRequest);
-        if (paymentResponse.status() != PaymentResponse.PaymentStatus.ACCEPTED) {
-            newOrder.setStatus(OrderStatus.PAYMENT_REJECTED);
-            newOrder.setComments("Payment rejected");
-        }
         Order savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderId={}", savedOrder.getOrderId());
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
@@ -79,15 +65,6 @@ public class OrderService {
             OrderCreatedEvent orderCreatedEvent = this.buildOrderCreatedEvent(order);
             orderEventPublisher.send(orderCreatedEvent);
             log.info("Published OrderCreatedEvent for orderId:{}", order.getOrderId());
-        }
-    }
-
-    public void processPaymentRejectedOrders() {
-        List<Order> orders = this.findOrdersByStatus(OrderStatus.PAYMENT_REJECTED);
-        for (Order order : orders) {
-            OrderErrorEvent orderErrorEvent = this.buildOrderErrorEvent(order, "Payment rejected");
-            orderEventPublisher.send(orderErrorEvent);
-            log.info("Published OrderErrorEvent for orderId:{}", order.getOrderId());
         }
     }
 

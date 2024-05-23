@@ -3,7 +3,6 @@ version: '3'
 vars:
   GOOS: "{{default OS .GOOS}}"
   MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
-  IMAGE_NAME: 'sivaprasadreddy/bookstore'
   DC_DIR: "docker"
   DC_FILE: "{{.DC_DIR}}/docker-compose.yml"
   DC_MONITORING_FILE: "{{.DC_DIR}}/grafana-stack.yml"
@@ -23,7 +22,7 @@ tasks:
 
   build_image:
     cmds:
-      - "{{.MVNW}} -pl bookstore clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
+      - "{{.MVNW}} -pl bookstore clean compile spring-boot:build-image -DskipTests"
 
   start_infra:
     cmds:
@@ -43,12 +42,12 @@ tasks:
   start:
     deps: [build_image]
     cmds:
-      - docker compose --profile app -f "{{.DC_FILE}}" up --force-recreate -d
+      - docker compose -f "{{.DC_FILE}}" up --force-recreate -d
 
   stop:
     cmds:
-      - docker compose --profile app -f "{{.DC_FILE}}" stop
-      - docker compose --profile app -f "{{.DC_FILE}}" rm -f
+      - docker compose -f "{{.DC_FILE}}" stop
+      - docker compose -f "{{.DC_FILE}}" rm -f
 
   restart:
     cmds:

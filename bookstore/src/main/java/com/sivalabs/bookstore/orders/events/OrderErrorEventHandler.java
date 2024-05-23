@@ -1,23 +1,21 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.sivalabs.bookstore.common.model.OrderErrorEvent;
+import com.sivalabs.bookstore.orders.domain.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class OrderErrorEventHandler {
-    private static final Logger log = LoggerFactory.getLogger(OrderErrorEventHandler.class);
-
     private final OrderService orderService;
-
-    public OrderErrorEventHandler(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private final NotificationService notificationService;
 
     @EventListener
     public void handle(OrderErrorEvent event) {
@@ -29,6 +27,7 @@ public class OrderErrorEventHandler {
                 return;
             }
             orderService.updateOrderStatus(event.orderId(), OrderStatus.ERROR, event.reason());
+            notificationService.sendErrorNotification(event);
         } catch (RuntimeException e) {
             log.error("Error processing OrderErrorEvent. Payload: {}", event);
             log.error(e.getMessage(), e);

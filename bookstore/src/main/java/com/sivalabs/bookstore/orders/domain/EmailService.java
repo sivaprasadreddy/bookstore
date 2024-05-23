@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.notifications;
+package com.sivalabs.bookstore.orders.domain;
 
 import org.springframework.stereotype.Service;
 

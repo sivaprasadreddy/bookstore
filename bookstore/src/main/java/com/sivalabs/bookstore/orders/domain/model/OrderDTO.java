@@ -1,9 +1,6 @@
 package com.sivalabs.bookstore.orders.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sivalabs.bookstore.common.model.Address;
-import com.sivalabs.bookstore.common.model.Customer;
-import com.sivalabs.bookstore.common.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import java.math.BigDecimal;

@@ -20,7 +20,7 @@ public class OrderMapper {
         newOrder.setDeliveryAddress(orderRequest.deliveryAddress());
 
         Set<OrderItem> orderItems = new HashSet<>();
-        for (com.sivalabs.bookstore.common.model.OrderItem item : orderRequest.items()) {
+        for (com.sivalabs.bookstore.orders.domain.model.OrderItem item : orderRequest.items()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setCode(item.code());
             orderItem.setName(item.name());

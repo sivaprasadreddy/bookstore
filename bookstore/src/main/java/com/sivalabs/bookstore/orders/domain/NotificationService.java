@@ -1,9 +1,9 @@
-package com.sivalabs.bookstore.notifications;
+package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.common.model.OrderCancelledEvent;
-import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
-import com.sivalabs.bookstore.common.model.OrderDeliveredEvent;
-import com.sivalabs.bookstore.common.model.OrderErrorEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

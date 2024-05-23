@@ -4,8 +4,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import com.sivalabs.bookstore.catalog.domain.Product;
 import com.sivalabs.bookstore.catalog.domain.ProductRepository;
-import com.sivalabs.bookstore.payment.domain.CreditCard;
-import com.sivalabs.bookstore.payment.domain.CreditCardRepository;
 import io.restassured.RestAssured;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,9 +25,6 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private CreditCardRepository creditCardRepository;
-
     protected final List<Product> products = List.of(
             new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN),
             new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
@@ -39,9 +34,5 @@ public abstract class AbstractIntegrationTest {
         RestAssured.baseURI = "http://localhost:" + port;
         productRepository.deleteAll();
         productRepository.saveAll(products);
-        creditCardRepository.deleteAllInBatch();
-
-        creditCardRepository.save(new CreditCard(null, "Siva", "1111222233334444", "123", 2, 2030));
-        creditCardRepository.save(new CreditCard(null, "John", "1234123412341234", "123", 3, 2030));
     }
 }

@@ -1,7 +1,7 @@
 name: 'bookstore'
 services:
   bookstore:
-    image: sivaprasadreddy/bookstore
+    image: sivaprasadreddy/sivalabs-bookstore
     #build: ../bookstore
     container_name: bookstore
     environment:
@@ -9,7 +9,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://bookstore-postgres:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      MANAGEMENT_TRACING_ENABLED: "${MANAGEMENT_TRACING_ENABLED}"
+      MANAGEMENT_TRACING_ENABLED: "${TRACING_ENABLED}"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
     ports:
       - "8080:8080"
@@ -22,8 +22,6 @@ services:
           memory: 1024m
     labels:
       logging: "promtail"
-    profiles:
-      - app
 
   bookstore-postgres:
     image: postgres:16-alpine

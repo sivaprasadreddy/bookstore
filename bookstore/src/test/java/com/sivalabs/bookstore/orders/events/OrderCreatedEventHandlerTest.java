@@ -6,12 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.common.model.Address;
-import com.sivalabs.bookstore.common.model.Customer;
-import com.sivalabs.bookstore.common.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.OrderRepository;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.model.Address;
+import com.sivalabs.bookstore.orders.domain.model.Customer;
+import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

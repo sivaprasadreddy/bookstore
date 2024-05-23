@@ -7,12 +7,6 @@ document.addEventListener('alpine:init', () => {
                 email: "siva@gmail.com",
                 phone: "9999999999"
             },
-            payment: {
-                cardNumber: "1111222233334444",
-                cvv: "123",
-                expiryMonth: 2,
-                expiryYear: 2030
-            },
             deliveryAddress: {
                 addressLine1: "KPHB",
                 addressLine2: "Kukatpally",
