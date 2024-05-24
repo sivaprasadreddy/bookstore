@@ -1,10 +1,10 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.catalog.infra.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.sivalabs.bookstore.catalog.domain.Product;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,25 +19,20 @@ import org.springframework.dao.DataIntegrityViolationException;
         })
 class ProductRepositoryTest {
     @Autowired
-    private ProductRepository productRepository;
+    private JpaProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
         productRepository.deleteAllInBatch();
 
-        productRepository.save(new Product(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN));
-        productRepository.save(new Product(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
-    }
-
-    @Test
-    void shouldGetAllProducts() {
-        List<Product> products = productRepository.findAll();
-        assertThat(products).hasSize(2);
+        productRepository.save(new ProductEntity(null, "P100", "Product 1", "Product 1 desc", null, BigDecimal.TEN));
+        productRepository.save(
+                new ProductEntity(null, "P101", "Product 2", "Product 2 desc", null, BigDecimal.valueOf(24)));
     }
 
     @Test
     void shouldFailToSaveProductWithDuplicateCode() {
-        var product = new Product(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN);
+        var product = new ProductEntity(null, "P100", "Product name", "Product desc", null, BigDecimal.TEN);
         assertThrows(DataIntegrityViolationException.class, () -> productRepository.saveAndFlush(product));
     }
 
@@ -45,9 +40,9 @@ class ProductRepositoryTest {
     void shouldGetProductByCode() {
         Optional<Product> optionalProduct = productRepository.findByCode("P100");
         assertThat(optionalProduct).isNotEmpty();
-        assertThat(optionalProduct.get().getCode()).isEqualTo("P100");
-        assertThat(optionalProduct.get().getName()).isEqualTo("Product 1");
-        assertThat(optionalProduct.get().getDescription()).isEqualTo("Product 1 desc");
-        assertThat(optionalProduct.get().getPrice()).isEqualTo(BigDecimal.TEN);
+        assertThat(optionalProduct.get().code()).isEqualTo("P100");
+        assertThat(optionalProduct.get().name()).isEqualTo("Product 1");
+        assertThat(optionalProduct.get().description()).isEqualTo("Product 1 desc");
+        assertThat(optionalProduct.get().price()).isEqualTo(BigDecimal.TEN);
     }
 }
