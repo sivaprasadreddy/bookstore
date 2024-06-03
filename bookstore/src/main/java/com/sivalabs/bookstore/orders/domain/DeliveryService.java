@@ -8,6 +8,7 @@ import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class DeliveryService {
 
     private boolean canBeDelivered(OrderCreatedEvent order) {
         return DELIVERY_ALLOWED_COUNTRIES.contains(
-                order.deliveryAddress().country().toUpperCase());
+                order.deliveryAddress().country().toUpperCase(Locale.getDefault()));
     }
 
     private OrderDeliveredEvent buildOrderDeliveredEvent(OrderCreatedEvent order) {
