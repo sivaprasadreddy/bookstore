@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-@Sql("/test-orders-data.sql")
+@Sql({"/test-products-data.sql", "/test-orders-data.sql"})
 class OrderControllerTests extends AbstractIntegrationTest {
     @Autowired
     private OrderService orderService;
@@ -46,8 +46,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
                                         "items": [
                                             {
                                                 "code": "P100",
-                                                "name": "Product 1",
-                                                "price": 25.50,
+                                                "name": "The Hunger Games",
+                                                "price": 34.0,
                                                 "quantity": 1
                                             }
                                         ]
@@ -89,8 +89,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
                                         "items": [
                                             {
                                                 "code": "P100",
-                                                "name": "Product 1",
-                                                "price": 25.50,
+                                                "name": "The Hunger Games",
+                                                "price": 34.00,
                                                 "quantity": 1
                                             }
                                         ]

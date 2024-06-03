@@ -1,7 +1,7 @@
-package com.sivalabs.bookstore.catalog.application;
+package com.sivalabs.bookstore.catalog.domain;
 
-import com.sivalabs.bookstore.catalog.domain.Product;
-import com.sivalabs.bookstore.catalog.domain.ProductRepository;
+import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.Queries;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-public class ProductQueryService {
+public class ProductQueryHandler {
     private final ProductRepository productRepository;
 
     public PagedResult<Product> getProducts(Queries.FindProductsQuery query) {

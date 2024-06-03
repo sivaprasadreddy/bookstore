@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orders.config;
 
+import com.sivalabs.bookstore.orders.domain.InvalidOrderException;
 import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import java.net.URI;
 import java.time.Instant;
@@ -16,10 +17,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class OrdersExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
-    ProblemDetail handleOrderNotFoundException(OrderNotFoundException e) {
+    ProblemDetail handle(OrderNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Order Not Found");
         problemDetail.setType(URI.create("https://api.bookstore.com/errors/not-found"));
+        problemDetail.setProperty("errorCategory", "Generic");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(InvalidOrderException.class)
+    ProblemDetail handle(InvalidOrderException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("Invalid Order Creation Request");
+        problemDetail.setType(URI.create("https://api.bookstore.com/errors/bad-request"));
         problemDetail.setProperty("errorCategory", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;

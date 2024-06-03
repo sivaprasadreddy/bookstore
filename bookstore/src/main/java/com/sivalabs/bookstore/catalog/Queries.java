@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.catalog.application;
+package com.sivalabs.bookstore.catalog;
 
 public record Queries() {
 

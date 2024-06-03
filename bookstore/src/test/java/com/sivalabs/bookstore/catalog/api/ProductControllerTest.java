@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import com.sivalabs.bookstore.catalog.domain.Product;
+import com.sivalabs.bookstore.catalog.Product;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
 import java.math.BigDecimal;

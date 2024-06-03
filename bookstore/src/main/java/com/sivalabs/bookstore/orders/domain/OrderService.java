@@ -1,5 +1,8 @@
 package com.sivalabs.bookstore.orders.domain;
 
+import com.sivalabs.bookstore.catalog.CatalogAPI;
+import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.Queries;
 import com.sivalabs.bookstore.orders.domain.entity.Order;
 import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.Address;
@@ -29,13 +32,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final CatalogAPI catalogAPI;
     private final OrderEventPublisher orderEventPublisher;
 
     public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
+        validate(orderRequest);
         Order newOrder = orderMapper.convertToEntity(orderRequest);
         Order savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderId={}", savedOrder.getOrderId());
         return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
+    }
+
+    private void validate(CreateOrderRequest req) {
+        req.items().forEach(item -> {
+            Product product = catalogAPI
+                    .findProductByCode(new Queries.FindProductByCodeQuery(item.code()))
+                    .orElseThrow(() -> new InvalidOrderException("Invalid Product Code: " + item.code()));
+            if (product.price().compareTo(item.price()) != 0) {
+                throw new InvalidOrderException("Product price mismatch for code: " + item.code());
+            }
+        });
     }
 
     public Optional<OrderDTO> findOrderByOrderId(String orderId) {

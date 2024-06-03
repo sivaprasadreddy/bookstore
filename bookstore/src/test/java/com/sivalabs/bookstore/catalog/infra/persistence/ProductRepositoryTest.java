@@ -3,7 +3,7 @@ package com.sivalabs.bookstore.catalog.infra.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.sivalabs.bookstore.catalog.domain.Product;
+import com.sivalabs.bookstore.catalog.Product;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

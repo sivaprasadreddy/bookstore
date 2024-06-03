@@ -1,7 +1,7 @@
-package com.sivalabs.bookstore.catalog.application;
+package com.sivalabs.bookstore.catalog.domain;
 
-import com.sivalabs.bookstore.catalog.domain.Product;
-import com.sivalabs.bookstore.catalog.domain.ProductRepository;
+import com.sivalabs.bookstore.catalog.Commands;
+import com.sivalabs.bookstore.catalog.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

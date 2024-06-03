@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.catalog.domain;
 
+import com.sivalabs.bookstore.catalog.Product;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
 
