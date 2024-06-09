@@ -30,7 +30,7 @@ spec:
       containers:
         - name: bookstore
           image: sivaprasadreddy/sivalabs-bookstore
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
