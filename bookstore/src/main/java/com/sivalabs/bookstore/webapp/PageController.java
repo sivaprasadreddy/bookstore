@@ -15,7 +15,7 @@ class PageController {
     }
 
     @GetMapping("/products")
-    String showProductsPage(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
+    String showProductsPage(@RequestParam(defaultValue = "1") int page, Model model) {
         model.addAttribute("pageNo", page);
         return "products";
     }
