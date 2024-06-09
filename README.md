@@ -16,3 +16,19 @@ $ ./mvnw verify
 $ ./mvnw spring-boot:run
 ```
 
+# Running application on Kubernetes
+
+* Start kind cluster
+
+```shell
+cd deployment/kind
+./kind-cluster.sh create
+```
+
+* Deploy/Undeploy application
+
+```shell
+cd deployment
+kubectl apply -f k8s/
+kubectl delete -f k8s/
+```
