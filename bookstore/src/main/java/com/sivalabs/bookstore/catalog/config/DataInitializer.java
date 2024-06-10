@@ -57,7 +57,7 @@ class DataInitializer {
     private Commands.CreateProductCommand toProduct(String json) {
         try {
             Book book = objectMapper.readValue(json, Book.class);
-            log.info("Book: {}", book);
+            // log.info("Book: {}", book);
             return new Commands.CreateProductCommand(
                     "P1000" + book.id(),
                     book.title(),
