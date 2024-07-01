@@ -1,16 +1,15 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.orders.domain.entity.Order;
-import com.sivalabs.bookstore.orders.domain.entity.OrderItem;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderMapper {
+class OrderMapper {
 
     public Order convertToEntity(CreateOrderRequest orderRequest) {
         Order newOrder = new Order();
@@ -31,5 +30,21 @@ public class OrderMapper {
         }
         newOrder.setItems(orderItems);
         return newOrder;
+    }
+
+    public OrderDTO toDTO(Order order) {
+        Set<com.sivalabs.bookstore.orders.domain.model.OrderItem> orderItems = order.getItems().stream()
+                .map(item -> new com.sivalabs.bookstore.orders.domain.model.OrderItem(
+                        item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                .collect(Collectors.toSet());
+
+        return new OrderDTO(
+                order.getId(),
+                order.getOrderId(),
+                orderItems,
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                order.getStatus(),
+                order.getComments());
     }
 }

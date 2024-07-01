@@ -2,7 +2,7 @@ package com.sivalabs.bookstore.orders.events;
 
 import com.sivalabs.bookstore.orders.domain.NotificationService;
 import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
+import com.sivalabs.bookstore.orders.domain.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderCancelledEventHandler {
+class OrderCancelledEventHandler {
     private final OrderService orderService;
     private final NotificationService notificationService;
 

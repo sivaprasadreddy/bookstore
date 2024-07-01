@@ -2,15 +2,10 @@ package com.sivalabs.bookstore.orders.domain;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.Product;
-import com.sivalabs.bookstore.orders.domain.entity.Order;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
-import com.sivalabs.bookstore.orders.domain.model.Address;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.domain.model.Customer;
 import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderItem;
 import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
@@ -54,11 +49,7 @@ public class OrderService {
     }
 
     public Optional<OrderDTO> findOrderByOrderId(String orderId) {
-        return this.orderRepository.findByOrderId(orderId).map(OrderDTO::from);
-    }
-
-    public List<Order> findOrdersByStatus(OrderStatus status) {
-        return orderRepository.findByStatus(status);
+        return this.orderRepository.findByOrderId(orderId).map(orderMapper::toDTO);
     }
 
     public void updateOrderStatus(String orderId, OrderStatus status, String comments) {
@@ -74,7 +65,7 @@ public class OrderService {
     }
 
     public void processNewOrders() {
-        List<Order> newOrders = this.findOrdersByStatus(OrderStatus.NEW);
+        List<Order> newOrders = orderRepository.findByStatus(OrderStatus.NEW);
         for (Order order : newOrders) {
             this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
             OrderCreatedEvent orderCreatedEvent = this.buildOrderCreatedEvent(order);
@@ -85,25 +76,12 @@ public class OrderService {
 
     private OrderCreatedEvent buildOrderCreatedEvent(Order order) {
         return new OrderCreatedEvent(
-                order.getOrderId(), getOrderItems(order), getCustomer(order), getDeliveryAddress(order));
-    }
-
-    private OrderErrorEvent buildOrderErrorEvent(Order order, String reason) {
-        return new OrderErrorEvent(
-                order.getOrderId(), reason, getOrderItems(order), getCustomer(order), getDeliveryAddress(order));
+                order.getOrderId(), getOrderItems(order), order.getCustomer(), order.getDeliveryAddress());
     }
 
     private Set<OrderItem> getOrderItems(Order order) {
         return order.getItems().stream()
                 .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
-    }
-
-    private Customer getCustomer(Order order) {
-        return order.getCustomer();
-    }
-
-    private Address getDeliveryAddress(Order order) {
-        return order.getDeliveryAddress();
     }
 }

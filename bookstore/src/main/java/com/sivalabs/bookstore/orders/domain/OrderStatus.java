@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.domain.entity;
+package com.sivalabs.bookstore.orders.domain;
 
 public enum OrderStatus {
     NEW,

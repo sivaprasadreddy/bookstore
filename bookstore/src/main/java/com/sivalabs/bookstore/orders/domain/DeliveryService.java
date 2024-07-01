@@ -1,7 +1,5 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import com.sivalabs.bookstore.orders.domain.entity.Order;
-import com.sivalabs.bookstore.orders.domain.entity.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;

@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.domain.entity;
+package com.sivalabs.bookstore.orders.domain;
 
 import com.sivalabs.bookstore.orders.domain.model.Address;
 import com.sivalabs.bookstore.orders.domain.model.Customer;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Table(name = "orders")
 @Setter
 @Getter
-public class Order {
+class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")

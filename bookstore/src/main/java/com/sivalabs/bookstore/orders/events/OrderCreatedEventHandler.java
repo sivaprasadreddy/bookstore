@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderCreatedEventHandler {
+class OrderCreatedEventHandler {
     private final DeliveryService deliveryService;
     private final NotificationService notificationService;
 

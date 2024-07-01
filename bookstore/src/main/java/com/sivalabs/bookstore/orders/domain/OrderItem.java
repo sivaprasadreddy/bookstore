@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.domain.entity;
+package com.sivalabs.bookstore.orders.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Table(name = "order_items")
 @Setter
 @Getter
-public class OrderItem {
+class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_id_generator")
