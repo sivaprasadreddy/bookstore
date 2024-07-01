@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.catalog.infra.persistence;
+package com.sivalabs.bookstore.catalog.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

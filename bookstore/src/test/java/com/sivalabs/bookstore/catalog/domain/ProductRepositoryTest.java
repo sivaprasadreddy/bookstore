@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.catalog.infra.persistence;
+package com.sivalabs.bookstore.catalog.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,7 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
         })
 class ProductRepositoryTest {
     @Autowired
-    private JpaProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {

@@ -1,17 +1,14 @@
 package com.sivalabs.bookstore.catalog.domain;
 
 import com.sivalabs.bookstore.catalog.Product;
-import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository {
-    void saveProduct(Product product);
-
-    PagedResult<Product> getProducts(int pageNo, int pageSize);
+interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     Optional<Product> findByCode(String code);
 
-    long count();
-
-    void deleteAllInBatch();
+    Page<Product> findAllBy(Pageable pageable);
 }
