@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +23,7 @@ public class ProductImporter {
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
 
+    @Async
     public void importProducts(InputStream inputStream) throws IOException {
         if (productRepository.count() > 0) {
             log.info("Product data already imported.");
