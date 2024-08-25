@@ -29,8 +29,6 @@ public class ProductImporter {
             log.info("Product data already imported.");
             return;
         }
-        log.info("Deleting existing product data...");
-        productRepository.deleteAllInBatch();
 
         log.info("Importing product data...");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
