@@ -24,7 +24,7 @@
         <jquery.version>3.7.1</jquery.version>
         <font_awesome.version>6.5.2</font_awesome.version>
         <alpinejs.version>3.14.1</alpinejs.version>
-        <error-prone.version>2.32.0</error-prone.version>
+        <error-prone.version>2.36.0</error-prone.version>
         <spotless.version>2.43.0</spotless.version>
         <rewrite-maven-plugin.version>5.40.2</rewrite-maven-plugin.version>
         <rewrite-spring.version>5.19.0</rewrite-spring.version>
