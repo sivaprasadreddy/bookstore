@@ -22,7 +22,7 @@
         <testcontainers.version>1.20.1</testcontainers.version>
         <bootstrap.version>5.3.3</bootstrap.version>
         <jquery.version>3.7.1</jquery.version>
-        <font_awesome.version>6.5.2</font_awesome.version>
+        <font_awesome.version>6.7.1</font_awesome.version>
         <alpinejs.version>3.14.1</alpinejs.version>
         <error-prone.version>2.32.0</error-prone.version>
         <spotless.version>2.43.0</spotless.version>
