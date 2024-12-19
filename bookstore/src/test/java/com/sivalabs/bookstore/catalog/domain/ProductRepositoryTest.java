@@ -4,19 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.common.TestcontainersConfiguration;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
-@DataJpaTest(
-        properties = {
-            "spring.test.database.replace=none",
-            "spring.datasource.url=jdbc:tc:postgresql:16-alpine:///bookstore"
-        })
+@DataJpaTest
+@Import(TestcontainersConfiguration.class)
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
