@@ -221,7 +221,6 @@
                     </excludes>
                     <image>
                         <name>${dockerImageName}</name>
-                        <builder>dashaun/builder:tiny</builder>
                     </image>
                 </configuration>
                 <executions>
@@ -232,6 +231,34 @@
                     </execution>
 
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>me.fabriciorby</groupId>
+                        <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                        <version>1.4.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <reportFormat>plain</reportFormat>
+                    <consoleOutputReporter>
+                        <disable>true</disable>
+                    </consoleOutputReporter>
+                    <statelessTestsetInfoReporter
+                            implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+                        <theme>UNICODE</theme>
+                        <printStacktraceOnError>true</printStacktraceOnError>
+                        <printStacktraceOnFailure>true</printStacktraceOnFailure>
+                        <printStdoutOnError>true</printStdoutOnError>
+                        <printStdoutOnFailure>true</printStdoutOnFailure>
+                        <printStdoutOnSuccess>false</printStdoutOnSuccess>
+                        <printStderrOnError>true</printStderrOnError>
+                        <printStderrOnFailure>true</printStderrOnFailure>
+                        <printStderrOnSuccess>false</printStderrOnSuccess>
+                    </statelessTestsetInfoReporter>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
