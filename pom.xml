@@ -13,7 +13,7 @@
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <spotless.version>2.43.0</spotless.version>
+        <spotless.version>2.44.2</spotless.version>
     </properties>
     <modules>
         <module>bookstore</module>

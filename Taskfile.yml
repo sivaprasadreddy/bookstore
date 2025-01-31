@@ -72,6 +72,9 @@ tasks:
         vars: { DURATION: 10 }
       - task: start_monitoring
 
+  rewrite:
+    cmds:
+      - "{{.MVNW}} -pl bookstore rewrite:run"
   sleep:
     vars:
       DURATION: '{{default 5 .DURATION}}'

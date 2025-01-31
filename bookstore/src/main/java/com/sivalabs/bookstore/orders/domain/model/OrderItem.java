@@ -11,10 +11,8 @@ import java.math.BigDecimal;
 public record OrderItem(
         @NotBlank(message = "Code is required") String code,
         @NotBlank(message = "Name is required") String name,
-        @NotNull(message = "Price is required") @DecimalMin(value = "0.1", message = "Price should be greater than 0")
-                BigDecimal price,
-        @NotNull(message = "Quantity is required") @Min(value = 1, message = "Quantity should be greater than 0")
-                Integer quantity) {
+        @NotNull(message = "Price is required") @DecimalMin(value = "0.1", message = "Price should be greater than 0") BigDecimal price,
+        @NotNull(message = "Quantity is required") @Min(value = 1, message = "Quantity should be greater than 0") Integer quantity) {
     public BigDecimal getSubTotal() {
         return price.multiply(new BigDecimal(quantity));
     }
