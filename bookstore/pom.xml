@@ -21,7 +21,7 @@
         <springdoc-openapi.version>2.8.4</springdoc-openapi.version>
         <bootstrap.version>5.3.3</bootstrap.version>
         <jquery.version>3.7.1</jquery.version>
-        <font_awesome.version>6.7.1</font_awesome.version>
+        <font_awesome.version>6.7.2</font_awesome.version>
         <alpinejs.version>3.14.8</alpinejs.version>
         <error-prone.version>2.36.0</error-prone.version>
         <spotless.version>2.44.2</spotless.version>
