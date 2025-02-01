@@ -942,10 +942,6 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "kart-api-spring-java:8080",
-          "value": "kart-api-spring-java:8080"
-        },
         "datasource": "Prometheus",
         "definition": "label_values(jvm_memory_used_bytes{application=\"$application\"}, instance)",
         "hide": 0,
