@@ -24,7 +24,7 @@
         <font_awesome.version>6.7.2</font_awesome.version>
         <alpinejs.version>3.14.8</alpinejs.version>
         <error-prone.version>2.36.0</error-prone.version>
-        <spotless.version>2.44.2</spotless.version>
+        <spotless.version>2.44.4</spotless.version>
         <rewrite-maven-plugin.version>6.1.1</rewrite-maven-plugin.version>
         <rewrite-spring.version>6.1.0</rewrite-spring.version>
         <archunit.version>1.4.0</archunit.version>
