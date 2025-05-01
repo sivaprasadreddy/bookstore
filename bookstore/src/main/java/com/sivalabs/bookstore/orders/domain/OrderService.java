@@ -10,20 +10,20 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class OrderService {
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CatalogAPI catalogAPI;
     private final OrderEventPublisher orderEventPublisher;
 
-    public OrderService(
+    OrderService(
             OrderRepository orderRepository,
             OrderMapper orderMapper,
             CatalogAPI catalogAPI,
@@ -34,6 +34,7 @@ public class OrderService {
         this.orderEventPublisher = orderEventPublisher;
     }
 
+    @Transactional
     public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
         validate(orderRequest);
         Order newOrder = orderMapper.convertToEntity(orderRequest);
@@ -53,10 +54,12 @@ public class OrderService {
         });
     }
 
+    @Transactional(readOnly = true)
     public Optional<OrderDTO> findOrderByOrderId(String orderId) {
         return this.orderRepository.findByOrderId(orderId).map(orderMapper::toDTO);
     }
 
+    @Transactional
     public void updateOrderStatus(String orderId, OrderStatus status, String comments) {
         Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
         order.setStatus(status);
@@ -64,11 +67,13 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderSummary> findAllOrderSummaries() {
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         return orderRepository.findAllOrderSummaries(sort);
     }
 
+    @Transactional
     public void processNewOrders() {
         List<Order> newOrders = orderRepository.findByStatus(OrderStatus.NEW);
         for (Order order : newOrders) {

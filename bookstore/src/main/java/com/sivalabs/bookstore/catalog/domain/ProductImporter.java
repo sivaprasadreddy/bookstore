@@ -22,8 +22,7 @@ public class ProductImporter {
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
 
-    public ProductImporter(
-            CatalogService catalogService, ProductRepository productRepository, ObjectMapper objectMapper) {
+    ProductImporter(CatalogService catalogService, ProductRepository productRepository, ObjectMapper objectMapper) {
         this.catalogService = catalogService;
         this.productRepository = productRepository;
         this.objectMapper = objectMapper;

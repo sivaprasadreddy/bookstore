@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
     private final EmailService emailService;
 
-    public NotificationService(EmailService emailService) {
+    NotificationService(EmailService emailService) {
         this.emailService = emailService;
     }
 
