@@ -4,23 +4,25 @@ import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class NotificationService {
     private final EmailService emailService;
+
+    public NotificationService(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     public void sendConfirmationNotification(OrderCreatedEvent event) {
         String content =
                 """
-                Hi %s,
-                This email is to notify you that your order : %s is received and will be processed soon.
+                        Hi %s,
+                        This email is to notify you that your order : %s is received and will be processed soon.
 
-                Thanks,
-                BookStore Team
-                """
+                        Thanks,
+                        BookStore Team
+                        """
                         .formatted(event.customer().name(), event.orderId());
         emailService.sendEmail(event.customer().email(), "Order Confirmation", content);
     }
@@ -28,12 +30,12 @@ public class NotificationService {
     public void sendDeliveredNotification(OrderDeliveredEvent event) {
         String content =
                 """
-                Hi %s,
-                This email is to notify you that your order : %s is delivered.
+                        Hi %s,
+                        This email is to notify you that your order : %s is delivered.
 
-                Thanks,
-                BookStore Team
-                """
+                        Thanks,
+                        BookStore Team
+                        """
                         .formatted(event.customer().name(), event.orderId());
         emailService.sendEmail(event.customer().email(), "Order Delivery Confirmation", content);
     }
@@ -41,12 +43,12 @@ public class NotificationService {
     public void sendCancelledNotification(OrderCancelledEvent event) {
         String content =
                 """
-                Hi %s,
-                This email is to notify you that your order : %s is cancelled.
+                        Hi %s,
+                        This email is to notify you that your order : %s is cancelled.
 
-                Thanks,
-                BookStore Team
-                """
+                        Thanks,
+                        BookStore Team
+                        """
                         .formatted(event.customer().name(), event.orderId());
         emailService.sendEmail(event.customer().email(), "Order Cancellation Confirmation", content);
     }
@@ -54,12 +56,12 @@ public class NotificationService {
     public void sendErrorNotification(OrderErrorEvent event) {
         String content =
                 """
-                Hi %s,
-                This email is to notify you that your order : %s is failed to process.
+                        Hi %s,
+                        This email is to notify you that your order : %s is failed to process.
 
-                Thanks,
-                BookStore Team
-                """
+                        Thanks,
+                        BookStore Team
+                        """
                         .formatted(event.customer().name(), event.orderId());
         emailService.sendEmail(event.customer().email(), "Order Error Notification", content);
     }

@@ -13,12 +13,10 @@ import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
 import java.util.Optional;
 import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
-@Slf4j
 @Sql("/test-products-data.sql")
 class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
     @Autowired
@@ -34,8 +32,6 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
 
         OrderCreatedEvent event =
                 new OrderCreatedEvent(order.orderId(), Set.of(), request.customer(), request.deliveryAddress());
-
-        log.info("Created OrderId:{}", event.orderId());
 
         orderEventPublisher.send(event);
 

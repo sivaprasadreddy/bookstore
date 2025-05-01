@@ -6,8 +6,6 @@ import com.sivalabs.bookstore.catalog.FindProductsQuery;
 import com.sivalabs.bookstore.catalog.Product;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-@Slf4j
 class CatalogService implements CatalogAPI {
     private final ProductRepository productRepository;
+
+    public CatalogService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Transactional
     @Override
@@ -30,6 +29,7 @@ class CatalogService implements CatalogAPI {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedResult<Product> findProducts(FindProductsQuery query) {
         int pageNo = query.pageNo();
         int pageSize = query.pageSize();
@@ -40,6 +40,7 @@ class CatalogService implements CatalogAPI {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Product> findProductByCode(String code) {
         return productRepository.findByCode(code);
     }

@@ -2,30 +2,12 @@ package com.sivalabs.bookstore.orders.domain;
 
 import com.sivalabs.bookstore.orders.domain.model.Address;
 import com.sivalabs.bookstore.orders.domain.model.Customer;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "orders")
-@Setter
-@Getter
 class Order {
 
     @Id
@@ -67,4 +49,76 @@ class Order {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getOrderId() {
+        return this.orderId;
+    }
+
+    public Set<OrderItem> getItems() {
+        return this.items;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public Address getDeliveryAddress() {
+        return this.deliveryAddress;
+    }
+
+    public OrderStatus getStatus() {
+        return this.status;
+    }
+
+    public String getComments() {
+        return this.comments;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setItems(Set<OrderItem> items) {
+        this.items = items;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

@@ -3,17 +3,21 @@ package com.sivalabs.bookstore.orders.events;
 import com.sivalabs.bookstore.orders.domain.DeliveryService;
 import com.sivalabs.bookstore.orders.domain.NotificationService;
 import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 class OrderCreatedEventHandler {
+    private static final Logger log = LoggerFactory.getLogger(OrderCreatedEventHandler.class);
     private final DeliveryService deliveryService;
     private final NotificationService notificationService;
+
+    OrderCreatedEventHandler(DeliveryService deliveryService, NotificationService notificationService) {
+        this.deliveryService = deliveryService;
+        this.notificationService = notificationService;
+    }
 
     @EventListener
     public void handle(OrderCreatedEvent event) {

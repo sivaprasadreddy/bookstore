@@ -2,32 +2,37 @@ package com.sivalabs.bookstore.orders.domain;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.Product;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
-import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.domain.model.*;
 import com.sivalabs.bookstore.orders.domain.model.OrderItem;
-import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
-@Slf4j
 public class OrderService {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(OrderService.class);
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final CatalogAPI catalogAPI;
     private final OrderEventPublisher orderEventPublisher;
+
+    public OrderService(
+            OrderRepository orderRepository,
+            OrderMapper orderMapper,
+            CatalogAPI catalogAPI,
+            OrderEventPublisher orderEventPublisher) {
+        this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
+        this.catalogAPI = catalogAPI;
+        this.orderEventPublisher = orderEventPublisher;
+    }
 
     public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
         validate(orderRequest);

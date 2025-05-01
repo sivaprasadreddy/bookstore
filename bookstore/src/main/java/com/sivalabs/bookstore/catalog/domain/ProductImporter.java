@@ -10,18 +10,24 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class ProductImporter {
+    private static final Logger log = LoggerFactory.getLogger(ProductImporter.class);
     private final CatalogService catalogService;
     private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
+
+    public ProductImporter(
+            CatalogService catalogService, ProductRepository productRepository, ObjectMapper objectMapper) {
+        this.catalogService = catalogService;
+        this.productRepository = productRepository;
+        this.objectMapper = objectMapper;
+    }
 
     @Async
     public void importProducts(InputStream inputStream) throws IOException {

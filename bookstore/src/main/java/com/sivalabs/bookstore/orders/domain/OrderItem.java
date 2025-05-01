@@ -1,22 +1,10 @@
 package com.sivalabs.bookstore.orders.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "order_items")
-@Setter
-@Getter
 class OrderItem {
 
     @Id
@@ -38,4 +26,52 @@ class OrderItem {
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public BigDecimal getPrice() {
+        return this.price;
+    }
+
+    public Integer getQuantity() {
+        return this.quantity;
+    }
+
+    public Order getOrder() {
+        return this.order;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

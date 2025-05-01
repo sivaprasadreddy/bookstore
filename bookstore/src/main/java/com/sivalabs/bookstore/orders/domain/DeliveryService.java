@@ -7,17 +7,20 @@ import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
 import java.util.Locale;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class DeliveryService {
     private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
     private final OrderRepository orderRepository;
     private final OrderEventPublisher orderEventPublisher;
+
+    public DeliveryService(OrderRepository orderRepository, OrderEventPublisher orderEventPublisher) {
+        this.orderRepository = orderRepository;
+        this.orderEventPublisher = orderEventPublisher;
+    }
 
     public void process(OrderCreatedEvent event) {
         try {

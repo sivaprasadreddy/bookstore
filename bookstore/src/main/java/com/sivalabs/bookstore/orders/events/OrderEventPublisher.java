@@ -4,14 +4,16 @@ import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class OrderEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
+
+    public OrderEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
 
     public void send(OrderDeliveredEvent event) {
         this.publish(event);

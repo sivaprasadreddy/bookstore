@@ -3,8 +3,8 @@ package com.sivalabs.bookstore.catalog.config;
 import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.catalog.domain.ProductImporter;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +12,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 @Configuration
-@RequiredArgsConstructor
-@Slf4j
 class DataInitializer {
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
     private final ProductImporter productImporter;
     private final ApplicationProperties properties;
+
+    DataInitializer(ProductImporter productImporter, ApplicationProperties properties) {
+        this.productImporter = productImporter;
+        this.properties = properties;
+    }
 
     @Bean
     ApplicationRunner catalogInitializer(@Value("classpath:/data/books.jsonlines") Resource resource) {

@@ -5,17 +5,21 @@ import com.sivalabs.bookstore.orders.domain.OrderService;
 import com.sivalabs.bookstore.orders.domain.OrderStatus;
 import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 class OrderCancelledEventHandler {
+    private static final Logger log = LoggerFactory.getLogger(OrderCancelledEventHandler.class);
     private final OrderService orderService;
     private final NotificationService notificationService;
+
+    OrderCancelledEventHandler(OrderService orderService, NotificationService notificationService) {
+        this.orderService = orderService;
+        this.notificationService = notificationService;
+    }
 
     @EventListener
     public void handle(OrderCancelledEvent event) {
