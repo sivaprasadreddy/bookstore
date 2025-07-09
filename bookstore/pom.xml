@@ -26,7 +26,7 @@
         <error-prone.version>2.38.0</error-prone.version>
         <spotless.version>2.44.4</spotless.version>
         <rewrite-maven-plugin.version>6.9.0</rewrite-maven-plugin.version>
-        <rewrite-spring.version>6.8.1</rewrite-spring.version>
+        <rewrite-spring.version>6.10.0</rewrite-spring.version>
         <archunit.version>1.4.1</archunit.version>
         <dockerImageName>sivaprasadreddy/sivalabs-bookstore</dockerImageName>
     </properties>
