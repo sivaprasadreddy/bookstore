@@ -110,6 +110,67 @@ class OrderControllerTests extends AbstractIntegrationTest {
     }
 
     @Nested
+    class CheckoutTests {
+        @Test
+        @WithUserDetails("admin@gmail.com")
+        void shouldRenderCheckoutPageWhenCartHasItems() {
+            MockHttpSession session = new MockHttpSession();
+            Cart cart = new Cart();
+            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            CartUtil.setCart(session, cart);
+
+            var result =
+                    mockMvcTester.get().uri("/orders/checkout").session(session).exchange();
+
+            assertThat(result)
+                    .hasStatus(HttpStatus.OK)
+                    .hasViewName("checkout")
+                    .model()
+                    .containsKeys("orderForm")
+                    .satisfies(model -> {
+                        var orderForm = (OrderForm) model.get("orderForm");
+                        assertThat(orderForm).isNotNull();
+                    });
+        }
+
+        @Test
+        @WithUserDetails("admin@gmail.com")
+        void shouldRedirectToCartWhenCartIsEmpty() {
+            MockHttpSession session = new MockHttpSession();
+            Cart cart = new Cart(); // Empty cart
+            CartUtil.setCart(session, cart);
+
+            var result =
+                    mockMvcTester.get().uri("/orders/checkout").session(session).exchange();
+
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).isEqualTo("/cart");
+        }
+
+        @Test
+        void shouldRequireAuthenticationForCheckout() {
+            // No @WithUserDetails annotation means unauthenticated request
+            MockHttpSession session = new MockHttpSession();
+            Cart cart = new Cart();
+            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            CartUtil.setCart(session, cart);
+
+            var result =
+                    mockMvcTester.get().uri("/orders/checkout").session(session).exchange();
+
+            // Should redirect to login page
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).contains("/login");
+        }
+    }
+
+    @Nested
     class GetOrderApiTests {
         String orderId = "order-123";
 
