@@ -1,6 +1,6 @@
 package com.sivalabs.bookstore.orders.jobs;
 
-import com.sivalabs.bookstore.orders.domain.OrderService;
+import com.sivalabs.bookstore.orders.core.OrderService;
 import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

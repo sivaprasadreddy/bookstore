@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.domain.model;
+package com.sivalabs.bookstore.orders.core.models;
 
 import jakarta.validation.constraints.NotBlank;
 

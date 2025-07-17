@@ -1,9 +1,9 @@
-package com.sivalabs.bookstore.orders.domain;
+package com.sivalabs.bookstore.orders.core;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.core.models.ProductDto;
-import com.sivalabs.bookstore.orders.domain.model.*;
-import com.sivalabs.bookstore.orders.domain.model.OrderItem;
+import com.sivalabs.bookstore.orders.core.models.*;
+import com.sivalabs.bookstore.orders.core.models.OrderItem;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<OrderDTO> findOrderByOrderId(String orderId) {
+    public Optional<OrderDto> findOrderByOrderId(String orderId) {
         return this.orderRepository.findByOrderId(orderId).map(orderMapper::toDTO);
     }
 

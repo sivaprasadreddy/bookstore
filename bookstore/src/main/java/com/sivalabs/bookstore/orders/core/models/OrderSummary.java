@@ -1,7 +1,7 @@
-package com.sivalabs.bookstore.orders.domain.model;
+package com.sivalabs.bookstore.orders.core.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sivalabs.bookstore.orders.domain.OrderStatus;
+import com.sivalabs.bookstore.orders.core.OrderStatus;
 import java.time.LocalDateTime;
 
 public record OrderSummary(

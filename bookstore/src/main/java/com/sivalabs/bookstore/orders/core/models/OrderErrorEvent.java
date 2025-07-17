@@ -1,6 +1,6 @@
-package com.sivalabs.bookstore.orders.domain.model;
+package com.sivalabs.bookstore.orders.core.models;
 
 import java.util.Set;
 
-public record OrderCancelledEvent(
+public record OrderErrorEvent(
         String orderId, String reason, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}

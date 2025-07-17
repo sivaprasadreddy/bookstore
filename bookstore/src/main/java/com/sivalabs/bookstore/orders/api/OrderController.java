@@ -1,11 +1,11 @@
 package com.sivalabs.bookstore.orders.api;
 
-import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
-import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
+import com.sivalabs.bookstore.orders.core.OrderNotFoundException;
+import com.sivalabs.bookstore.orders.core.OrderService;
+import com.sivalabs.bookstore.orders.core.models.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
+import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ class OrderController {
     }
 
     @GetMapping(value = "/{orderId}")
-    OrderDTO getOrder(@PathVariable String orderId) {
+    OrderDto getOrder(@PathVariable String orderId) {
         log.info("Fetching order by id: {}", orderId);
         return orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
     }

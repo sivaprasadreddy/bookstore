@@ -4,18 +4,22 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapMode.DIRECT_DEPENDENCIES;
 
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.core.OrderService;
+import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
+import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import io.restassured.http.ContentType;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.test.context.jdbc.Sql;
 
+@ApplicationModuleTest(mode = DIRECT_DEPENDENCIES, webEnvironment = RANDOM_PORT)
 @Sql({"/test-products-data.sql", "/test-orders-data.sql"})
 class OrderControllerTests extends AbstractIntegrationTest {
     @Autowired
@@ -63,7 +67,7 @@ class OrderControllerTests extends AbstractIntegrationTest {
                     .body()
                     .as(CreateOrderResponse.class);
 
-            Optional<OrderDTO> orderOptional = orderService.findOrderByOrderId(createOrderResponse.orderId());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderId(createOrderResponse.orderId());
             assertThat(orderOptional).isPresent();
         }
 
@@ -109,13 +113,13 @@ class OrderControllerTests extends AbstractIntegrationTest {
 
         @Test
         void shouldGetOrderSuccessfully() {
-            OrderDTO orderDTO = given().when()
+            OrderDto orderDTO = given().when()
                     .get("/api/orders/{orderId}", orderId)
                     .then()
                     .statusCode(200)
                     .extract()
                     .body()
-                    .as(OrderDTO.class);
+                    .as(OrderDto.class);
 
             assertThat(orderDTO.orderId()).isEqualTo(orderId);
             assertThat(orderDTO.items()).hasSize(2);

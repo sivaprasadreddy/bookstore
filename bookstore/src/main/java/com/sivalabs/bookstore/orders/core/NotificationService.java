@@ -1,9 +1,9 @@
-package com.sivalabs.bookstore.orders.domain;
+package com.sivalabs.bookstore.orders.core;
 
-import com.sivalabs.bookstore.orders.domain.model.OrderCancelledEvent;
-import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
-import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
-import com.sivalabs.bookstore.orders.domain.model.OrderErrorEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderCancelledEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderCreatedEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderErrorEvent;
 import org.springframework.stereotype.Service;
 
 @Service

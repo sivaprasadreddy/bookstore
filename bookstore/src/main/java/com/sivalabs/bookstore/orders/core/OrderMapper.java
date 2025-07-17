@@ -1,7 +1,7 @@
-package com.sivalabs.bookstore.orders.domain;
+package com.sivalabs.bookstore.orders.core;
 
-import com.sivalabs.bookstore.orders.domain.model.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
+import com.sivalabs.bookstore.orders.core.models.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -19,7 +19,7 @@ class OrderMapper {
         newOrder.setDeliveryAddress(orderRequest.deliveryAddress());
 
         Set<OrderItem> orderItems = new HashSet<>();
-        for (com.sivalabs.bookstore.orders.domain.model.OrderItem item : orderRequest.items()) {
+        for (com.sivalabs.bookstore.orders.core.models.OrderItem item : orderRequest.items()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setCode(item.code());
             orderItem.setName(item.name());
@@ -32,13 +32,13 @@ class OrderMapper {
         return newOrder;
     }
 
-    public OrderDTO toDTO(Order order) {
-        Set<com.sivalabs.bookstore.orders.domain.model.OrderItem> orderItems = order.getItems().stream()
-                .map(item -> new com.sivalabs.bookstore.orders.domain.model.OrderItem(
+    public OrderDto toDTO(Order order) {
+        Set<com.sivalabs.bookstore.orders.core.models.OrderItem> orderItems = order.getItems().stream()
+                .map(item -> new com.sivalabs.bookstore.orders.core.models.OrderItem(
                         item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
 
-        return new OrderDTO(
+        return new OrderDto(
                 order.getId(),
                 order.getOrderId(),
                 orderItems,

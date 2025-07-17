@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.domain.model;
+package com.sivalabs.bookstore.orders.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.DecimalMin;

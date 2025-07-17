@@ -1,6 +1,6 @@
-package com.sivalabs.bookstore.orders.domain;
+package com.sivalabs.bookstore.orders.core;
 
-import com.sivalabs.bookstore.orders.domain.model.OrderSummary;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Sort;
@@ -14,6 +14,6 @@ interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatus(OrderStatus status);
 
     @Query(
-            "select new com.sivalabs.bookstore.orders.domain.model.OrderSummary(o.id, o.orderId, o.status, o.createdAt) from Order o")
+            "select new com.sivalabs.bookstore.orders.core.models.OrderSummary(o.id, o.orderId, o.status, o.createdAt) from Order o")
     List<OrderSummary> findAllOrderSummaries(Sort sort);
 }

@@ -4,14 +4,17 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import com.sivalabs.bookstore.catalog.core.models.ProductDto;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
+import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.test.context.jdbc.Sql;
 
+@ApplicationModuleTest(webEnvironment = RANDOM_PORT)
 @Sql("/test-products-data.sql")
 class ProductControllerTest extends AbstractIntegrationTest {
 

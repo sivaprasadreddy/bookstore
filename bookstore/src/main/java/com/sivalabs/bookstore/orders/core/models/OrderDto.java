@@ -1,12 +1,12 @@
-package com.sivalabs.bookstore.orders.domain.model;
+package com.sivalabs.bookstore.orders.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sivalabs.bookstore.orders.domain.OrderStatus;
+import com.sivalabs.bookstore.orders.core.OrderStatus;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record OrderDTO(
+public record OrderDto(
         Long id,
         String orderId,
         Set<OrderItem> items,

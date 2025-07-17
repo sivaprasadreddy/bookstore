@@ -1,8 +1,8 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.sivalabs.bookstore.orders.domain.DeliveryService;
-import com.sivalabs.bookstore.orders.domain.NotificationService;
-import com.sivalabs.bookstore.orders.domain.model.OrderCreatedEvent;
+import com.sivalabs.bookstore.orders.core.DeliveryService;
+import com.sivalabs.bookstore.orders.core.NotificationService;
+import com.sivalabs.bookstore.orders.core.models.OrderCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

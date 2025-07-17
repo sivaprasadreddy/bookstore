@@ -1,10 +1,10 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.sivalabs.bookstore.orders.domain.NotificationService;
-import com.sivalabs.bookstore.orders.domain.OrderService;
-import com.sivalabs.bookstore.orders.domain.OrderStatus;
-import com.sivalabs.bookstore.orders.domain.model.OrderDTO;
-import com.sivalabs.bookstore.orders.domain.model.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.core.NotificationService;
+import com.sivalabs.bookstore.orders.core.OrderService;
+import com.sivalabs.bookstore.orders.core.OrderStatus;
+import com.sivalabs.bookstore.orders.core.models.OrderDeliveredEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -25,7 +25,7 @@ class OrderDeliveredEventHandler {
     public void handle(OrderDeliveredEvent event) {
         try {
             log.info("Received a OrderDeliveredEvent with orderId:{}: ", event.orderId());
-            OrderDTO order = orderService.findOrderByOrderId(event.orderId()).orElse(null);
+            OrderDto order = orderService.findOrderByOrderId(event.orderId()).orElse(null);
             if (order == null) {
                 log.info("Received invalid OrderDeliveredEvent with orderId:{}: ", event.orderId());
                 return;
