@@ -25,7 +25,7 @@ create table orders
 create table order_items
 (
     id       bigint  not null default nextval('order_item_id_seq'),
-    code     varchar not null,
+    isbn     varchar not null,
     name     varchar not null,
     price    numeric not null,
     quantity integer not null,

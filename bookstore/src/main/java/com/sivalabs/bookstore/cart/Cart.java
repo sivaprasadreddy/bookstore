@@ -36,52 +36,52 @@ public class Cart {
     }
 
     public void addItem(LineItem item) {
-        if (items.stream().noneMatch(i -> i.getCode().equals(item.getCode()))) {
+        if (items.stream().noneMatch(i -> i.getIsbn().equals(item.getIsbn()))) {
             items.add(item);
             return;
         }
         items.stream()
-                .filter(i -> i.getCode().equals(item.getCode()))
+                .filter(i -> i.getIsbn().equals(item.getIsbn()))
                 .findFirst()
                 .ifPresent(i -> i.setQuantity(i.getQuantity() + item.getQuantity()));
     }
 
-    public void removeItem(String code) {
-        this.items.removeIf(item -> item.getCode().equals(code));
+    public void removeItem(String isbn) {
+        this.items.removeIf(item -> item.getIsbn().equals(isbn));
     }
 
-    public void updateItemQuantity(String code, int quantity) {
+    public void updateItemQuantity(String isbn, int quantity) {
         if (quantity <= 0) {
-            removeItem(code);
+            removeItem(isbn);
             return;
         }
         this.items.stream()
-                .filter(item -> item.getCode().equals(code))
+                .filter(item -> item.getIsbn().equals(isbn))
                 .findFirst()
                 .ifPresent(item -> item.setQuantity(quantity));
     }
 
     public static class LineItem {
-        private String code;
+        private String isbn;
         private String name;
         private BigDecimal price;
         private int quantity;
 
         public LineItem() {}
 
-        public LineItem(String code, String name, BigDecimal price, int quantity) {
-            this.code = code;
+        public LineItem(String isbn, String name, BigDecimal price, int quantity) {
+            this.isbn = isbn;
             this.name = name;
             this.price = price;
             this.quantity = quantity;
         }
 
-        public String getCode() {
-            return code;
+        public String getIsbn() {
+            return isbn;
         }
 
-        public void setCode(String code) {
-            this.code = code;
+        public void setIsbn(String isbn) {
+            this.isbn = isbn;
         }
 
         public String getName() {

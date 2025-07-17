@@ -22,7 +22,7 @@ class OrderMapper {
         Set<OrderItem> orderItems = new HashSet<>();
         for (com.sivalabs.bookstore.orders.core.models.OrderItem item : orderRequest.items()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setCode(item.code());
+            orderItem.setIsbn(item.isbn());
             orderItem.setName(item.name());
             orderItem.setPrice(item.price());
             orderItem.setQuantity(item.quantity());
@@ -36,7 +36,7 @@ class OrderMapper {
     public OrderDto toDTO(Order order) {
         Set<com.sivalabs.bookstore.orders.core.models.OrderItem> orderItems = order.getItems().stream()
                 .map(item -> new com.sivalabs.bookstore.orders.core.models.OrderItem(
-                        item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                        item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
 
         return new OrderDto(

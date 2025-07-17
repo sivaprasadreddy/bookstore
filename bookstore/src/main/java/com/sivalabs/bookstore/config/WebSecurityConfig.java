@@ -35,7 +35,7 @@ class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(unsecuredPaths)
                 .permitAll()
-                .requestMatchers(HttpMethod.GET, "/products/**")
+                .requestMatchers(HttpMethod.GET, "/books/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated());

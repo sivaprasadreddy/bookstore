@@ -23,7 +23,7 @@ import org.springframework.test.context.jdbc.Sql;
         mode = DIRECT_DEPENDENCIES,
         extraIncludes = {"config"},
         webEnvironment = RANDOM_PORT)
-@Sql("/test-products-data.sql")
+@Sql("/test-books-data.sql")
 class OrderErrorEventHandlerTest extends AbstractIntegrationTest {
 
     @Autowired

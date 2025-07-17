@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
-class ProductEntity {
+@Table(name = "books")
+class BookEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_generator")
-    @SequenceGenerator(name = "product_id_generator", sequenceName = "product_id_seq", allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
+    @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 50)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String code;
+    private String isbn;
 
     @Column(nullable = false)
     private String name;
@@ -24,59 +24,59 @@ class ProductEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    public ProductEntity(Long id, String code, String name, String description, String imageUrl, BigDecimal price) {
+    public BookEntity(Long id, String isbn, String name, String description, String imageUrl, BigDecimal price) {
         this.id = id;
-        this.code = code;
+        this.isbn = isbn;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
     }
 
-    public ProductEntity() {}
+    public BookEntity() {}
 
     public Long getId() {
-        return this.id;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getImageUrl() {
-        return this.imageUrl;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public void setPrice(BigDecimal price) {

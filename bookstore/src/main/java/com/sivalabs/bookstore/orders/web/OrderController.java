@@ -39,7 +39,7 @@ class OrderController {
         Long userId = securityService.getLoginUserId().orElseThrow();
         Cart cart = CartUtil.getCart(session);
         Set<OrderItem> orderItems = cart.getItems().stream()
-                .map(li -> new OrderItem(li.getCode(), li.getName(), li.getPrice(), li.getQuantity()))
+                .map(li -> new OrderItem(li.getIsbn(), li.getName(), li.getPrice(), li.getQuantity()))
                 .collect(Collectors.toSet());
 
         CreateOrderRequest request = getCreateOrderRequest(userId, orderForm, orderItems);

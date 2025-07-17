@@ -7,7 +7,7 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Product Name</th>
+                    <th scope="col">Book Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Sub Total</th>
@@ -20,7 +20,7 @@
                     <td>[[${item.price}]]</td>
                     <td>
                         <form>
-                            <input type="hidden" name="code" th:value="${item.code}"/>
+                            <input type="hidden" name="isbn" th:value="${item.isbn}"/>
                             <input type="number" min="0"
                                    name="quantity"
                                    th:value="${item.quantity}"

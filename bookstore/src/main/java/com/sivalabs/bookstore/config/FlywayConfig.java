@@ -1,5 +1,7 @@
 package com.sivalabs.bookstore.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 class FlywayConfig {

@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
         mode = DIRECT_DEPENDENCIES,
         extraIncludes = {"config"},
         webEnvironment = RANDOM_PORT)
-@Sql({"/test-products-data.sql", "/test-orders-data.sql"})
+@Sql({"/test-books-data.sql", "/test-orders-data.sql"})
 class OrderControllerTests extends AbstractIntegrationTest {
     @Autowired
     private OrderService orderService;

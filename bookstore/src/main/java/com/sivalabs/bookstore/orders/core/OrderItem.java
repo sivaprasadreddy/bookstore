@@ -13,7 +13,7 @@ class OrderItem {
     private Long id;
 
     @Column(nullable = false)
-    private String code;
+    private String isbn;
 
     private String name;
 
@@ -31,8 +31,8 @@ class OrderItem {
         return this.id;
     }
 
-    public String getCode() {
-        return this.code;
+    public String getIsbn() {
+        return this.isbn;
     }
 
     public String getName() {
@@ -55,8 +55,8 @@ class OrderItem {
         this.id = id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public void setName(String name) {

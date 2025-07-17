@@ -8,12 +8,12 @@
 <div layout:fragment="content">
     <div th:replace="~{partials/pagination :: pagination}"></div>
     <div class="row row-cols-1 row-cols-md-5">
-        <div th:each="product : ${ productsPage.data}">
+        <div th:each="book : ${ booksPage.data}">
             <div class="col mb-3">
-                <div class="card h-100 product">
-                    <img th:src="${product.imageUrl}"
+                <div class="card h-100 book">
+                    <img th:src="${book.imageUrl}"
                          src="/images/books.png"
-                         alt="Product Image"
+                         alt="Book Image"
                          class="card-img-top"
                          height="300" width="200"
                     />
@@ -22,16 +22,16 @@
                         <h6 class="card-title"
                             data-toggle="tooltip"
                             data-placement="top"
-                            th:text="${product.getDisplayName()}">product.name</h6>
+                            th:text="${book.getDisplayName()}">book.name</h6>
                         <p class="card-text"
                            data-toggle="tooltip"
                            data-placement="top"
-                           th:text="${'Price: $'+product.price}">product.price</p>
+                           th:text="${'Price: $'+book.price}">book.price</p>
                     </div>
                     <div class="card-footer" style="background: transparent; border-top: 0;">
                         <form method="post" th:action="@{/add-to-cart}">
                             <div class="d-grid gap-2">
-                                <input type="hidden" name="code" th:value="${product.code}"/>
+                                <input type="hidden" name="isbn" th:value="${book.isbn}"/>
                                 <button class="btn btn-primary"
                                         hx-post="/add-to-cart"
                                         hx-swap="none"

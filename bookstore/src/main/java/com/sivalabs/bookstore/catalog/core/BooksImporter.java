@@ -2,7 +2,7 @@ package com.sivalabs.bookstore.catalog.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sivalabs.bookstore.catalog.core.models.CreateProductCommand;
+import com.sivalabs.bookstore.catalog.core.models.CreateBookCommand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,37 +16,37 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductImporter {
-    private static final Logger log = LoggerFactory.getLogger(ProductImporter.class);
-    private final CatalogService catalogService;
-    private final ProductRepository productRepository;
+public class BooksImporter {
+    private static final Logger log = LoggerFactory.getLogger(BooksImporter.class);
+    private final BookService bookService;
+    private final BookRepository bookRepository;
     private final ObjectMapper objectMapper;
 
-    ProductImporter(CatalogService catalogService, ProductRepository productRepository, ObjectMapper objectMapper) {
-        this.catalogService = catalogService;
-        this.productRepository = productRepository;
+    BooksImporter(BookService bookService, BookRepository bookRepository, ObjectMapper objectMapper) {
+        this.bookService = bookService;
+        this.bookRepository = bookRepository;
         this.objectMapper = objectMapper;
     }
 
     @Async
-    public void importProducts(InputStream inputStream) throws IOException {
-        if (productRepository.count() > 0) {
-            log.info("Product data already imported.");
+    public void importBooks(InputStream inputStream) throws IOException {
+        if (bookRepository.count() > 0) {
+            log.info("Book data already imported.");
             return;
         }
 
-        log.info("Importing product data...");
+        log.info("Importing book data...");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            reader.lines().map(this::toProduct).forEach(catalogService::createProduct);
+            reader.lines().map(this::toBook).forEach(bookService::createBook);
         }
-        log.info("Product data imported successfully.");
+        log.info("Book data imported successfully.");
     }
 
-    private CreateProductCommand toProduct(String json) {
+    private CreateBookCommand toBook(String json) {
         try {
             Book book = objectMapper.readValue(json, Book.class);
             // log.info("Book: {}", book);
-            return new CreateProductCommand(
+            return new CreateBookCommand(
                     "P1000" + book.id(),
                     book.title(),
                     book.description(),

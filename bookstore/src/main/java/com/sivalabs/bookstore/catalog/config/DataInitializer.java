@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.catalog.config;
 
 import com.sivalabs.bookstore.ApplicationProperties;
-import com.sivalabs.bookstore.catalog.core.ProductImporter;
+import com.sivalabs.bookstore.catalog.core.BooksImporter;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +14,11 @@ import org.springframework.core.io.Resource;
 @Configuration
 class DataInitializer {
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
-    private final ProductImporter productImporter;
+    private final BooksImporter booksImporter;
     private final ApplicationProperties properties;
 
-    DataInitializer(ProductImporter productImporter, ApplicationProperties properties) {
-        this.productImporter = productImporter;
+    DataInitializer(BooksImporter booksImporter, ApplicationProperties properties) {
+        this.booksImporter = booksImporter;
         this.properties = properties;
     }
 
@@ -32,6 +32,6 @@ class DataInitializer {
             log.info("Data import is disabled.");
             return;
         }
-        productImporter.importProducts(resource.getInputStream());
+        booksImporter.importBooks(resource.getInputStream());
     }
 }

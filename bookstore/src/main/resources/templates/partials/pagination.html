@@ -1,17 +1,17 @@
 <div th:fragment="pagination">
-    <nav aria-label="Page navigation" th:if="${productsPage.totalPages() > 1 }">
+    <nav aria-label="Page navigation" th:if="${booksPage.totalPages() > 1 }">
         <ul class="pagination pagination justify-content-center">
-            <li class="page-item" th:classappend="${!productsPage.hasPrevious()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/products?page=1'}">First</a>
+            <li class="page-item" th:classappend="${!booksPage.hasPrevious()} ? disabled : ''">
+                <a class="page-link" href="#" th:href="${'/books?page=1'}">First</a>
             </li>
-            <li class="page-item" th:classappend="${!productsPage.hasPrevious()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/products?page='+(productsPage.pageNumber() - 1)}">Previous</a>
+            <li class="page-item" th:classappend="${!booksPage.hasPrevious()} ? disabled : ''">
+                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.pageNumber() - 1)}">Previous</a>
             </li>
-            <li class="page-item" th:classappend="${!productsPage.hasNext()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/products?page='+(productsPage.pageNumber() + 1)}">Next</a>
+            <li class="page-item" th:classappend="${!booksPage.hasNext()} ? disabled : ''">
+                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.pageNumber() + 1)}">Next</a>
             </li>
-            <li class="page-item" th:classappend="${!productsPage.hasNext()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/products?page='+(productsPage.totalPages())}">Last</a>
+            <li class="page-item" th:classappend="${!booksPage.hasNext()} ? disabled : ''">
+                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.totalPages())}">Last</a>
             </li>
         </ul>
     </nav>

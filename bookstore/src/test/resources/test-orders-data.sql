@@ -11,7 +11,7 @@ insert into orders (id,order_id, user_id,
 (2, 'order-456', 2, 'Prasad', 'prasad@gmail.com', '2222222', '123 Main St', 'Apt 1', 'Hyderabad', 'TS', '500072', 'India', 'NEW', null)
 ;
 
-insert into order_items(order_id, code, name, price, quantity) values
+insert into order_items(order_id, isbn, name, price, quantity) values
 (1, 'P100', 'The Hunger Games', 34.0, 2),
 (1, 'P101', 'To Kill a Mockingbird', 45.40, 1),
 (2, 'P102', 'The Chronicles of Narnia', 44.50, 1)

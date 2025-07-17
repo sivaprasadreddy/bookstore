@@ -8,15 +8,15 @@ import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.test.context.jdbc.Sql;
 
 @ApplicationModuleTest(webEnvironment = RANDOM_PORT)
-@Sql("/test-products-data.sql")
-class ProductControllerTest extends AbstractIntegrationTest {
+@Sql("/test-books-data.sql")
+class BookControllerTest extends AbstractIntegrationTest {
 
     @Test
-    void shouldGetAllProducts() {}
+    void shouldGetAllBooks() {}
 
     @Test
-    void shouldGetProductByCode() {}
+    void shouldGetBookByIsbn() {}
 
     @Test
-    void shouldReturnNotFoundWhenProductCodeNotExists() {}
+    void shouldReturnNotFoundWhenBookIsbnNotExists() {}
 }

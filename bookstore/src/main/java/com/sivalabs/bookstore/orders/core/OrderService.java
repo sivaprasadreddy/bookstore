@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.core;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
-import com.sivalabs.bookstore.catalog.core.models.ProductDto;
+import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import com.sivalabs.bookstore.orders.core.models.*;
 import com.sivalabs.bookstore.orders.core.models.OrderItem;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
@@ -45,11 +45,11 @@ public class OrderService {
 
     private void validate(CreateOrderRequest req) {
         req.items().forEach(item -> {
-            ProductDto product = catalogAPI
-                    .findProductByCode(item.code())
-                    .orElseThrow(() -> new InvalidOrderException("Invalid Product Code: " + item.code()));
+            BookDto product = catalogAPI
+                    .findBookByIsbn(item.isbn())
+                    .orElseThrow(() -> new InvalidOrderException("Invalid Book isbn: " + item.isbn()));
             if (product.price().compareTo(item.price()) != 0) {
-                throw new InvalidOrderException("Product price mismatch for code: " + item.code());
+                throw new InvalidOrderException("Book price mismatch for isbn: " + item.isbn());
             }
         });
     }
@@ -91,7 +91,7 @@ public class OrderService {
 
     private Set<OrderItem> getOrderItems(Order order) {
         return order.getItems().stream()
-                .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                .map(item -> new OrderItem(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
     }
 }

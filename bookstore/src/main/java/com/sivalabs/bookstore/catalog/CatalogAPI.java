@@ -1,20 +1,20 @@
 package com.sivalabs.bookstore.catalog;
 
-import com.sivalabs.bookstore.catalog.core.CatalogService;
-import com.sivalabs.bookstore.catalog.core.models.ProductDto;
+import com.sivalabs.bookstore.catalog.core.BookService;
+import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CatalogAPI {
 
-    private final CatalogService catalogService;
+    private final BookService bookService;
 
-    CatalogAPI(CatalogService catalogService) {
-        this.catalogService = catalogService;
+    CatalogAPI(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    public Optional<ProductDto> findProductByCode(String code) {
-        return catalogService.findProductByCode(code);
+    public Optional<BookDto> findBookByIsbn(String isbn) {
+        return bookService.findBookByIsbn(isbn);
     }
 }

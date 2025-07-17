@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.cart;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
-import com.sivalabs.bookstore.catalog.core.models.ProductDto;
+import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRefreshView;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,11 +27,11 @@ class CartController {
 
     @PostMapping("/add-to-cart")
     @HxRequest
-    View addProductToCart(@RequestParam String code, HttpSession session) {
-        log.info("Adding product code:{} to cart", code);
+    View addBookToCart(@RequestParam String isbn, HttpSession session) {
+        log.info("Adding book isbn:{} to cart", isbn);
         Cart cart = CartUtil.getCart(session);
-        ProductDto product = catalogAPI.findProductByCode(code).orElseThrow();
-        cart.addItem(new Cart.LineItem(product.code(), product.name(), product.price(), 1));
+        BookDto product = catalogAPI.findBookByIsbn(isbn).orElseThrow();
+        cart.addItem(new Cart.LineItem(product.isbn(), product.name(), product.price(), 1));
         CartUtil.setCart(session, cart);
         boolean refresh = cart.isEmpty();
         if (refresh) {
@@ -52,10 +52,10 @@ class CartController {
 
     @HxRequest
     @PostMapping("/update-cart")
-    View updateCart(@RequestParam String code, @RequestParam int quantity, HttpSession session) {
-        log.info("Updating cart code:{}, quantity:{}", code, quantity);
+    View updateCart(@RequestParam String isbn, @RequestParam int quantity, HttpSession session) {
+        log.info("Updating cart isbn:{}, quantity:{}", isbn, quantity);
         Cart cart = CartUtil.getCart(session);
-        cart.updateItemQuantity(code, quantity);
+        cart.updateItemQuantity(isbn, quantity);
         CartUtil.setCart(session, cart);
         boolean refresh = cart.getItems().isEmpty();
         if (refresh) {

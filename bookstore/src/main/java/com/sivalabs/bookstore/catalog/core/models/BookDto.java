@@ -2,7 +2,7 @@ package com.sivalabs.bookstore.catalog.core.models;
 
 import java.math.BigDecimal;
 
-public record ProductDto(Long id, String code, String name, String description, String imageUrl, BigDecimal price) {
+public record BookDto(Long id, String isbn, String name, String description, String imageUrl, BigDecimal price) {
     public String getDisplayName() {
         if (name.length() <= 20) {
             return name;
