@@ -1,10 +1,11 @@
-package com.sivalabs.bookstore.cart;
+package com.sivalabs.bookstore.cart.core.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Serializable {
     private List<LineItem> items = new ArrayList<>();
 
     public List<LineItem> getItems() {
@@ -61,7 +62,7 @@ public class Cart {
                 .ifPresent(item -> item.setQuantity(quantity));
     }
 
-    public static class LineItem {
+    public static class LineItem implements Serializable {
         private String isbn;
         private String name;
         private BigDecimal price;

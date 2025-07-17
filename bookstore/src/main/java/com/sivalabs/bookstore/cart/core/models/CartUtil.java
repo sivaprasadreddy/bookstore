@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.cart;
+package com.sivalabs.bookstore.cart.core.models;
 
 import jakarta.servlet.http.HttpSession;
 

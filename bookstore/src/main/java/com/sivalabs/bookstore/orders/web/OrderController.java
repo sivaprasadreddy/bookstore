@@ -1,8 +1,7 @@
 package com.sivalabs.bookstore.orders.web;
 
-import com.sivalabs.bookstore.cart.Cart;
-import com.sivalabs.bookstore.cart.CartUtil;
-import com.sivalabs.bookstore.cart.OrderForm;
+import com.sivalabs.bookstore.cart.core.models.Cart;
+import com.sivalabs.bookstore.cart.core.models.CartUtil;
 import com.sivalabs.bookstore.orders.core.OrderNotFoundException;
 import com.sivalabs.bookstore.orders.core.OrderService;
 import com.sivalabs.bookstore.orders.core.models.CreateOrderRequest;
@@ -35,13 +34,23 @@ class OrderController {
         this.securityService = securityService;
     }
 
+    @GetMapping("/checkout")
+    String checkout(Model model, HttpSession session) {
+        Cart cart = CartUtil.getCart(session);
+        if (cart.isEmpty()) {
+            return "redirect:/cart";
+        }
+        OrderForm orderForm = OrderForm.empty();
+        model.addAttribute("orderForm", orderForm);
+        return "checkout";
+    }
+
     @PostMapping("")
-    String createOrder(@Valid OrderForm orderForm, BindingResult bindingResult, Model model, HttpSession session) {
+    String createOrder(
+            @ModelAttribute("orderForm") @Valid OrderForm orderForm, BindingResult bindingResult, HttpSession session) {
         Cart cart = CartUtil.getCart(session);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("orderForm", orderForm);
-            model.addAttribute("cart", cart);
-            return "cart";
+            return "checkout";
         }
         Long userId = securityService.getLoginUserId().orElseThrow();
         Set<OrderItem> orderItems = cart.getItems().stream()

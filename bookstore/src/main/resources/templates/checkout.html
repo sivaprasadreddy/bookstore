@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Place Order</h2>
+            </div>
+            <div class="card-body">
+                <form class="row g-3" method="post" th:action="@{/orders}" th:object="${orderForm}">
+                    <div class="col-md-6">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control"
+                               id="customerName"
+                               name="customer.name"
+                               th:field="*{customer.name}"
+                        />
+                        <p th:if="${#fields.hasErrors('customer.name')}" class="text-danger"
+                           th:errors="*{customer.name}"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="customerEmail" class="form-label">Customer Email</label>
+                        <input type="email" class="form-control"
+                               id="customerEmail"
+                               name="customer.email"
+                               th:field="*{customer.email}">
+                        <p th:if="${#fields.hasErrors('customer.email')}" class="text-danger"
+                           th:errors="*{customer.email}"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="customerPhone" class="form-label">Customer Phone</label>
+                        <input type="text" class="form-control"
+                               id="customerPhone"
+                               name="customer.phone"
+                               th:field="*{customer.phone}">
+                        <p th:if="${#fields.hasErrors('customer.phone')}" class="text-danger"
+                           th:errors="*{customer.phone}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine1" class="form-label">Delivery Address Line 1</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine1"
+                               name="deliveryAddress.addressLine1"
+                               th:field="*{deliveryAddress.addressLine1}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.addressLine1')}" class="text-danger"
+                           th:errors="*{deliveryAddress.addressLine1}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressLine2" class="form-label">Delivery Address Line 2</label>
+                        <input class="form-control"
+                               id="deliveryAddressLine2"
+                               name="deliveryAddress.addressLine2"
+                               th:field="*{deliveryAddress.addressLine2}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.addressLine2')}" class="text-danger"
+                           th:errors="*{deliveryAddress.addressLine2}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCity" class="form-label">Delivery Address City</label>
+                        <input class="form-control"
+                               id="deliveryAddressCity"
+                               name="deliveryAddress.city"
+                               th:field="*{deliveryAddress.city}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.city')}" class="text-danger"
+                           th:errors="*{deliveryAddress.city}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressState" class="form-label">Delivery Address State</label>
+                        <input class="form-control"
+                               id="deliveryAddressState"
+                               name="deliveryAddress.state"
+                               th:field="*{deliveryAddress.state}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.state')}" class="text-danger"
+                           th:errors="*{deliveryAddress.state}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressZipCode" class="form-label">Delivery Address ZipCode</label>
+                        <input class="form-control"
+                               id="deliveryAddressZipCode"
+                               name="deliveryAddress.zipCode"
+                               th:field="*{deliveryAddress.zipCode}"
+                        />
+                        <p th:if="${#fields.hasErrors('deliveryAddress.zipCode')}" class="text-danger"
+                           th:errors="*{deliveryAddress.zipCode}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label for="deliveryAddressCountry" class="form-label">Delivery Address Country</label>
+                        <input class="form-control"
+                               id="deliveryAddressCountry"
+                               name="deliveryAddress.country"
+                               th:field="*{deliveryAddress.country}"
+                        />
+                        <p th:if="${#fields.hasErrors('deliveryAddress.country')}" class="text-danger"
+                           th:errors="*{deliveryAddress.country}"></p>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

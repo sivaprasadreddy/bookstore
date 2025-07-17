@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.cart;
+package com.sivalabs.bookstore.orders.web;
 
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;

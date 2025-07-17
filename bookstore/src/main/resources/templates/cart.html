@@ -7,9 +7,12 @@
 <body>
 <div layout:fragment="content">
     <div th:insert="~{partials/cart}"> </div>
-    <div th:if="${cart.itemCount > 0 }">
-        <div class="col-md-8 offset-md-2">
-            <div th:insert="~{partials/order-form}"> </div>
+    <div th:if="${cart.itemCount > 0 }" class="d-flex justify-content-center mt-3">
+        <div class="p-2">
+            <a class="btn btn-secondary btn-lg" th:href="@{/books}">Continue Shopping</a>
+        </div>
+        <div class="p-2">
+            <a class="btn btn-primary btn-lg" th:href="@{/orders/checkout}">Checkout</a>
         </div>
     </div>
 </div>

@@ -1,5 +1,7 @@
-package com.sivalabs.bookstore.cart;
+package com.sivalabs.bookstore.cart.web;
 
+import com.sivalabs.bookstore.cart.core.models.Cart;
+import com.sivalabs.bookstore.cart.core.models.CartUtil;
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRefreshView;
@@ -41,8 +43,6 @@ class CartController {
     String showCart(Model model, HttpSession session) {
         Cart cart = CartUtil.getCart(session);
         model.addAttribute("cart", cart);
-        OrderForm orderForm = OrderForm.empty();
-        model.addAttribute("orderForm", orderForm);
         return "cart";
     }
 

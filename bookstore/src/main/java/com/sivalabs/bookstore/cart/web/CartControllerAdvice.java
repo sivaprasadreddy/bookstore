@@ -1,5 +1,6 @@
-package com.sivalabs.bookstore.cart;
+package com.sivalabs.bookstore.cart.web;
 
+import com.sivalabs.bookstore.cart.core.models.Cart;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
