@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.catalog.config;
 
 import com.sivalabs.bookstore.ApplicationProperties;
-import com.sivalabs.bookstore.catalog.domain.ProductImporter;
+import com.sivalabs.bookstore.catalog.core.ProductImporter;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,3 +1,3 @@
-package com.sivalabs.bookstore.catalog;
+package com.sivalabs.bookstore.catalog.core.models;
 
 public record FindProductsQuery(int pageNo, int pageSize) {}

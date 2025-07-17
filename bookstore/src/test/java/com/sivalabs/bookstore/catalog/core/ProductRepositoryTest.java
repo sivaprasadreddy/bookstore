@@ -1,9 +1,9 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.catalog.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.core.models.ProductDto;
 import com.sivalabs.bookstore.common.TestcontainersConfiguration;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -37,7 +37,7 @@ class ProductRepositoryTest {
 
     @Test
     void shouldGetProductByCode() {
-        Optional<Product> optionalProduct = productRepository.findByCode("P100");
+        Optional<ProductDto> optionalProduct = productRepository.findByCode("P100");
         assertThat(optionalProduct).isNotEmpty();
         assertThat(optionalProduct.get().code()).isEqualTo("P100");
         assertThat(optionalProduct.get().name()).isEqualTo("Product 1");

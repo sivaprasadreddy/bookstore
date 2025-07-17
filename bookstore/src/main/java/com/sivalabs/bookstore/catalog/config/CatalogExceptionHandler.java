@@ -1,6 +1,6 @@
 package com.sivalabs.bookstore.catalog.config;
 
-import com.sivalabs.bookstore.catalog.domain.ProductNotFoundException;
+import com.sivalabs.bookstore.catalog.core.ProductNotFoundException;
 import java.net.URI;
 import java.time.Instant;
 import org.springframework.core.Ordered;

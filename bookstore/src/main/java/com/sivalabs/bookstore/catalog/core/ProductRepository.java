@@ -1,6 +1,6 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.catalog.core;
 
-import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.core.models.ProductDto;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    Optional<Product> findByCode(String code);
+    Optional<ProductDto> findByCode(String code);
 
-    Page<Product> findAllBy(Pageable pageable);
+    Page<ProductDto> findAllBy(Pageable pageable);
 }

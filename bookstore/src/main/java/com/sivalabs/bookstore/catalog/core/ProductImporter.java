@@ -1,8 +1,8 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.catalog.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sivalabs.bookstore.catalog.CreateProductCommand;
+import com.sivalabs.bookstore.catalog.core.models.CreateProductCommand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

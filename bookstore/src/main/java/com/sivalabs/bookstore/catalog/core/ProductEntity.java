@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.catalog.domain;
+package com.sivalabs.bookstore.catalog.core;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;

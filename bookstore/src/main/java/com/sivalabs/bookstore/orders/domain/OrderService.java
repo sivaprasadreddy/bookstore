@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.domain;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
-import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.core.models.ProductDto;
 import com.sivalabs.bookstore.orders.domain.model.*;
 import com.sivalabs.bookstore.orders.domain.model.OrderItem;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
@@ -45,7 +45,7 @@ public class OrderService {
 
     private void validate(CreateOrderRequest req) {
         req.items().forEach(item -> {
-            Product product = catalogAPI
+            ProductDto product = catalogAPI
                     .findProductByCode(item.code())
                     .orElseThrow(() -> new InvalidOrderException("Invalid Product Code: " + item.code()));
             if (product.price().compareTo(item.price()) != 0) {

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import com.sivalabs.bookstore.catalog.Product;
+import com.sivalabs.bookstore.catalog.core.models.ProductDto;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import io.restassured.http.ContentType;
 import java.math.BigDecimal;
@@ -34,7 +34,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldGetProductByCode() {
-        Product product = given().contentType(ContentType.JSON)
+        ProductDto product = given().contentType(ContentType.JSON)
                 .when()
                 .get("/api/products/{code}", "P100")
                 .then()
@@ -42,7 +42,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
                 .assertThat()
                 .extract()
                 .body()
-                .as(Product.class);
+                .as(ProductDto.class);
 
         assertThat(product.code()).isEqualTo("P100");
         assertThat(product.name()).isEqualTo("The Hunger Games");
