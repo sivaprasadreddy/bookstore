@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.core;
 
-import com.sivalabs.bookstore.orders.core.models.Address;
-import com.sivalabs.bookstore.orders.core.models.Customer;
+import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.Customer;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;

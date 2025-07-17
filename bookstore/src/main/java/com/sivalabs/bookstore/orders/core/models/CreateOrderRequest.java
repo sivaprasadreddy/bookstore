@@ -1,5 +1,7 @@
 package com.sivalabs.bookstore.orders.core.models;
 
+import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.Customer;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;

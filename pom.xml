@@ -17,7 +17,6 @@
     </properties>
     <modules>
         <module>bookstore</module>
-        <module>gatling-tests</module>
     </modules>
     <build>
         <plugins>

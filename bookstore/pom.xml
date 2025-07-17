@@ -18,11 +18,11 @@
     <properties>
         <java.version>24</java.version>
         <spring-modulith.version>1.4.1</spring-modulith.version>
-        <springdoc-openapi.version>2.8.9</springdoc-openapi.version>
+        <htmx-spring-boot-thymeleaf.version>4.0.1</htmx-spring-boot-thymeleaf.version>
         <bootstrap.version>5.3.7</bootstrap.version>
+        <htmx.version>2.0.6</htmx.version>
         <jquery.version>3.7.1</jquery.version>
         <font_awesome.version>6.7.2</font_awesome.version>
-        <alpinejs.version>3.14.9</alpinejs.version>
         <error-prone.version>2.40.0</error-prone.version>
         <spotless.version>2.45.0</spotless.version>
         <archunit.version>1.4.1</archunit.version>
@@ -46,6 +46,11 @@
             <artifactId>thymeleaf-layout-dialect</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.github.wimdeblauwe</groupId>
+            <artifactId>htmx-spring-boot-thymeleaf</artifactId>
+            <version>${htmx-spring-boot-thymeleaf.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
@@ -61,11 +66,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -93,6 +93,11 @@
             <version>${bootstrap.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>htmx.org</artifactId>
+            <version>${htmx.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
@@ -102,16 +107,16 @@
             <artifactId>font-awesome</artifactId>
             <version>${font_awesome.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>alpinejs</artifactId>
-            <version>${alpinejs.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.modulith</groupId>
             <artifactId>spring-modulith-starter-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-jdbc</artifactId>
+        </dependency>
+        <!-- Dev dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -130,6 +135,7 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -158,11 +164,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -1,8 +1,8 @@
 package com.sivalabs.bookstore.orders;
 
-import com.sivalabs.bookstore.orders.core.models.Address;
+import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.orders.core.models.CreateOrderRequest;
-import com.sivalabs.bookstore.orders.core.models.Customer;
 import com.sivalabs.bookstore.orders.core.models.OrderItem;
 import java.math.BigDecimal;
 import java.util.Set;

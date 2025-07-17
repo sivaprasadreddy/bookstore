@@ -7,7 +7,7 @@
 
 <body>
 <div layout:fragment="content">
-    <div x-data="initData()">
+    <div>
         <h2>All Orders</h2>
         <hr/>
         <div class="pb-3">
@@ -20,20 +20,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template x-for="order in orders">
-                    <tr>
-                        <td><a x-bind:href="'/order/'+order.orderId" x-text="order.orderId">OrderId</a></td>
-                        <td x-text="order.status">status</td>
-                        <td x-text="order.createdAt">Date</td>
-                    </tr>
-                </template>
+                <tr th:each="order : ${orders}">
+                    <td><a th:href="${'/orders/'+order.orderId}" th:text="${order.orderId}">OrderNumber</a></td>
+                    <td th:text="${order.status}">status</td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
-</div>
-<div layout:fragment="pageScripts">
-    <script src="/js/orders.js"></script>
 </div>
 </body>
 </html>
