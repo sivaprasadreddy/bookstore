@@ -68,9 +68,9 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderSummary> findAllOrderSummaries() {
+    public List<OrderSummary> findUserOrders(Long userId) {
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
-        return orderRepository.findAllOrderSummaries(sort);
+        return orderRepository.findUserOrders(userId, sort);
     }
 
     @Transactional

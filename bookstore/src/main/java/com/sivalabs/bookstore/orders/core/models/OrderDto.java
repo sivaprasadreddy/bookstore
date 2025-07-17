@@ -11,6 +11,7 @@ import java.util.Set;
 public record OrderDto(
         Long id,
         String orderId,
+        Long userId,
         Set<OrderItem> items,
         Customer customer,
         Address deliveryAddress,

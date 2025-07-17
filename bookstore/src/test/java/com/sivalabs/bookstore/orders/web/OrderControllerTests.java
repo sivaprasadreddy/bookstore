@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.test.context.jdbc.Sql;
 
-@ApplicationModuleTest(mode = DIRECT_DEPENDENCIES, webEnvironment = RANDOM_PORT)
+@ApplicationModuleTest(
+        mode = DIRECT_DEPENDENCIES,
+        extraIncludes = {"config"},
+        webEnvironment = RANDOM_PORT)
 @Sql({"/test-products-data.sql", "/test-orders-data.sql"})
 class OrderControllerTests extends AbstractIntegrationTest {
     @Autowired

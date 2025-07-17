@@ -10,6 +10,7 @@ import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import com.sivalabs.bookstore.orders.core.models.OrderItem;
 import com.sivalabs.bookstore.orders.core.models.OrderSummary;
+import com.sivalabs.bookstore.users.SecurityService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,31 +27,36 @@ import org.springframework.web.bind.annotation.*;
 class OrderController {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
     private final OrderService orderService;
+    private final SecurityService securityService;
 
-    OrderController(OrderService orderService) {
+    OrderController(OrderService orderService, SecurityService securityService) {
         this.orderService = orderService;
+        this.securityService = securityService;
     }
 
     @PostMapping("")
     String createOrder(@Valid OrderForm orderForm, HttpSession session) {
+        Long userId = securityService.getLoginUserId().orElseThrow();
         Cart cart = CartUtil.getCart(session);
         Set<OrderItem> orderItems = cart.getItems().stream()
                 .map(li -> new OrderItem(li.getCode(), li.getName(), li.getPrice(), li.getQuantity()))
                 .collect(Collectors.toSet());
 
-        CreateOrderRequest request = getCreateOrderRequest(orderForm, orderItems);
+        CreateOrderRequest request = getCreateOrderRequest(userId, orderForm, orderItems);
         CreateOrderResponse orderResponse = orderService.createOrder(request);
         CartUtil.clearCart(session);
         return "redirect:/orders/" + orderResponse.orderId();
     }
 
-    private static CreateOrderRequest getCreateOrderRequest(OrderForm orderForm, Set<OrderItem> orderItems) {
-        return new CreateOrderRequest(orderItems, orderForm.customer(), orderForm.deliveryAddress());
+    private static CreateOrderRequest getCreateOrderRequest(
+            Long userId, OrderForm orderForm, Set<OrderItem> orderItems) {
+        return new CreateOrderRequest(userId, orderItems, orderForm.customer(), orderForm.deliveryAddress());
     }
 
     @GetMapping("")
     String getOrders(Model model) {
-        List<OrderSummary> orders = orderService.findAllOrderSummaries();
+        Long userId = securityService.getLoginUserId().orElseThrow();
+        List<OrderSummary> orders = orderService.findUserOrders(userId);
         model.addAttribute("orders", orders);
         return "orders";
     }
@@ -58,8 +64,12 @@ class OrderController {
     @GetMapping(value = "/{orderId}")
     String showOrder(@PathVariable String orderId, Model model) {
         log.info("Fetching order by id: {}", orderId);
+        Long userId = securityService.getLoginUserId().orElseThrow();
         OrderDto orderDTO =
                 orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (userId.longValue() != orderDTO.userId().longValue()) {
+            throw new OrderNotFoundException(orderId);
+        }
         model.addAttribute("order", orderDTO);
         return "order-details";
     }

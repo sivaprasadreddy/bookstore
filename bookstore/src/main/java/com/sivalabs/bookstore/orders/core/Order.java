@@ -15,7 +15,11 @@ class Order {
     @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq", allocationSize = 50)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String orderId;
+
+    @Column(nullable = false, name = "user_id")
+    private Long userId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     private Set<OrderItem> items;
@@ -56,6 +60,14 @@ class Order {
 
     public String getOrderId() {
         return this.orderId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Set<OrderItem> getItems() {
