@@ -1,15 +1,26 @@
 package com.sivalabs.bookstore.orders.web;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapMode.DIRECT_DEPENDENCIES;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
+import com.sivalabs.bookstore.cart.Cart;
+import com.sivalabs.bookstore.cart.CartUtil;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
-import com.sivalabs.bookstore.orders.core.OrderService;
+import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.Customer;
+import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.modulith.test.ApplicationModuleTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MvcResult;
 
 @ApplicationModuleTest(
         mode = DIRECT_DEPENDENCIES,
@@ -17,16 +28,85 @@ import org.springframework.test.context.jdbc.Sql;
         webEnvironment = RANDOM_PORT)
 @Sql({"/test-books-data.sql", "/test-orders-data.sql"})
 class OrderControllerTests extends AbstractIntegrationTest {
-    @Autowired
-    private OrderService orderService;
-
     @Nested
     class CreateOrderApiTests {
         @Test
-        void shouldCreateOrderSuccessfully() {}
+        @WithUserDetails("admin@gmail.com")
+        void shouldCreateOrderSuccessfully() {
+            MockHttpSession session = new MockHttpSession();
+            Cart cart = new Cart();
+            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            CartUtil.setCart(session, cart);
+
+            // Create a valid order form
+            Customer customer = new Customer("Test User", "test@example.com", "1234567890");
+            Address address = new Address("123 Main St", "Apt 4B", "New York", "NY", "10001", "USA");
+
+            // Submit the order
+            var result = mockMvcTester
+                    .post()
+                    .uri("/orders")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("customer.name", customer.name())
+                    .param("customer.email", customer.email())
+                    .param("customer.phone", customer.phone())
+                    .param("deliveryAddress.addressLine1", address.addressLine1())
+                    .param("deliveryAddress.addressLine2", address.addressLine2())
+                    .param("deliveryAddress.city", address.city())
+                    .param("deliveryAddress.state", address.state())
+                    .param("deliveryAddress.zipCode", address.zipCode())
+                    .param("deliveryAddress.country", address.country())
+                    .session(session)
+                    .exchange();
+
+            // Verify the response is a redirect to the order details page
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            // Check the redirect location
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).startsWith("/orders/");
+
+            // Verify the cart is cleared
+            cart = CartUtil.getCart(session);
+            assertThat(cart.isEmpty()).isTrue();
+        }
 
         @Test
-        void shouldReturnBadRequestWhenMandatoryDataIsMissing() {}
+        @WithUserDetails("admin@gmail.com")
+        void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
+            MockHttpSession session = new MockHttpSession();
+            Cart cart = new Cart();
+            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            CartUtil.setCart(session, cart);
+
+            // Submit the order with missing mandatory fields
+            var result = mockMvcTester
+                    .post()
+                    .uri("/orders")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("customer.name", "") // Empty name (required)
+                    .param("customer.email", "invalid-email") // Invalid email
+                    .param("customer.phone", "1234567890")
+                    .param("deliveryAddress.addressLine1", "123 Main St")
+                    .param("deliveryAddress.addressLine2", "Apt 4B")
+                    .param("deliveryAddress.city", "") // Empty city (required)
+                    .param("deliveryAddress.state", "NY")
+                    .param("deliveryAddress.zipCode", "10001")
+                    .param("deliveryAddress.country", "USA")
+                    .session(session)
+                    .exchange();
+
+            // Verify the response is a bad request (validation error)
+            assertThat(result)
+                    .hasStatus(HttpStatus.OK) // Spring MVC returns 200 OK with validation errors in the model
+                    .model()
+                    .extractingBindingResult("orderForm")
+                    .hasErrorsCount(3)
+                    .hasFieldErrors("customer.name", "customer.email", "deliveryAddress.city");
+        }
     }
 
     @Nested
@@ -34,9 +114,35 @@ class OrderControllerTests extends AbstractIntegrationTest {
         String orderId = "order-123";
 
         @Test
-        void shouldGetOrderSuccessfully() {}
+        @WithUserDetails("admin@gmail.com") // User ID 1 in test data
+        void shouldGetOrderSuccessfully() {
+            var result = mockMvcTester.get().uri("/orders/{orderId}", orderId).exchange();
+
+            assertThat(result)
+                    .hasStatus(HttpStatus.OK)
+                    .hasViewName("order-details")
+                    .model()
+                    .containsKeys("order")
+                    .satisfies(model -> {
+                        var order = (OrderDto) model.get("order");
+                        assertThat(order).isNotNull();
+                        assertThat(order.orderId()).isEqualTo(orderId);
+                        assertThat(order.userId()).isEqualTo(1L);
+                        assertThat(order.items()).hasSize(2);
+                    });
+        }
 
         @Test
-        void shouldReturnNotFoundWhenOrderIdNotExist() {}
+        @WithUserDetails("admin@gmail.com")
+        void shouldReturnNotFoundWhenOrderIdNotExist() {
+            String nonExistentOrderId = "non-existent-order";
+
+            var result = mockMvcTester
+                    .get()
+                    .uri("/orders/{orderId}", nonExistentOrderId)
+                    .exchange();
+
+            assertThat(result).hasStatus(HttpStatus.OK).hasViewName("error/404");
+        }
     }
 }

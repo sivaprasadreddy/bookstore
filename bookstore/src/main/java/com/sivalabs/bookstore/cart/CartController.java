@@ -33,10 +33,6 @@ class CartController {
         BookDto product = catalogAPI.findBookByIsbn(isbn).orElseThrow();
         cart.addItem(new Cart.LineItem(product.isbn(), product.name(), product.price(), 1));
         CartUtil.setCart(session, cart);
-        boolean refresh = cart.isEmpty();
-        if (refresh) {
-            return new HtmxRefreshView();
-        }
         return FragmentsRendering.with("partials/cart-item-count", Map.of("cartItemCount", cart.getItemCount()))
                 .build();
     }

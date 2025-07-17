@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,9 +36,14 @@ class OrderController {
     }
 
     @PostMapping("")
-    String createOrder(@Valid OrderForm orderForm, HttpSession session) {
-        Long userId = securityService.getLoginUserId().orElseThrow();
+    String createOrder(@Valid OrderForm orderForm, BindingResult bindingResult, Model model, HttpSession session) {
         Cart cart = CartUtil.getCart(session);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("orderForm", orderForm);
+            model.addAttribute("cart", cart);
+            return "cart";
+        }
+        Long userId = securityService.getLoginUserId().orElseThrow();
         Set<OrderItem> orderItems = cart.getItems().stream()
                 .map(li -> new OrderItem(li.getIsbn(), li.getName(), li.getPrice(), li.getQuantity()))
                 .collect(Collectors.toSet());

@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.modulith.test.ApplicationModuleTest;
 import org.springframework.test.context.jdbc.Sql;
 
-@ApplicationModuleTest(webEnvironment = RANDOM_PORT,
-    extraIncludes = {"config"})
+@ApplicationModuleTest(
+        webEnvironment = RANDOM_PORT,
+        extraIncludes = {"config"})
 @Sql("/test-books-data.sql")
 class BookControllerTest extends AbstractIntegrationTest {
 
@@ -34,6 +35,5 @@ class BookControllerTest extends AbstractIntegrationTest {
                     assertThat(booksPage.data()).isNotEmpty();
                     assertThat(booksPage.totalElements()).isEqualTo(15);
                 });
-
     }
 }
