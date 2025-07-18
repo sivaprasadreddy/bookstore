@@ -10,5 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BookStoreApplicationTests extends AbstractIntegrationTest {
 
     @Test
-    void contextLoads() {}
+    void contextLoads() {
+        // to verify whether applicationContext can be loaded successfully or not.
+    }
 }

@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import java.security.SecureRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -45,7 +45,6 @@ public class BooksImporter {
     private CreateBookCommand toBook(String json) {
         try {
             Book book = objectMapper.readValue(json, Book.class);
-            // log.info("Book: {}", book);
             return new CreateBookCommand(
                     "P1000" + book.id(),
                     book.title(),
@@ -53,8 +52,7 @@ public class BooksImporter {
                     book.coverImg(),
                     RandomGenerator.getBigDecimal());
         } catch (Exception e) {
-            log.error("Error parsing book: {}", e.getMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error parsing book: {}", e);
         }
     }
 
@@ -62,7 +60,7 @@ public class BooksImporter {
             Long id, String title, String description, String language, @JsonProperty("cover_img") String coverImg) {}
 
     record RandomGenerator() {
-        static Random r = new Random();
+        static SecureRandom r = new SecureRandom();
         static int max = 100, min = 10;
 
         public static int getInt() {

@@ -43,4 +43,4 @@ jobs:
 
       - name: SonarQube Analyze
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: ./mvnw initialize sonar:sonar -Dsonar.login=${{ env.SONAR_TOKEN }}
+        run: ./mvnw initialize sonar:sonar
