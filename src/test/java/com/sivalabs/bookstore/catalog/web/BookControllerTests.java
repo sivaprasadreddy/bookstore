@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
         webEnvironment = RANDOM_PORT,
         extraIncludes = {"config"})
 @Sql("/test-books-data.sql")
-class BookControllerTest extends AbstractIntegrationTest {
+class BookControllerTests extends AbstractIntegrationTest {
 
     @Test
     void shouldGetAllBooks() {
@@ -35,5 +35,31 @@ class BookControllerTest extends AbstractIntegrationTest {
                     assertThat(booksPage.data()).isNotEmpty();
                     assertThat(booksPage.totalElements()).isEqualTo(15);
                 });
+    }
+
+    @Test
+    void shouldGetBookByIsbn() {
+        var result = mockMvcTester.get().uri("/books/P100").exchange();
+
+        assertThat(result)
+                .hasStatus(HttpStatus.OK)
+                .hasViewName("catalog/book-details")
+                .model()
+                .containsKeys("book")
+                .satisfies(model -> {
+                    var book = model.get("book");
+                    assertThat(book).isInstanceOf(BookDto.class);
+
+                    BookDto bookDto = (BookDto) book;
+                    assertThat(bookDto.isbn()).isEqualTo("P100");
+                    assertThat(bookDto.name()).isEqualTo("The Hunger Games");
+                });
+    }
+
+    @Test
+    void shouldReturn404WhenBookNotFound() {
+        var result = mockMvcTester.get().uri("/books/NONEXISTENT").exchange();
+
+        assertThat(result).hasStatus(HttpStatus.OK).hasViewName("error/404");
     }
 }

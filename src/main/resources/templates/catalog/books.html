@@ -11,18 +11,23 @@
         <div th:each="book : ${ booksPage.data}">
             <div class="col mb-3">
                 <div class="card h-100 book">
-                    <img th:src="${book.imageUrl}"
-                         src="/images/books.png"
-                         alt="Book Image"
-                         class="card-img-top"
-                         height="300" width="200"
-                    />
+                    <a th:href="@{/books/{id}(id=${book.isbn})}">
+                        <img th:src="${book.imageUrl}"
+                             src="/images/books.png"
+                             alt="Book Image"
+                             class="card-img-top"
+                             height="300" width="200"
+                        />
+                    </a>
 
                     <div class="card-body">
                         <h6 class="card-title"
                             data-toggle="tooltip"
-                            data-placement="top"
-                            th:text="${book.getDisplayName()}">book.name</h6>
+                            data-placement="top">
+                            <a th:href="@{/books/{id}(id=${book.isbn})}"
+                               th:text="${book.getDisplayName()}"
+                               class="text-decoration-none">book.name</a>
+                        </h6>
                         <p class="card-text"
                            data-toggle="tooltip"
                            data-placement="top"
