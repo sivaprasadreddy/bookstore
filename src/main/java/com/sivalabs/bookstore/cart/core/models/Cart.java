@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.cart.core.models;
 
+import com.sivalabs.bookstore.common.model.LineItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -60,53 +61,5 @@ public class Cart implements Serializable {
                 .filter(item -> item.getIsbn().equals(isbn))
                 .findFirst()
                 .ifPresent(item -> item.setQuantity(quantity));
-    }
-
-    public static class LineItem implements Serializable {
-        private String isbn;
-        private String name;
-        private BigDecimal price;
-        private int quantity;
-
-        public LineItem() {}
-
-        public LineItem(String isbn, String name, BigDecimal price, int quantity) {
-            this.isbn = isbn;
-            this.name = name;
-            this.price = price;
-            this.quantity = quantity;
-        }
-
-        public String getIsbn() {
-            return isbn;
-        }
-
-        public void setIsbn(String isbn) {
-            this.isbn = isbn;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public BigDecimal getPrice() {
-            return price;
-        }
-
-        public void setPrice(BigDecimal price) {
-            this.price = price;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
     }
 }

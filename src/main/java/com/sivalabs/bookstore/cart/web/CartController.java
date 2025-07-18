@@ -4,6 +4,7 @@ import com.sivalabs.bookstore.cart.CartUtil;
 import com.sivalabs.bookstore.cart.core.models.Cart;
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.core.models.BookDto;
+import com.sivalabs.bookstore.common.model.LineItem;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxRefreshView;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.servlet.http.HttpSession;
@@ -33,7 +34,7 @@ class CartController {
         log.info("Adding book isbn:{} to cart", isbn);
         Cart cart = CartUtil.getCart(session);
         BookDto product = catalogAPI.findBookByIsbn(isbn).orElseThrow();
-        cart.addItem(new Cart.LineItem(product.isbn(), product.name(), product.price(), 1));
+        cart.addItem(new LineItem(product.isbn(), product.name(), product.price(), product.imageUrl(), 1));
         CartUtil.setCart(session, cart);
         return FragmentsRendering.with("partials/cart-item-count", Map.of("cartItemCount", cart.getItemCount()))
                 .build();

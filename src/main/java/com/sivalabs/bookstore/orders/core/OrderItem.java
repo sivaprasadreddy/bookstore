@@ -1,7 +1,7 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.common.model.LineItem;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
@@ -12,16 +12,16 @@ class OrderItem {
     @SequenceGenerator(name = "order_item_id_generator", sequenceName = "order_item_id_seq")
     private Long id;
 
-    @Column(nullable = false)
-    private String isbn;
-
-    private String name;
-
-    @Column(nullable = false)
-    private BigDecimal price;
-
-    @Column(nullable = false)
-    private Integer quantity;
+    @Embedded
+    @AttributeOverrides(
+            value = {
+                @AttributeOverride(name = "isbn", column = @Column(name = "isbn", nullable = false)),
+                @AttributeOverride(name = "name", column = @Column(name = "name", nullable = false)),
+                @AttributeOverride(name = "price", column = @Column(name = "price", nullable = false)),
+                @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url")),
+                @AttributeOverride(name = "quantity", column = @Column(name = "quantity", nullable = false))
+            })
+    private LineItem lineItem;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
@@ -31,20 +31,12 @@ class OrderItem {
         return this.id;
     }
 
-    public String getIsbn() {
-        return this.isbn;
+    public LineItem getLineItem() {
+        return lineItem;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public Integer getQuantity() {
-        return this.quantity;
+    public void setLineItem(LineItem lineItem) {
+        this.lineItem = lineItem;
     }
 
     public Order getOrder() {
@@ -53,22 +45,6 @@ class OrderItem {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public void setOrder(Order order) {

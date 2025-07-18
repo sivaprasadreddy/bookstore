@@ -53,7 +53,8 @@ class OrderController {
         }
         Long userId = usersAPI.getLoginUserId();
         Set<OrderItemDto> orderItemDtos = cart.getItems().stream()
-                .map(li -> new OrderItemDto(li.getIsbn(), li.getName(), li.getPrice(), li.getQuantity()))
+                .map(li ->
+                        new OrderItemDto(li.getIsbn(), li.getName(), li.getPrice(), li.getImageUrl(), li.getQuantity()))
                 .collect(Collectors.toSet());
 
         CreateOrderCmd request =

@@ -10,6 +10,7 @@ import com.sivalabs.bookstore.cart.core.models.Cart;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
+import com.sivalabs.bookstore.common.model.LineItem;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +36,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
         void shouldCreateOrderSuccessfully() {
             MockHttpSession session = new MockHttpSession();
             Cart cart = new Cart();
-            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            cart.addItem(new LineItem(
+                    "P100", "The Hunger Games", new BigDecimal("34.0"), "https://images.bookstore.com/p100.png", 1));
             CartUtil.setCart(session, cart);
 
             // Create a valid order form
@@ -78,7 +80,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
         void shouldReturnBadRequestWhenMandatoryDataIsMissing() {
             MockHttpSession session = new MockHttpSession();
             Cart cart = new Cart();
-            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            cart.addItem(new LineItem(
+                    "P100", "The Hunger Games", new BigDecimal("34.0"), "https://images.bookstore.com/p100.png", 1));
             CartUtil.setCart(session, cart);
 
             // Submit the order with missing mandatory fields
@@ -116,7 +119,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
         void shouldRenderCheckoutPageWhenCartHasItems() {
             MockHttpSession session = new MockHttpSession();
             Cart cart = new Cart();
-            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            cart.addItem(new LineItem(
+                    "P100", "The Hunger Games", new BigDecimal("34.0"), "https://images.bookstore.com/p100.png", 1));
             CartUtil.setCart(session, cart);
 
             var result =
@@ -155,7 +159,8 @@ class OrderControllerTests extends AbstractIntegrationTest {
             // No @WithUserDetails annotation means unauthenticated request
             MockHttpSession session = new MockHttpSession();
             Cart cart = new Cart();
-            cart.addItem(new Cart.LineItem("P100", "The Hunger Games", new BigDecimal("34.0"), 1));
+            cart.addItem(new LineItem(
+                    "P100", "The Hunger Games", new BigDecimal("34.0"), "https://images.bookstore.com/p100.png", 1));
             CartUtil.setCart(session, cart);
 
             var result =

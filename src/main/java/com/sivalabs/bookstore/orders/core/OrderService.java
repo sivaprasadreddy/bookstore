@@ -95,7 +95,12 @@ public class OrderService {
 
     private Set<OrderItemDto> getOrderItems(Order order) {
         return order.getItems().stream()
-                .map(item -> new OrderItemDto(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
+                .map(item -> new OrderItemDto(
+                        item.getLineItem().getIsbn(),
+                        item.getLineItem().getName(),
+                        item.getLineItem().getPrice(),
+                        item.getLineItem().getImageUrl(),
+                        item.getLineItem().getQuantity()))
                 .collect(Collectors.toSet());
     }
 }

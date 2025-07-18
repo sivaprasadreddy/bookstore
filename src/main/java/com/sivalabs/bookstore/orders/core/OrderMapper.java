@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.common.model.LineItem;
 import com.sivalabs.bookstore.orders.core.models.CreateOrderCmd;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import com.sivalabs.bookstore.orders.core.models.OrderItemDto;
@@ -23,10 +24,13 @@ class OrderMapper {
         Set<OrderItem> orderItems = new HashSet<>();
         for (OrderItemDto item : orderRequest.items()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setIsbn(item.isbn());
-            orderItem.setName(item.name());
-            orderItem.setPrice(item.price());
-            orderItem.setQuantity(item.quantity());
+            LineItem lineItem = new LineItem();
+            lineItem.setIsbn(item.isbn());
+            lineItem.setName(item.name());
+            lineItem.setPrice(item.price());
+            lineItem.setImageUrl(item.imageUrl());
+            lineItem.setQuantity(item.quantity());
+            orderItem.setLineItem(lineItem);
             orderItem.setOrder(newOrder);
             orderItems.add(orderItem);
         }
@@ -36,7 +40,12 @@ class OrderMapper {
 
     public OrderDto toDTO(Order order) {
         Set<OrderItemDto> orderItemDtos = order.getItems().stream()
-                .map(item -> new OrderItemDto(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
+                .map(item -> new OrderItemDto(
+                        item.getLineItem().getIsbn(),
+                        item.getLineItem().getName(),
+                        item.getLineItem().getPrice(),
+                        item.getLineItem().getImageUrl(),
+                        item.getLineItem().getQuantity()))
                 .collect(Collectors.toSet());
 
         return new OrderDto(

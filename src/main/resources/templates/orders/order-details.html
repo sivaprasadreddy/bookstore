@@ -14,7 +14,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Book Name</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Sub Total</th>
@@ -22,6 +23,14 @@
                 </thead>
                 <tbody>
                 <tr th:each="item : ${order.items}">
+                    <td data-label="Image">
+                        <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/books.png'}"
+                             alt="Book Image"
+                             class="img-thumbnail"
+                             height="80"
+                             width="60"
+                        />
+                    </td>
                     <td th:text="${item.name}">name</td>
                     <td th:text="${item.price}">price</td>
                     <td th:text="${item.quantity}">quantity</td>
@@ -30,7 +39,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th colspan="3"></th>
+                    <th colspan="4"></th>
                     <th colspan="1" style="text-align: left">
                         Total Amount: <span th:text="${order.totalAmount}">totalAmount</span>
                     </th>
