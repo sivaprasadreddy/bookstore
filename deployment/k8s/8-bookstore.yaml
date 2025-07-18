@@ -61,6 +61,11 @@ spec:
                 secretKeyRef:
                   name: bookstore-secrets
                   key: postgres_password
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: bookstore-configmap
+                  key: redis_host
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
