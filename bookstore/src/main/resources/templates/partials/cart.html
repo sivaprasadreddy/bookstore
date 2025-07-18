@@ -16,9 +16,9 @@
                 <tbody>
                 <tr th:each="item: ${cart.items}">
 
-                    <td>[[${item.name}]]</td>
-                    <td>[[${item.price}]]</td>
-                    <td>
+                    <td data-label="Book Name">[[${item.name}]]</td>
+                    <td data-label="Price">[[${item.price}]]</td>
+                    <td data-label="Quantity">
                         <form>
                             <input type="hidden" name="isbn" th:value="${item.isbn}"/>
                             <input type="number" min="0"
@@ -29,7 +29,7 @@
                             />
                         </form>
                     </td>
-                    <td>[[${item.quantity * item.price}]]</td>
+                    <td data-label="Sub Total">[[${item.quantity * item.price}]]</td>
                 </tr>
                 </tbody>
                 <tfoot>
