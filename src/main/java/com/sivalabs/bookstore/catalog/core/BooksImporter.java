@@ -52,7 +52,7 @@ public class BooksImporter {
                     book.coverImg(),
                     RandomGenerator.getBigDecimal());
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing book: {}", e);
+            throw new BooksImportException("Error parsing book: {}", e);
         }
     }
 
