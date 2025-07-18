@@ -4,7 +4,7 @@ import com.sivalabs.bookstore.orders.core.DeliveryService;
 import com.sivalabs.bookstore.orders.core.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ class OrderCreatedEventHandler {
         this.notificationService = notificationService;
     }
 
-    @EventListener
+    @ApplicationModuleListener
     public void handle(OrderCreatedEvent event) {
         try {
             log.info("Received a OrderCreatedEvent with orderNumber:{}: ", event.orderNumber());

@@ -6,7 +6,7 @@ import com.sivalabs.bookstore.orders.core.OrderStatus;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +20,7 @@ class OrderDeliveredEventHandler {
         this.notificationService = notificationService;
     }
 
-    @EventListener
+    @ApplicationModuleListener
     public void handle(OrderDeliveredEvent event) {
         try {
             log.info("Received a OrderDeliveredEvent with orderNumber:{}: ", event.orderNumber());
