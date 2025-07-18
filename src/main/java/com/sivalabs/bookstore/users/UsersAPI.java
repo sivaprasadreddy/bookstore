@@ -1,19 +1,20 @@
 package com.sivalabs.bookstore.users;
 
-import com.sivalabs.bookstore.users.core.User;
-import com.sivalabs.bookstore.users.core.UserService;
-import java.util.Optional;
+import com.sivalabs.bookstore.users.core.SecurityService;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersAPI {
-    private final UserService userService;
+    private final SecurityService securityService;
 
-    public UsersAPI(UserService userService) {
-        this.userService = userService;
+    UsersAPI(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userService.findByEmail(email);
+    public Long getLoginUserId() {
+        return securityService
+                .getLoginUserId()
+                .orElseThrow(() -> new InternalAuthenticationServiceException("Not logged in"));
     }
 }

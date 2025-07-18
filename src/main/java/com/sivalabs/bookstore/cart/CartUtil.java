@@ -1,5 +1,6 @@
-package com.sivalabs.bookstore.cart.core.models;
+package com.sivalabs.bookstore.cart;
 
+import com.sivalabs.bookstore.cart.core.models.Cart;
 import jakarta.servlet.http.HttpSession;
 
 public final class CartUtil {

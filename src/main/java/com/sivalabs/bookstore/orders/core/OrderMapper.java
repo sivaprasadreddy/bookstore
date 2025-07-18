@@ -1,7 +1,8 @@
 package com.sivalabs.bookstore.orders.core;
 
-import com.sivalabs.bookstore.orders.core.models.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.core.models.CreateOrderCmd;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderItemDto;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 class OrderMapper {
 
-    public Order convertToEntity(CreateOrderRequest orderRequest) {
+    public Order convertToEntity(CreateOrderCmd orderRequest) {
         Order newOrder = new Order();
         newOrder.setOrderNumber(UUID.randomUUID().toString());
         newOrder.setUserId(orderRequest.userId());
@@ -20,7 +21,7 @@ class OrderMapper {
         newOrder.setDeliveryAddress(orderRequest.deliveryAddress());
 
         Set<OrderItem> orderItems = new HashSet<>();
-        for (com.sivalabs.bookstore.orders.core.models.OrderItem item : orderRequest.items()) {
+        for (OrderItemDto item : orderRequest.items()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setIsbn(item.isbn());
             orderItem.setName(item.name());
@@ -34,16 +35,15 @@ class OrderMapper {
     }
 
     public OrderDto toDTO(Order order) {
-        Set<com.sivalabs.bookstore.orders.core.models.OrderItem> orderItems = order.getItems().stream()
-                .map(item -> new com.sivalabs.bookstore.orders.core.models.OrderItem(
-                        item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
+        Set<OrderItemDto> orderItemDtos = order.getItems().stream()
+                .map(item -> new OrderItemDto(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
 
         return new OrderDto(
                 order.getId(),
                 order.getOrderNumber(),
                 order.getUserId(),
-                orderItems,
+                orderItemDtos,
                 order.getCustomer(),
                 order.getDeliveryAddress(),
                 order.getStatus(),

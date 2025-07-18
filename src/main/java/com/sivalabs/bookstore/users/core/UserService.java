@@ -21,8 +21,8 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(RegistrationRequest req) {
-        var user = new User(null, req.name(), req.email(), passwordEncoder.encode(req.password()), Role.ROLE_USER);
-        return userRepository.save(user);
+    public void createUser(CreateUserCmd cmd) {
+        var user = new User(null, cmd.name(), cmd.email(), passwordEncoder.encode(cmd.password()), Role.ROLE_USER);
+        userRepository.save(user);
     }
 }

@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Set;
 
-public record CreateOrderRequest(
+public record CreateOrderCmd(
         Long userId,
-        @NotEmpty(message = "Items cannot be empty") @Valid Set<OrderItem> items,
+        @NotEmpty(message = "Items cannot be empty") @Valid Set<OrderItemDto> items,
         @Valid Customer customer,
         @Valid Address deliveryAddress)
         implements Serializable {}

@@ -10,9 +10,8 @@ import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapM
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.OrdersTestData;
 import com.sivalabs.bookstore.orders.core.OrderService;
-import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.core.models.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -40,14 +39,14 @@ class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
     @Test
     void shouldHandleOrderCancelledEvent() {
         var request = OrdersTestData.getCreateOrderRequest();
-        CreateOrderResponse order = orderService.createOrder(request);
+        OrderSummary orderSummary = orderService.createOrder(request);
 
-        log.info("Cancelling OrderNumber:{}", order.orderNumber());
+        log.info("Cancelling OrderNumber:{}", orderSummary.orderNumber());
         orderEventPublisher.send(new OrderCancelledEvent(
-                order.orderNumber(), "testing", Set.of(), request.customer(), request.deliveryAddress()));
+                orderSummary.orderNumber(), "testing", Set.of(), request.customer(), request.deliveryAddress()));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
-            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(order.orderNumber());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(orderSummary.orderNumber());
             assertThat(orderOptional).isPresent();
             assertThat(orderOptional.get().status()).isEqualTo(CANCELLED);
         });

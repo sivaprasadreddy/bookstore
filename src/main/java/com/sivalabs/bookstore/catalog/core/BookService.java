@@ -15,15 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
-    BookService(BookRepository bookRepository) {
+    BookService(BookRepository bookRepository, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
     }
 
     @Transactional
     public void createBook(CreateBookCommand cmd) {
         BookDto book = new BookDto(null, cmd.isbn(), cmd.name(), cmd.description(), cmd.imageUrl(), cmd.price());
-        bookRepository.save(toEntity(book));
+        BookEntity entity = bookMapper.toEntity(book);
+        bookRepository.save(entity);
     }
 
     @Transactional(readOnly = true)
@@ -32,16 +35,12 @@ public class BookService {
         int pageSize = query.pageSize();
         int page = pageNo <= 1 ? 0 : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.ASC, "name");
-        Page<BookDto> booksPage = bookRepository.findAllBy(pageable);
+        Page<BookDto> booksPage = bookRepository.findAll(pageable).map(bookMapper::toDto);
         return new PagedResult<>(booksPage);
     }
 
     @Transactional(readOnly = true)
     public Optional<BookDto> findBookByIsbn(String isbn) {
-        return bookRepository.findByIsbn(isbn);
-    }
-
-    private BookEntity toEntity(BookDto book) {
-        return new BookEntity(book.id(), book.isbn(), book.name(), book.description(), book.imageUrl(), book.price());
+        return bookRepository.findByIsbn(isbn).map(bookMapper::toDto);
     }
 }

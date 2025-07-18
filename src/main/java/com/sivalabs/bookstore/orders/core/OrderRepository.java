@@ -14,10 +14,6 @@ interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatus(OrderStatus status);
 
     @Query(
-            "select new com.sivalabs.bookstore.orders.core.models.OrderSummary(o.id, o.orderNumber, o.status, o.createdAt) from Order o")
-    List<OrderSummary> findAllOrderSummaries(Sort sort);
-
-    @Query(
             "select new com.sivalabs.bookstore.orders.core.models.OrderSummary(o.id, o.orderNumber, o.status, o.createdAt) from Order o where o.userId = :userId")
     List<OrderSummary> findUserOrders(Long userId, Sort sort);
 }

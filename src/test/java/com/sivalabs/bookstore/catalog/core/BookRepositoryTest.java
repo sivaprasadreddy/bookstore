@@ -3,7 +3,6 @@ package com.sivalabs.bookstore.catalog.core;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import com.sivalabs.bookstore.common.TestcontainersConfiguration;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -36,11 +35,11 @@ class BookRepositoryTest {
 
     @Test
     void shouldGetBookByIsbn() {
-        Optional<BookDto> optionalBook = bookRepository.findByIsbn("P100");
+        Optional<BookEntity> optionalBook = bookRepository.findByIsbn("P100");
         assertThat(optionalBook).isNotEmpty();
-        assertThat(optionalBook.get().isbn()).isEqualTo("P100");
-        assertThat(optionalBook.get().name()).isEqualTo("Book 1");
-        assertThat(optionalBook.get().description()).isEqualTo("Book 1 desc");
-        assertThat(optionalBook.get().price()).isEqualTo(BigDecimal.TEN);
+        assertThat(optionalBook.get().getIsbn()).isEqualTo("P100");
+        assertThat(optionalBook.get().getName()).isEqualTo("Book 1");
+        assertThat(optionalBook.get().getDescription()).isEqualTo("Book 1 desc");
+        assertThat(optionalBook.get().getPrice()).isEqualTo(BigDecimal.TEN);
     }
 }

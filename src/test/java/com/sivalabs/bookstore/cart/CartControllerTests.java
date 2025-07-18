@@ -6,7 +6,6 @@ import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapM
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import com.sivalabs.bookstore.cart.core.models.Cart;
-import com.sivalabs.bookstore.cart.core.models.CartUtil;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

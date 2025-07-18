@@ -5,8 +5,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapMode.DIRECT_DEPENDENCIES;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
+import com.sivalabs.bookstore.cart.CartUtil;
 import com.sivalabs.bookstore.cart.core.models.Cart;
-import com.sivalabs.bookstore.cart.core.models.CartUtil;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;

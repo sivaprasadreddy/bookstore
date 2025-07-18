@@ -10,13 +10,13 @@ public record OrderDto(
         Long id,
         String orderNumber,
         Long userId,
-        Set<OrderItem> items,
+        Set<OrderItemDto> items,
         Customer customer,
         Address deliveryAddress,
         OrderStatus status,
         String comments) {
 
     public BigDecimal getTotalAmount() {
-        return items.stream().map(OrderItem::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream().map(OrderItemDto::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

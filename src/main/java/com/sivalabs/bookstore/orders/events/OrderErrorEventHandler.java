@@ -4,7 +4,6 @@ import com.sivalabs.bookstore.orders.core.NotificationService;
 import com.sivalabs.bookstore.orders.core.OrderService;
 import com.sivalabs.bookstore.orders.core.OrderStatus;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
-import com.sivalabs.bookstore.orders.core.models.OrderErrorEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

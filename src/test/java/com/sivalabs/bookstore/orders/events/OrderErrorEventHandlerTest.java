@@ -10,9 +10,8 @@ import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapM
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.OrdersTestData;
 import com.sivalabs.bookstore.orders.core.OrderService;
-import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
-import com.sivalabs.bookstore.orders.core.models.OrderErrorEvent;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +34,13 @@ class OrderErrorEventHandlerTest extends AbstractIntegrationTest {
     @Test
     void shouldHandleOrderErrorEvent() {
         var request = OrdersTestData.getCreateOrderRequest();
-        CreateOrderResponse orderResponse = orderService.createOrder(request);
+        OrderSummary orderSummary = orderService.createOrder(request);
 
         orderEventPublisher.send(new OrderErrorEvent(
-                orderResponse.orderNumber(),
-                "testing",
-                request.items(),
-                request.customer(),
-                request.deliveryAddress()));
+                orderSummary.orderNumber(), "testing", request.items(), request.customer(), request.deliveryAddress()));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
-            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(orderResponse.orderNumber());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(orderSummary.orderNumber());
             assertThat(orderOptional).isPresent();
             assertThat(orderOptional.get().status()).isEqualTo(ERROR);
         });

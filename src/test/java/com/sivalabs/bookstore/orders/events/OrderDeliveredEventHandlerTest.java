@@ -10,9 +10,8 @@ import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapM
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.OrdersTestData;
 import com.sivalabs.bookstore.orders.core.OrderService;
-import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.core.models.OrderDeliveredEvent;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -36,13 +35,13 @@ class OrderDeliveredEventHandlerTest extends AbstractIntegrationTest {
     @Test
     void shouldHandleOrderDeliveredEvent() {
         var request = OrdersTestData.getCreateOrderRequest();
-        CreateOrderResponse order = orderService.createOrder(request);
+        OrderSummary orderSummary = orderService.createOrder(request);
 
-        orderEventPublisher.send(
-                new OrderDeliveredEvent(order.orderNumber(), Set.of(), request.customer(), request.deliveryAddress()));
+        orderEventPublisher.send(new OrderDeliveredEvent(
+                orderSummary.orderNumber(), Set.of(), request.customer(), request.deliveryAddress()));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
-            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(order.orderNumber());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(orderSummary.orderNumber());
             assertThat(orderOptional).isPresent();
             assertThat(orderOptional.get().status()).isEqualTo(DELIVERED);
         });

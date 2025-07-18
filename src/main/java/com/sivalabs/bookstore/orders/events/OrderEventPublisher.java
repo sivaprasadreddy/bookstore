@@ -1,9 +1,5 @@
 package com.sivalabs.bookstore.orders.events;
 
-import com.sivalabs.bookstore.orders.core.models.OrderCancelledEvent;
-import com.sivalabs.bookstore.orders.core.models.OrderCreatedEvent;
-import com.sivalabs.bookstore.orders.core.models.OrderDeliveredEvent;
-import com.sivalabs.bookstore.orders.core.models.OrderErrorEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

@@ -3,7 +3,6 @@ package com.sivalabs.bookstore.orders.events;
 import com.sivalabs.bookstore.orders.core.NotificationService;
 import com.sivalabs.bookstore.orders.core.OrderService;
 import com.sivalabs.bookstore.orders.core.OrderStatus;
-import com.sivalabs.bookstore.orders.core.models.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

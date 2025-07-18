@@ -1,10 +1,9 @@
-package com.sivalabs.bookstore.users;
+package com.sivalabs.bookstore.users.core;
 
-import com.sivalabs.bookstore.users.core.User;
 import java.util.List;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public class SecurityUser extends org.springframework.security.core.userdetails.User {
+class SecurityUser extends org.springframework.security.core.userdetails.User {
     private final User user;
 
     public SecurityUser(User user) {

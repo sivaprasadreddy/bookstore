@@ -1,7 +1,0 @@
-package com.sivalabs.bookstore.orders.core.models;
-
-import com.sivalabs.bookstore.common.model.Address;
-import com.sivalabs.bookstore.common.model.Customer;
-import java.util.Set;
-
-public record OrderCreatedEvent(String orderNumber, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}

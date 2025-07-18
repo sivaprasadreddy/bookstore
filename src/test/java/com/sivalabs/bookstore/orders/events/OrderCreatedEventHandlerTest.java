@@ -10,9 +10,8 @@ import static org.springframework.modulith.test.ApplicationModuleTest.BootstrapM
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
 import com.sivalabs.bookstore.orders.OrdersTestData;
 import com.sivalabs.bookstore.orders.core.OrderService;
-import com.sivalabs.bookstore.orders.core.models.CreateOrderResponse;
-import com.sivalabs.bookstore.orders.core.models.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -35,10 +34,10 @@ class OrderCreatedEventHandlerTest extends AbstractIntegrationTest {
     @Test
     void shouldHandleOrderCreatedEvent() {
         var request = OrdersTestData.getCreateOrderRequest();
-        CreateOrderResponse order = orderService.createOrder(request);
+        OrderSummary orderSummary = orderService.createOrder(request);
 
-        OrderCreatedEvent event =
-                new OrderCreatedEvent(order.orderNumber(), Set.of(), request.customer(), request.deliveryAddress());
+        OrderCreatedEvent event = new OrderCreatedEvent(
+                orderSummary.orderNumber(), Set.of(), request.customer(), request.deliveryAddress());
 
         orderEventPublisher.send(event);
 

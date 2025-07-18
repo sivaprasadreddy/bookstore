@@ -3,7 +3,8 @@ package com.sivalabs.bookstore.orders.core;
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import com.sivalabs.bookstore.orders.core.models.*;
-import com.sivalabs.bookstore.orders.core.models.OrderItem;
+import com.sivalabs.bookstore.orders.core.models.OrderItemDto;
+import com.sivalabs.bookstore.orders.events.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.events.OrderEventPublisher;
 import java.util.List;
 import java.util.Optional;
@@ -35,15 +36,16 @@ public class OrderService {
     }
 
     @Transactional
-    public CreateOrderResponse createOrder(CreateOrderRequest orderRequest) {
+    public OrderSummary createOrder(CreateOrderCmd orderRequest) {
         validate(orderRequest);
         Order newOrder = orderMapper.convertToEntity(orderRequest);
         Order savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderNumber={}", savedOrder.getOrderNumber());
-        return new CreateOrderResponse(savedOrder.getOrderNumber(), savedOrder.getStatus());
+        return new OrderSummary(
+                savedOrder.getId(), savedOrder.getOrderNumber(), savedOrder.getStatus(), savedOrder.getCreatedAt());
     }
 
-    private void validate(CreateOrderRequest req) {
+    private void validate(CreateOrderCmd req) {
         req.items().forEach(item -> {
             BookDto product = catalogAPI
                     .findBookByIsbn(item.isbn())
@@ -91,9 +93,9 @@ public class OrderService {
                 order.getOrderNumber(), getOrderItems(order), order.getCustomer(), order.getDeliveryAddress());
     }
 
-    private Set<OrderItem> getOrderItems(Order order) {
+    private Set<OrderItemDto> getOrderItems(Order order) {
         return order.getItems().stream()
-                .map(item -> new OrderItem(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
+                .map(item -> new OrderItemDto(item.getIsbn(), item.getName(), item.getPrice(), item.getQuantity()))
                 .collect(Collectors.toSet());
     }
 }
