@@ -3,7 +3,7 @@ name: CI Build
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_TOKEN }}/bookstore
+  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/bookstore
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 on:
