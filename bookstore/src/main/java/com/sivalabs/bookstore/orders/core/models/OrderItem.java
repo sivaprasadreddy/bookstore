@@ -1,13 +1,11 @@
 package com.sivalabs.bookstore.orders.core.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record OrderItem(
         @NotBlank(message = "ISBN is required") String isbn,
         @NotBlank(message = "Name is required") String name,

@@ -1,6 +1,6 @@
 package com.sivalabs.bookstore.cart.web;
 
-import com.sivalabs.bookstore.cart.core.models.Cart;
+import com.sivalabs.bookstore.cart.core.models.CartUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,7 +10,6 @@ class CartControllerAdvice {
 
     @ModelAttribute("cartItemCount")
     public int cartItemCount(HttpSession session) {
-        Cart cart = (Cart) session.getAttribute("cart");
-        return cart == null ? 0 : cart.getItemCount();
+        return CartUtil.getCart(session).getItemCount();
     }
 }

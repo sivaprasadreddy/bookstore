@@ -55,7 +55,7 @@ class CartControllerTests extends AbstractIntegrationTest {
             assertThat(session).isNotNull();
             assertThat(result)
                     .hasStatus(HttpStatus.OK)
-                    .hasViewName("cart")
+                    .hasViewName("cart/cart")
                     .model()
                     .containsKeys("cart")
                     .satisfies(model -> {
@@ -86,7 +86,7 @@ class CartControllerTests extends AbstractIntegrationTest {
 
             assertThat(result)
                     .hasStatus(HttpStatus.OK)
-                    .hasViewName("cart")
+                    .hasViewName("cart/cart")
                     .model()
                     .containsKeys("cart")
                     .satisfies(model -> {

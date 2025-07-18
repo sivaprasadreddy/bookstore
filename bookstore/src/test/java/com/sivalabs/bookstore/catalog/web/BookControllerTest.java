@@ -23,7 +23,7 @@ class BookControllerTest extends AbstractIntegrationTest {
 
         assertThat(result)
                 .hasStatus(HttpStatus.OK)
-                .hasViewName("books")
+                .hasViewName("catalog/books")
                 .model()
                 .containsKeys("booksPage")
                 .satisfies(model -> {

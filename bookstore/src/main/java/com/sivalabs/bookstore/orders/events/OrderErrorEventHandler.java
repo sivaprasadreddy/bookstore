@@ -24,13 +24,14 @@ class OrderErrorEventHandler {
     @EventListener
     public void handle(OrderErrorEvent event) {
         try {
-            log.info("Received a OrderErrorEvent with orderId:{}", event.orderId());
-            OrderDto order = orderService.findOrderByOrderId(event.orderId()).orElse(null);
+            log.info("Received a OrderErrorEvent with orderNumber:{}", event.orderNumber());
+            OrderDto order =
+                    orderService.findOrderByOrderNumber(event.orderNumber()).orElse(null);
             if (order == null) {
-                log.info("Received invalid OrderErrorEvent with orderId:{}", event.orderId());
+                log.info("Received invalid OrderErrorEvent with orderNumber:{}", event.orderNumber());
                 return;
             }
-            orderService.updateOrderStatus(event.orderId(), OrderStatus.ERROR, event.reason());
+            orderService.updateOrderStatus(event.orderNumber(), OrderStatus.ERROR, event.reason());
             notificationService.sendErrorNotification(event);
         } catch (RuntimeException e) {
             log.error("Error processing OrderErrorEvent. Payload: {}", event);

@@ -25,20 +25,20 @@ public class DeliveryService {
     public void process(OrderCreatedEvent event) {
         try {
             if (canBeDelivered(event)) {
-                this.updateOrderStatus(event.orderId(), OrderStatus.DELIVERED);
+                this.updateOrderStatus(event.orderNumber(), OrderStatus.DELIVERED);
                 orderEventPublisher.send(buildOrderDeliveredEvent(event));
             } else {
-                this.updateOrderStatus(event.orderId(), OrderStatus.CANCELLED);
+                this.updateOrderStatus(event.orderNumber(), OrderStatus.CANCELLED);
                 orderEventPublisher.send(buildOrderCancelledEvent(event, "Can't deliver to the location"));
             }
         } catch (RuntimeException e) {
-            this.updateOrderStatus(event.orderId(), OrderStatus.ERROR);
+            this.updateOrderStatus(event.orderNumber(), OrderStatus.ERROR);
             orderEventPublisher.send(buildOrderErrorEvent(event, e.getMessage()));
         }
     }
 
-    private void updateOrderStatus(String orderId, OrderStatus status) {
-        Order order = orderRepository.findByOrderId(orderId).orElseThrow();
+    private void updateOrderStatus(String orderNumber, OrderStatus status) {
+        Order order = orderRepository.findByOrderNumber(orderNumber).orElseThrow();
         order.setStatus(status);
         orderRepository.save(order);
     }
@@ -49,15 +49,16 @@ public class DeliveryService {
     }
 
     private OrderDeliveredEvent buildOrderDeliveredEvent(OrderCreatedEvent order) {
-        return new OrderDeliveredEvent(order.orderId(), order.items(), order.customer(), order.deliveryAddress());
+        return new OrderDeliveredEvent(order.orderNumber(), order.items(), order.customer(), order.deliveryAddress());
     }
 
     private OrderCancelledEvent buildOrderCancelledEvent(OrderCreatedEvent order, String reason) {
         return new OrderCancelledEvent(
-                order.orderId(), reason, order.items(), order.customer(), order.deliveryAddress());
+                order.orderNumber(), reason, order.items(), order.customer(), order.deliveryAddress());
     }
 
     private OrderErrorEvent buildOrderErrorEvent(OrderCreatedEvent order, String reason) {
-        return new OrderErrorEvent(order.orderId(), reason, order.items(), order.customer(), order.deliveryAddress());
+        return new OrderErrorEvent(
+                order.orderNumber(), reason, order.items(), order.customer(), order.deliveryAddress());
     }
 }

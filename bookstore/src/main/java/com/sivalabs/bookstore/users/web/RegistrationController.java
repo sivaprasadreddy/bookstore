@@ -22,7 +22,7 @@ class RegistrationController {
     @GetMapping("/registration")
     String registrationForm(Model model) {
         model.addAttribute("user", new RegistrationRequest("", "", ""));
-        return "registration";
+        return "users/registration";
     }
 
     @PostMapping("/registration")
@@ -31,7 +31,7 @@ class RegistrationController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "users/registration";
         }
         try {
             userService.createUser(registrationRequest);
@@ -45,6 +45,6 @@ class RegistrationController {
 
     @GetMapping("/registration/success")
     String registrationSuccess() {
-        return "registrationStatus";
+        return "users/registration-status";
     }
 }

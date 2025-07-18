@@ -24,13 +24,14 @@ class OrderCancelledEventHandler {
     @EventListener
     public void handle(OrderCancelledEvent event) {
         try {
-            log.info("Received a OrderCancelledEvent with orderId:{}: ", event.orderId());
-            OrderDto order = orderService.findOrderByOrderId(event.orderId()).orElse(null);
+            log.info("Received a OrderCancelledEvent with orderNumber:{}: ", event.orderNumber());
+            OrderDto order =
+                    orderService.findOrderByOrderNumber(event.orderNumber()).orElse(null);
             if (order == null) {
-                log.info("Received invalid OrderCancelledEvent with orderId:{}: ", event.orderId());
+                log.info("Received invalid OrderCancelledEvent with orderNumber:{}: ", event.orderNumber());
                 return;
             }
-            orderService.updateOrderStatus(event.orderId(), OrderStatus.CANCELLED, event.reason());
+            orderService.updateOrderStatus(event.orderNumber(), OrderStatus.CANCELLED, event.reason());
             notificationService.sendCancelledNotification(event);
         } catch (RuntimeException e) {
             log.error("Error processing OrderCancelledEvent. event: {}", event);

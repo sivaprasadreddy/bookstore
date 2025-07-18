@@ -4,4 +4,4 @@ import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import java.util.Set;
 
-public record OrderCreatedEvent(String orderId, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}
+public record OrderCreatedEvent(String orderNumber, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}

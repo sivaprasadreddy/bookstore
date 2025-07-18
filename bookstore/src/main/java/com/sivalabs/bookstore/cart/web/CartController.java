@@ -43,7 +43,7 @@ class CartController {
     String showCart(Model model, HttpSession session) {
         Cart cart = CartUtil.getCart(session);
         model.addAttribute("cart", cart);
-        return "cart";
+        return "cart/cart";
     }
 
     @HxRequest

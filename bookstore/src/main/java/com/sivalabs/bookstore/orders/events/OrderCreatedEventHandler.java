@@ -22,7 +22,7 @@ class OrderCreatedEventHandler {
     @EventListener
     public void handle(OrderCreatedEvent event) {
         try {
-            log.info("Received a OrderCreatedEvent with orderId:{}: ", event.orderId());
+            log.info("Received a OrderCreatedEvent with orderNumber:{}: ", event.orderNumber());
             deliveryService.process(event);
             notificationService.sendConfirmationNotification(event);
         } catch (RuntimeException e) {

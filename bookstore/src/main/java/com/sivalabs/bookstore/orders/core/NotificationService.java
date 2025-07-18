@@ -23,7 +23,7 @@ public class NotificationService {
                         Thanks,
                         BookStore Team
                         """
-                        .formatted(event.customer().name(), event.orderId());
+                        .formatted(event.customer().name(), event.orderNumber());
         emailService.sendEmail(event.customer().email(), "Order Confirmation", content);
     }
 
@@ -36,7 +36,7 @@ public class NotificationService {
                         Thanks,
                         BookStore Team
                         """
-                        .formatted(event.customer().name(), event.orderId());
+                        .formatted(event.customer().name(), event.orderNumber());
         emailService.sendEmail(event.customer().email(), "Order Delivery Confirmation", content);
     }
 
@@ -49,7 +49,7 @@ public class NotificationService {
                         Thanks,
                         BookStore Team
                         """
-                        .formatted(event.customer().name(), event.orderId());
+                        .formatted(event.customer().name(), event.orderNumber());
         emailService.sendEmail(event.customer().email(), "Order Cancellation Confirmation", content);
     }
 
@@ -62,7 +62,7 @@ public class NotificationService {
                         Thanks,
                         BookStore Team
                         """
-                        .formatted(event.customer().name(), event.orderId());
+                        .formatted(event.customer().name(), event.orderNumber());
         emailService.sendEmail(event.customer().email(), "Order Error Notification", content);
     }
 }

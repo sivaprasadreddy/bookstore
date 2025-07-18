@@ -5,4 +5,4 @@ import com.sivalabs.bookstore.common.model.Customer;
 import java.util.Set;
 
 public record OrderErrorEvent(
-        String orderId, String reason, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}
+        String orderNumber, String reason, Set<OrderItem> items, Customer customer, Address deliveryAddress) {}

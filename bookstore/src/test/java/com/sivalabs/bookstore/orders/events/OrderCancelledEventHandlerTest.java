@@ -42,12 +42,12 @@ class OrderCancelledEventHandlerTest extends AbstractIntegrationTest {
         var request = OrdersTestData.getCreateOrderRequest();
         CreateOrderResponse order = orderService.createOrder(request);
 
-        log.info("Cancelling OrderId:{}", order.orderId());
+        log.info("Cancelling OrderNumber:{}", order.orderNumber());
         orderEventPublisher.send(new OrderCancelledEvent(
-                order.orderId(), "testing", Set.of(), request.customer(), request.deliveryAddress()));
+                order.orderNumber(), "testing", Set.of(), request.customer(), request.deliveryAddress()));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
-            Optional<OrderDto> orderOptional = orderService.findOrderByOrderId(order.orderId());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(order.orderNumber());
             assertThat(orderOptional).isPresent();
             assertThat(orderOptional.get().status()).isEqualTo(CANCELLED);
         });

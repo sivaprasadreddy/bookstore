@@ -42,7 +42,7 @@ class OrderController {
         }
         OrderForm orderForm = OrderForm.empty();
         model.addAttribute("orderForm", orderForm);
-        return "checkout";
+        return "orders/checkout";
     }
 
     @PostMapping("")
@@ -50,7 +50,7 @@ class OrderController {
             @ModelAttribute("orderForm") @Valid OrderForm orderForm, BindingResult bindingResult, HttpSession session) {
         Cart cart = CartUtil.getCart(session);
         if (bindingResult.hasErrors()) {
-            return "checkout";
+            return "orders/checkout";
         }
         Long userId = securityService.getLoginUserId().orElseThrow();
         Set<OrderItem> orderItems = cart.getItems().stream()
@@ -60,7 +60,7 @@ class OrderController {
         CreateOrderRequest request = getCreateOrderRequest(userId, orderForm, orderItems);
         CreateOrderResponse orderResponse = orderService.createOrder(request);
         CartUtil.clearCart(session);
-        return "redirect:/orders/" + orderResponse.orderId();
+        return "redirect:/orders/" + orderResponse.orderNumber();
     }
 
     private static CreateOrderRequest getCreateOrderRequest(
@@ -73,19 +73,20 @@ class OrderController {
         Long userId = securityService.getLoginUserId().orElseThrow();
         List<OrderSummary> orders = orderService.findUserOrders(userId);
         model.addAttribute("orders", orders);
-        return "orders";
+        return "orders/orders";
     }
 
-    @GetMapping(value = "/{orderId}")
-    String showOrder(@PathVariable String orderId, Model model) {
-        log.info("Fetching order by id: {}", orderId);
+    @GetMapping(value = "/{orderNumber}")
+    String showOrder(@PathVariable String orderNumber, Model model) {
+        log.info("Fetching order by id: {}", orderNumber);
         Long userId = securityService.getLoginUserId().orElseThrow();
-        OrderDto orderDTO =
-                orderService.findOrderByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+        OrderDto orderDTO = orderService
+                .findOrderByOrderNumber(orderNumber)
+                .orElseThrow(() -> new OrderNotFoundException(orderNumber));
         if (userId.longValue() != orderDTO.userId().longValue()) {
-            throw new OrderNotFoundException(orderId);
+            throw new OrderNotFoundException(orderNumber);
         }
         model.addAttribute("order", orderDTO);
-        return "order-details";
+        return "orders/order-details";
     }
 }

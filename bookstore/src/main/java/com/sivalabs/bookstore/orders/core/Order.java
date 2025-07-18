@@ -12,11 +12,11 @@ class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")
-    @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq", allocationSize = 50)
+    @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq")
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String orderId;
+    @Column(name = "order_number", nullable = false, unique = true)
+    private String orderNumber;
 
     @Column(nullable = false, name = "user_id")
     private Long userId;
@@ -50,16 +50,18 @@ class Order {
 
     private String comments;
 
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Long getId() {
         return this.id;
     }
 
-    public String getOrderId() {
-        return this.orderId;
+    public String getOrderNumber() {
+        return this.orderNumber;
     }
 
     public Long getUserId() {
@@ -102,8 +104,8 @@ class Order {
         this.id = id;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public void setItems(Set<OrderItem> items) {

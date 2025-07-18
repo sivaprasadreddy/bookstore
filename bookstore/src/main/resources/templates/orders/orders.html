@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="order : ${orders}">
-                    <td><a th:href="${'/orders/'+order.orderId}" th:text="${order.orderId}">OrderNumber</a></td>
+                    <td><a th:href="${'/orders/'+order.orderNumber}" th:text="${order.orderNumber}">OrderNumber</a></td>
                     <td th:text="${order.status}">status</td>
                     <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">Date</td>
                 </tr>

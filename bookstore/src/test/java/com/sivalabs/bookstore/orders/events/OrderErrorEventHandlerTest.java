@@ -38,10 +38,14 @@ class OrderErrorEventHandlerTest extends AbstractIntegrationTest {
         CreateOrderResponse orderResponse = orderService.createOrder(request);
 
         orderEventPublisher.send(new OrderErrorEvent(
-                orderResponse.orderId(), "testing", request.items(), request.customer(), request.deliveryAddress()));
+                orderResponse.orderNumber(),
+                "testing",
+                request.items(),
+                request.customer(),
+                request.deliveryAddress()));
 
         await().atMost(30, SECONDS).untilAsserted(() -> {
-            Optional<OrderDto> orderOptional = orderService.findOrderByOrderId(orderResponse.orderId());
+            Optional<OrderDto> orderOptional = orderService.findOrderByOrderNumber(orderResponse.orderNumber());
             assertThat(orderOptional).isPresent();
             assertThat(orderOptional.get().status()).isEqualTo(ERROR);
         });

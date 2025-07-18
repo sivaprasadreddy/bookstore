@@ -13,7 +13,7 @@ class OrderMapper {
 
     public Order convertToEntity(CreateOrderRequest orderRequest) {
         Order newOrder = new Order();
-        newOrder.setOrderId(UUID.randomUUID().toString());
+        newOrder.setOrderNumber(UUID.randomUUID().toString());
         newOrder.setUserId(orderRequest.userId());
         newOrder.setStatus(OrderStatus.NEW);
         newOrder.setCustomer(orderRequest.customer());
@@ -41,7 +41,7 @@ class OrderMapper {
 
         return new OrderDto(
                 order.getId(),
-                order.getOrderId(),
+                order.getOrderNumber(),
                 order.getUserId(),
                 orderItems,
                 order.getCustomer(),

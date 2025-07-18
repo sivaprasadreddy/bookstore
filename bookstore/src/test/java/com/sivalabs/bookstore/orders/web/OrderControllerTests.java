@@ -124,7 +124,7 @@ class OrderControllerTests extends AbstractIntegrationTest {
 
             assertThat(result)
                     .hasStatus(HttpStatus.OK)
-                    .hasViewName("checkout")
+                    .hasViewName("orders/checkout")
                     .model()
                     .containsKeys("orderForm")
                     .satisfies(model -> {
@@ -172,22 +172,25 @@ class OrderControllerTests extends AbstractIntegrationTest {
 
     @Nested
     class GetOrderApiTests {
-        String orderId = "order-123";
+        String orderNumber = "order-123";
 
         @Test
         @WithUserDetails("admin@gmail.com") // User ID 1 in test data
         void shouldGetOrderSuccessfully() {
-            var result = mockMvcTester.get().uri("/orders/{orderId}", orderId).exchange();
+            var result = mockMvcTester
+                    .get()
+                    .uri("/orders/{orderNumber}", orderNumber)
+                    .exchange();
 
             assertThat(result)
                     .hasStatus(HttpStatus.OK)
-                    .hasViewName("order-details")
+                    .hasViewName("orders/order-details")
                     .model()
                     .containsKeys("order")
                     .satisfies(model -> {
                         var order = (OrderDto) model.get("order");
                         assertThat(order).isNotNull();
-                        assertThat(order.orderId()).isEqualTo(orderId);
+                        assertThat(order.orderNumber()).isEqualTo(orderNumber);
                         assertThat(order.userId()).isEqualTo(1L);
                         assertThat(order.items()).hasSize(2);
                     });
@@ -195,12 +198,12 @@ class OrderControllerTests extends AbstractIntegrationTest {
 
         @Test
         @WithUserDetails("admin@gmail.com")
-        void shouldReturnNotFoundWhenOrderIdNotExist() {
-            String nonExistentOrderId = "non-existent-order";
+        void shouldReturnNotFoundWhenOrderNumberNotExist() {
+            String nonExistentOrderNumber = "non-existent-order";
 
             var result = mockMvcTester
                     .get()
-                    .uri("/orders/{orderId}", nonExistentOrderId)
+                    .uri("/orders/{orderNumber}", nonExistentOrderNumber)
                     .exchange();
 
             assertThat(result).hasStatus(HttpStatus.OK).hasViewName("error/404");

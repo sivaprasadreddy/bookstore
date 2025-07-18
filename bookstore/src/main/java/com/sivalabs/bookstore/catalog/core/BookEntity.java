@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
-    @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 50)
+    @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq")
     private Long id;
 
     @Column(nullable = false, unique = true)

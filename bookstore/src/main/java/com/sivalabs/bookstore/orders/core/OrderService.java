@@ -39,8 +39,8 @@ public class OrderService {
         validate(orderRequest);
         Order newOrder = orderMapper.convertToEntity(orderRequest);
         Order savedOrder = this.orderRepository.save(newOrder);
-        log.info("Created Order with orderId={}", savedOrder.getOrderId());
-        return new CreateOrderResponse(savedOrder.getOrderId(), savedOrder.getStatus());
+        log.info("Created Order with orderNumber={}", savedOrder.getOrderNumber());
+        return new CreateOrderResponse(savedOrder.getOrderNumber(), savedOrder.getStatus());
     }
 
     private void validate(CreateOrderRequest req) {
@@ -55,13 +55,15 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<OrderDto> findOrderByOrderId(String orderId) {
-        return this.orderRepository.findByOrderId(orderId).map(orderMapper::toDTO);
+    public Optional<OrderDto> findOrderByOrderNumber(String orderNumber) {
+        return this.orderRepository.findByOrderNumber(orderNumber).map(orderMapper::toDTO);
     }
 
     @Transactional
-    public void updateOrderStatus(String orderId, OrderStatus status, String comments) {
-        Order order = orderRepository.findByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+    public void updateOrderStatus(String orderNumber, OrderStatus status, String comments) {
+        Order order = orderRepository
+                .findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new OrderNotFoundException(orderNumber));
         order.setStatus(status);
         order.setComments(comments);
         orderRepository.save(order);
@@ -77,16 +79,16 @@ public class OrderService {
     public void processNewOrders() {
         List<Order> newOrders = orderRepository.findByStatus(OrderStatus.NEW);
         for (Order order : newOrders) {
-            this.updateOrderStatus(order.getOrderId(), OrderStatus.IN_PROCESS, null);
+            this.updateOrderStatus(order.getOrderNumber(), OrderStatus.IN_PROCESS, null);
             OrderCreatedEvent orderCreatedEvent = this.buildOrderCreatedEvent(order);
             orderEventPublisher.send(orderCreatedEvent);
-            log.info("Published OrderCreatedEvent for orderId:{}", order.getOrderId());
+            log.info("Published OrderCreatedEvent for orderNumber:{}", order.getOrderNumber());
         }
     }
 
     private OrderCreatedEvent buildOrderCreatedEvent(Order order) {
         return new OrderCreatedEvent(
-                order.getOrderId(), getOrderItems(order), order.getCustomer(), order.getDeliveryAddress());
+                order.getOrderNumber(), getOrderItems(order), order.getCustomer(), order.getDeliveryAddress());
     }
 
     private Set<OrderItem> getOrderItems(Order order) {

@@ -33,6 +33,6 @@ class BookController {
         var query = new FindBooksQuery(page, properties.pageSize());
         var booksPage = bookService.findBooks(query);
         model.addAttribute("booksPage", booksPage);
-        return "books";
+        return "catalog/books";
     }
 }
