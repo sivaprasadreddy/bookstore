@@ -1,27 +1,27 @@
 package com.sivalabs.bookstore.users.core;
 
 import java.util.Optional;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityService {
-    User loginUser() {
+    Optional<Long> findLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null) {
-            return null;
+            return Optional.empty();
         }
 
         Object principal = authentication.getPrincipal();
         if (principal instanceof SecurityUser securityUser) {
-            return securityUser.getUser();
+            return Optional.of(securityUser.getUserId());
         }
-
-        return null;
+        return Optional.empty();
     }
 
-    public Optional<Long> getLoginUserId() {
-        return Optional.ofNullable(loginUser()).map(User::getId);
+    public Long getLoginUserId() {
+        return findLoginUser().orElseThrow(() -> new InternalAuthenticationServiceException("Not logged in"));
     }
 }

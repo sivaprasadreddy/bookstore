@@ -5,6 +5,7 @@ import com.sivalabs.bookstore.catalog.core.models.CreateBookCommand;
 import com.sivalabs.bookstore.catalog.core.models.FindBooksQuery;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "books", key = "#isbn", unless = "#result == null")
     public Optional<BookDto> findBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn).map(bookMapper::toDto);
     }

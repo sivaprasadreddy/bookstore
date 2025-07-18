@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-class User implements Serializable {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq")

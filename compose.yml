@@ -9,3 +9,11 @@ services:
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
+
+  redis:
+    image: redis:8.0.3
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped

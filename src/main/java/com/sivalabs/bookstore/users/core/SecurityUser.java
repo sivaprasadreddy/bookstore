@@ -1,37 +1,79 @@
 package com.sivalabs.bookstore.users.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-class SecurityUser extends org.springframework.security.core.userdetails.User {
-    private final User user;
+public class SecurityUser implements UserDetails {
+    private Long userId;
+    private String name;
+    private String email;
+    private String password;
+    private Role role;
 
-    public SecurityUser(User user) {
-        super(
-                user.getEmail(),
-                user.getPassword(),
-                List.of(new SimpleGrantedAuthority(user.getRole().name())));
-        this.user = user;
+    public SecurityUser() {}
+
+    public SecurityUser(Long userId, String name, String email, String password, Role role) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        SecurityUser that = (SecurityUser) o;
-        return Objects.equals(user, that.user);
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(user);
-        return result;
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return this.email;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

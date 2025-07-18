@@ -17,7 +17,7 @@ class SecurityUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         return userService
                 .findByEmail(username)
-                .map(SecurityUser::new)
+                .map(u -> new SecurityUser(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRole()))
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username " + username));
     }
 }

@@ -7,6 +7,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import com.sivalabs.bookstore.cart.core.models.Cart;
 import com.sivalabs.bookstore.common.AbstractIntegrationTest;
+import com.sivalabs.bookstore.common.model.LineItem;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -49,9 +51,8 @@ class CartControllerTests extends AbstractIntegrationTest {
             MockHttpSession session = new MockHttpSession();
             CartUtil.setCart(session, new Cart());
 
-            var result = mockMvcTester.get().uri("/cart").exchange();
+            var result = mockMvcTester.get().uri("/cart").session(session).exchange();
 
-            assertThat(session).isNotNull();
             assertThat(result)
                     .hasStatus(HttpStatus.OK)
                     .hasViewName("cart/cart")
@@ -66,19 +67,10 @@ class CartControllerTests extends AbstractIntegrationTest {
         @Test
         @WithUserDetails("admin@gmail.com")
         void shouldShowCartWithItems() {
-            // First add an item to the cart
-            MvcResult addResult = mockMvcTester
-                    .post()
-                    .uri("/add-to-cart")
-                    .with(csrf())
-                    .header("HX-Request", "true")
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("isbn", "P102")
-                    .exchange()
-                    .getMvcResult();
-
-            MockHttpSession session = (MockHttpSession) addResult.getRequest().getSession();
-            assertThat(session).isNotNull();
+            MockHttpSession session = new MockHttpSession();
+            Cart userCart = new Cart();
+            userCart.addItem(new LineItem("P102", "", BigDecimal.TEN, null, 1));
+            CartUtil.setCart(session, userCart);
 
             // Then view the cart
             var result = mockMvcTester.get().uri("/cart").session(session).exchange();
@@ -102,19 +94,10 @@ class CartControllerTests extends AbstractIntegrationTest {
         @Test
         @WithUserDetails("admin@gmail.com")
         void shouldUpdateCartItemQuantity() {
-            // First add an item to the cart
-            MvcResult addResult = mockMvcTester
-                    .post()
-                    .uri("/add-to-cart")
-                    .with(csrf())
-                    .header("HX-Request", "true")
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("isbn", "P103")
-                    .exchange()
-                    .getMvcResult();
-
-            MockHttpSession session = (MockHttpSession) addResult.getRequest().getSession();
-            assertThat(session).isNotNull();
+            MockHttpSession session = new MockHttpSession();
+            Cart userCart = new Cart();
+            userCart.addItem(new LineItem("P103", "", BigDecimal.TEN, null, 1));
+            CartUtil.setCart(session, userCart);
 
             // Then update the quantity
             var result = mockMvcTester
@@ -138,19 +121,10 @@ class CartControllerTests extends AbstractIntegrationTest {
         @Test
         @WithUserDetails("admin@gmail.com")
         void shouldRemoveItemWhenQuantityIsZero() {
-            // First add an item to the cart
-            MvcResult addResult = mockMvcTester
-                    .post()
-                    .uri("/add-to-cart")
-                    .with(csrf())
-                    .header("HX-Request", "true")
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("isbn", "P104")
-                    .exchange()
-                    .getMvcResult();
-
-            MockHttpSession session = (MockHttpSession) addResult.getRequest().getSession();
-            assertThat(session).isNotNull();
+            MockHttpSession session = new MockHttpSession();
+            Cart userCart = new Cart();
+            userCart.addItem(new LineItem("P104", "", BigDecimal.TEN, null, 1));
+            CartUtil.setCart(session, userCart);
 
             // Then set quantity to 0 to remove it
             var result = mockMvcTester
@@ -174,19 +148,10 @@ class CartControllerTests extends AbstractIntegrationTest {
         @Test
         @WithUserDetails("admin@gmail.com")
         void shouldRefreshViewWhenCartBecomesEmpty() {
-            // First add an item to the cart
-            MvcResult addResult = mockMvcTester
-                    .post()
-                    .uri("/add-to-cart")
-                    .with(csrf())
-                    .header("HX-Request", "true")
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("isbn", "P105")
-                    .exchange()
-                    .getMvcResult();
-
-            MockHttpSession session = (MockHttpSession) addResult.getRequest().getSession();
-            assertThat(session).isNotNull();
+            MockHttpSession session = new MockHttpSession();
+            Cart userCart = new Cart();
+            userCart.addItem(new LineItem("P105", "", BigDecimal.TEN, null, 1));
+            CartUtil.setCart(session, userCart);
 
             // Then set quantity to 0 to remove it and make cart empty
             var result = mockMvcTester
