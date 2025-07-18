@@ -9,11 +9,6 @@ jobs:
   build:
     name: Maven Build
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./bookstore
-    defaults:
-      run:
-        working-directory: ${{ env.working-directory }}
     steps:
       - uses: actions/checkout@v4
 

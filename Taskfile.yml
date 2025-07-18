@@ -22,7 +22,7 @@ tasks:
 
   build_image:
     cmds:
-      - "{{.MVNW}} -pl bookstore clean compile spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} clean compile spring-boot:build-image -DskipTests"
 
   start_infra:
     cmds:

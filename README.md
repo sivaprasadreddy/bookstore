@@ -7,17 +7,18 @@ A bookstore application built using SpringBoot as a monolith.
 * Spring Boot
 * Spring Modulith
 * Spring Data JPA
-* Thymeleaf + AlpineJS
+* Spring Security
+* Thymeleaf
+* Bootstrap CSS
 
 ## How to run?
 
 ```shell
-$ cd bookstore
 $ ./mvnw verify
 $ ./mvnw spring-boot:run
 ```
 
-# Running application on Kubernetes
+# Running the application on Kubernetes
 
 * Start kind cluster
 

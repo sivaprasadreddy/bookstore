@@ -4,22 +4,273 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
     <groupId>com.sivalabs</groupId>
-    <artifactId>sivalabs-bookstore</artifactId>
+    <artifactId>bookstore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>sivalabs-bookstore</name>
+    <name>bookstore</name>
+    <description>bookstore</description>
     <properties>
         <java.version>24</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <spring-modulith.version>1.4.1</spring-modulith.version>
+        <htmx-spring-boot-thymeleaf.version>4.0.1</htmx-spring-boot-thymeleaf.version>
+        <bootstrap.version>5.3.7</bootstrap.version>
+        <htmx.version>2.0.6</htmx.version>
+        <jquery.version>3.7.1</jquery.version>
+        <font_awesome.version>6.7.2</font_awesome.version>
+        <error-prone.version>2.40.0</error-prone.version>
         <spotless.version>2.45.0</spotless.version>
+        <archunit.version>1.4.1</archunit.version>
+        <dockerImageName>sivaprasadreddy/bookstore</dockerImageName>
     </properties>
-    <modules>
-        <module>bookstore</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.wimdeblauwe</groupId>
+            <artifactId>htmx-spring-boot-thymeleaf</artifactId>
+            <version>${htmx-spring-boot-thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-lite</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>htmx.org</artifactId>
+            <version>${htmx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font_awesome.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-jdbc</artifactId>
+        </dependency>
+        <!-- Dev dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-docs</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <version>${archunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${spring-modulith.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>${dockerImageName}</name>
+                    </image>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>me.fabriciorby</groupId>
+                        <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+                        <version>1.4.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <reportFormat>plain</reportFormat>
+                    <consoleOutputReporter>
+                        <disable>true</disable>
+                    </consoleOutputReporter>
+                    <statelessTestsetInfoReporter
+                            implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+                        <theme>UNICODE</theme>
+                        <printStacktraceOnError>true</printStacktraceOnError>
+                        <printStacktraceOnFailure>true</printStacktraceOnFailure>
+                        <printStdoutOnError>true</printStdoutOnError>
+                        <printStdoutOnFailure>true</printStdoutOnFailure>
+                        <printStdoutOnSuccess>false</printStdoutOnSuccess>
+                        <printStderrOnError>true</printStderrOnError>
+                        <printStderrOnFailure>true</printStderrOnFailure>
+                        <printStderrOnSuccess>false</printStderrOnSuccess>
+                    </statelessTestsetInfoReporter>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.user.name$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.message.full$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
@@ -45,4 +296,103 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>errorprone</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>${java.version}</source>
+                            <target>${java.version}</target>
+                            <encoding>UTF-8</encoding>
+                            <compilerArgs>
+                                <arg>-XDcompilePolicy=simple</arg>
+                                <arg>
+                                    -Xplugin:ErrorProne \
+                                    -Xep:AnnotateFormatMethod:ERROR \
+                                    -Xep:ArgumentSelectionDefectChecker:ERROR \
+                                    -Xep:BadComparable:ERROR \
+                                    -Xep:BadInstanceof:ERROR \
+                                    -Xep:BoxedPrimitiveConstructor:ERROR \
+                                    -Xep:ClassCanBeStatic:ERROR \
+                                    -Xep:CompareToZero:ERROR \
+                                    -Xep:DefaultCharset:ERROR \
+                                    -Xep:DistinctVarargsChecker:ERROR \
+                                    -Xep:DoNotCallSuggester:OFF \
+                                    -Xep:EmptyBlockTag:ERROR \
+                                    <!-- we would rather want the opposite check -->
+                                    -Xep:EqualsGetClass:OFF \
+                                    -Xep:EqualsIncompatibleType:ERROR \
+                                    -Xep:FallThrough:ERROR \
+                                    -Xep:GetClassOnEnum:ERROR \
+                                    <!-- needs some careful inspection -->
+                                    -Xep:GuardedBy:OFF \
+                                    -Xep:HidingField:ERROR \
+                                    -Xep:JavaTimeDefaultTimeZone:OFF \
+                                    <!-- covered by Modernizer -->
+                                    -Xep:JdkObsolete:OFF \
+                                    <!-- This check requires list fields to be declared as ImmutableList, which is not in line with project's code style -->
+                                    -Xep:Immutable:OFF \
+                                    <!-- flags enums with List fields even if initialized with ImmutableList, and other false positives -->
+                                    -Xep:ImmutableEnumChecker:OFF \
+                                    -Xep:ImmutableSetForContains:ERROR \
+                                    <!-- fields/variables should not differ only in case -->
+                                    -Xep:InconsistentCapitalization:ERROR \
+                                    -Xep:InconsistentHashCode:ERROR \
+                                    -Xep:InjectOnConstructorOfAbstractClass:ERROR \
+                                    -Xep:InvalidInlineTag:ERROR \
+                                    -Xep:MissingCasesInEnumSwitch:ERROR \
+                                    -Xep:MissingOverride:ERROR \
+                                    <!-- Sometimes our javadoc contains just a @see directive -->
+                                    -Xep:MissingSummary:OFF \
+                                    -Xep:MutablePublicArray:ERROR \
+                                    -Xep:NarrowCalculation:ERROR \
+                                    -Xep:NarrowingCompoundAssignment:ERROR \
+                                    -Xep:NullOptional:ERROR \
+                                    -Xep:NullableOptional:ERROR \
+                                    -Xep:ObjectToString:ERROR \
+                                    -Xep:OptionalNotPresent:ERROR \
+                                    -Xep:OrphanedFormatString:ERROR \
+                                    -Xep:Overrides:ERROR \
+                                    <!-- flags List fields even if initialized with ImmutableList -->
+                                    -Xep:PreferredInterfaceType:OFF \
+                                    -Xep:PrimitiveArrayPassedToVarargsMethod:ERROR \
+                                    -Xep:RethrowReflectiveOperationExceptionAsLinkageError:OFF \
+                                    -Xep:StaticAssignmentOfThrowable:ERROR \
+                                    -Xep:StreamResourceLeak:ERROR \
+                                    -Xep:UnicodeEscape:ERROR \
+                                    -Xep:UnnecessaryLongToIntConversion:ERROR \
+                                    -Xep:UnnecessaryMethodReference:ERROR \
+                                    -Xep:UnnecessaryOptionalGet:ERROR \
+                                    -Xep:UnnecessaryParentheses:ERROR \
+                                    -Xep:UnnecessaryStringBuilder:ERROR \
+                                    -Xep:UnusedMethod:OFF \
+                                    -Xep:UnusedVariable:ERROR \
+                                    -Xep:UseEnumSwitch:ERROR \
+                                    -XepExcludedPaths:.*/target/generated-(|test-)sources/.*
+                                </arg>
+                            </compilerArgs>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>com.google.errorprone</groupId>
+                                    <artifactId>error_prone_core</artifactId>
+                                    <version>${error-prone.version}</version>
+                                </path>
+                                <!-- Other annotation processors go here.
+
+                                If 'annotationProcessorPaths' is set, processors will no longer be
+                                discovered on the regular -classpath; see also 'Using Error Prone
+                                together with other annotation processors' below. -->
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

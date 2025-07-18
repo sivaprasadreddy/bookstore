@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: bookstore
-          image: sivaprasadreddy/sivalabs-bookstore
+          image: sivaprasadreddy/bookstore
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

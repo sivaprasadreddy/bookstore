@@ -1,8 +1,8 @@
 name: 'bookstore'
 services:
   bookstore:
-    image: sivaprasadreddy/sivalabs-bookstore
-    #build: ../bookstore
+    image: sivaprasadreddy/bookstore
+    #build: .
     container_name: bookstore
     environment:
       SPRING_PROFILES_ACTIVE: docker

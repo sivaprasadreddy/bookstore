@@ -13,7 +13,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '24'
           distribution: 'temurin'
           cache: 'maven'
 
@@ -28,8 +28,8 @@ jobs:
 
       - name: Build and Publish Docker Image
         env:
-          DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sivalabs-bookstore
+          DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/bookstore
         run: |
-          ./mvnw -pl bookstore spring-boot:build-image -DskipTests
+          ./mvnw spring-boot:build-image -DskipTests
           echo "Pushing the image $DOCKER_IMAGE_NAME to Docker Hub..."
           docker push $DOCKER_IMAGE_NAME
