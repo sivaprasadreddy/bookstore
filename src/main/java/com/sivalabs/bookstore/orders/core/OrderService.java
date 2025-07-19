@@ -2,6 +2,7 @@ package com.sivalabs.bookstore.orders.core;
 
 import com.sivalabs.bookstore.catalog.CatalogAPI;
 import com.sivalabs.bookstore.catalog.core.models.BookDto;
+import com.sivalabs.bookstore.common.model.PagedResult;
 import com.sivalabs.bookstore.orders.core.models.*;
 import com.sivalabs.bookstore.orders.core.models.OrderItemDto;
 import com.sivalabs.bookstore.orders.events.OrderCreatedEvent;
@@ -12,6 +13,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,5 +117,13 @@ public class OrderService {
                         item.getLineItem().getImageUrl(),
                         item.getLineItem().getQuantity()))
                 .collect(Collectors.toSet());
+    }
+
+    @Transactional(readOnly = true)
+    public PagedResult<OrderSummary> findAllOrders(int pageNo, int pageSize) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<OrderSummary> orders = orderRepository.findAllOrders(pageable);
+        return new PagedResult<>(orders);
     }
 }
