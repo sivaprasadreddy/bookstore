@@ -2,7 +2,6 @@ package com.sivalabs.bookstore.orders.core.models;
 
 import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
-import com.sivalabs.bookstore.orders.core.OrderStatus;
 import java.math.BigDecimal;
 import java.util.Set;
 

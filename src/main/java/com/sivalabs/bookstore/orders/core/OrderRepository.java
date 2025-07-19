@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.orders.core.models.OrderStatus;
 import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.util.List;
 import java.util.Optional;

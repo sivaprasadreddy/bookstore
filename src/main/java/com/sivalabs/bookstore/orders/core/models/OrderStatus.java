@@ -1,4 +1,4 @@
-package com.sivalabs.bookstore.orders.core;
+package com.sivalabs.bookstore.orders.core.models;
 
 public enum OrderStatus {
     NEW,

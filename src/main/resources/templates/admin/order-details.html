@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Order Details</h1>
+        <a th:href="@{/admin/orders}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}">Success message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}">Error message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-md-6 p-2">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title text-white mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Order Number:</div>
+                        <div class="col-md-8" th:text="${order.orderNumber()}">ORD123</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Status:</div>
+                        <div class="col-md-8">
+                            <span th:class="${'badge ' + 
+                                (order.status().name() == 'NEW' ? 'bg-primary' : 
+                                (order.status().name() == 'IN_PROCESS' ? 'bg-warning' : 
+                                (order.status().name() == 'DELIVERED' ? 'bg-success' : 'bg-danger')))}"
+                                  th:text="${order.status()}">NEW</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Total Amount:</div>
+                        <div class="col-md-8" th:text="${'$' + order.getTotalAmount()}">$123.45</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="col-md-6 p-2">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title text-white mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Name:</div>
+                        <div class="col-md-8" th:text="${order.customer().name()}">John Doe</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Email:</div>
+                        <div class="col-md-8" th:text="${order.customer().email()}">john@example.com</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Phone:</div>
+                        <div class="col-md-8" th:text="${order.customer().phone()}">123-456-7890</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Delivery Address -->
+        <div class="col-md-6 p-2">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title text-white mb-0">Delivery Address</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Address Line 1:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().addressLine1()}">123 Main St</div>
+                    </div>
+                    <div class="row mb-2" th:if="${order.deliveryAddress().addressLine2() != null}">
+                        <div class="col-md-4 fw-bold">Address Line 2:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().addressLine2()}">Apt 4B</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">City:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().city()}">New York</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">State:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().state()}">NY</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Zip Code:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().zipCode()}">10001</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-4 fw-bold">Country:</div>
+                        <div class="col-md-8" th:text="${order.deliveryAddress().country()}">USA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Actions -->
+        <div class="col-md-6 p-2">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title text-white mb-0">Order Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <form th:action="@{/admin/orders/{orderNumber}/update-status(orderNumber=${order.orderNumber()})}"
+                              th:method="put"
+                              method="post" class="mb-3">
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Update Status</label>
+                                <select id="status" name="status" class="form-select">
+                                    <option th:each="status : ${statuses}" 
+                                            th:value="${status}" 
+                                            th:text="${status}"
+                                            th:selected="${status == order.status()}">
+                                        NEW
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comments" class="form-label">Comments</label>
+                                <textarea id="comments" name="comments" class="form-control" rows="3" th:text="${order.comments()}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Status</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="card mb-4 pt-2">
+        <div class="card-header">
+            <h5 class="card-title text-white mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${order.items()}">
+                        <td th:text="${item.isbn()}">1234567890</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img th:if="${item.imageUrl() != null}" th:src="${item.imageUrl()}" alt="Book Cover" class="me-2" style="width: 50px; height: auto;">
+                                <span th:text="${item.name()}">Book Title</span>
+                            </div>
+                        </td>
+                        <td th:text="${'$' + item.price()}">$19.99</td>
+                        <td th:text="${item.quantity()}">2</td>
+                        <td th:text="${'$' + item.getSubTotal()}">$39.98</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Total:</td>
+                        <td class="fw-bold" th:text="${'$' + order.getTotalAmount()}">$123.45</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

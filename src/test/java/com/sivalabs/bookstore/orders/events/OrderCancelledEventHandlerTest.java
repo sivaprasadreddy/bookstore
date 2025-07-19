@@ -1,6 +1,6 @@
 package com.sivalabs.bookstore.orders.events;
 
-import static com.sivalabs.bookstore.orders.core.OrderStatus.CANCELLED;
+import static com.sivalabs.bookstore.orders.core.models.OrderStatus.CANCELLED;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;

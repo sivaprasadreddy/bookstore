@@ -4,6 +4,7 @@ import com.sivalabs.bookstore.common.model.LineItem;
 import com.sivalabs.bookstore.orders.core.models.CreateOrderCmd;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import com.sivalabs.bookstore.orders.core.models.OrderItemDto;
+import com.sivalabs.bookstore.orders.core.models.OrderStatus;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

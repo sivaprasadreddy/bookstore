@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.orders.core.models.OrderStatus;
 import com.sivalabs.bookstore.orders.events.OrderCancelledEvent;
 import com.sivalabs.bookstore.orders.events.OrderCreatedEvent;
 import com.sivalabs.bookstore.orders.events.OrderDeliveredEvent;
