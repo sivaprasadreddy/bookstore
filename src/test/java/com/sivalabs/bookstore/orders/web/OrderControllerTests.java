@@ -12,7 +12,10 @@ import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.LineItem;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
+import com.sivalabs.bookstore.orders.core.models.OrderStatus;
+import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -212,6 +215,95 @@ class OrderControllerTests extends AbstractIntegrationTest {
                     .exchange();
 
             assertThat(result).hasStatus(HttpStatus.OK).hasViewName("error/404");
+        }
+
+        @Test
+        @WithUserDetails("admin@gmail.com") // User ID 1 in test data
+        void shouldReturnNotFoundWhenOrderBelongsToDifferentUser() {
+            String orderNumberBelongingToAnotherUser = "order-456"; // Belongs to user ID 2
+
+            var result = mockMvcTester
+                    .get()
+                    .uri("/orders/{orderNumber}", orderNumberBelongingToAnotherUser)
+                    .exchange();
+
+            assertThat(result).hasStatus(HttpStatus.OK).hasViewName("error/404");
+        }
+
+        @Test
+        void shouldRequireAuthenticationForViewingOrder() {
+            // No @WithUserDetails annotation means unauthenticated request
+            var result = mockMvcTester
+                    .get()
+                    .uri("/orders/{orderNumber}", orderNumber)
+                    .exchange();
+
+            // Should redirect to login page
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).contains("/login");
+        }
+    }
+
+    @Nested
+    class GetOrdersTests {
+        @Test
+        @WithUserDetails("admin@gmail.com") // User ID 1 in test data
+        void shouldListUserOrders() {
+            var result = mockMvcTester.get().uri("/orders").exchange();
+
+            assertThat(result)
+                    .hasStatus(HttpStatus.OK)
+                    .hasViewName("orders/orders")
+                    .model()
+                    .containsKeys("orders")
+                    .satisfies(model -> {
+                        @SuppressWarnings("unchecked")
+                        List<OrderSummary> orders = (List<OrderSummary>) model.get("orders");
+                        assertThat(orders).isNotNull();
+                        assertThat(orders).hasSize(1); // User ID 1 has one order in test data
+
+                        // Verify the order details
+                        OrderSummary orderSummary = orders.getFirst();
+                        assertThat(orderSummary.orderNumber()).isEqualTo("order-123");
+                        assertThat(orderSummary.status()).isEqualTo(OrderStatus.NEW);
+                    });
+        }
+
+        @Test
+        void shouldRequireAuthenticationForListingOrders() {
+            // No @WithUserDetails annotation means unauthenticated request
+            var result = mockMvcTester.get().uri("/orders").exchange();
+
+            // Should redirect to login page
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).contains("/login");
+        }
+    }
+
+    @Nested
+    class CreateOrderAuthenticationTests {
+        @Test
+        void shouldRequireAuthenticationForCreatingOrder() {
+            // No @WithUserDetails annotation means unauthenticated request
+            var result = mockMvcTester
+                    .post()
+                    .uri("/orders")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .exchange();
+
+            // Should redirect to login page
+            assertThat(result).hasStatus(HttpStatus.FOUND);
+
+            MvcResult mvcResult = result.getMvcResult();
+            String location = mvcResult.getResponse().getHeader("Location");
+            assertThat(location).contains("/login");
         }
     }
 }
