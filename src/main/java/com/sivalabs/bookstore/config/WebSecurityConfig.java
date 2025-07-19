@@ -35,6 +35,7 @@ class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/books/**")
                 .permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated());
 

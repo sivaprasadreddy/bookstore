@@ -7,11 +7,42 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>BookStore</title>
+    <title>BookStore - Admin</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/webjars/font-awesome/css/all.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            padding-top: 56px; /* Adjust for fixed navbar */
+        }
+        .sidebar {
+            position: fixed;
+            top: 56px; /* Height of navbar */
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: #007bff;
+        }
+        .sidebar .nav-link .fas {
+            margin-right: 0.5rem;
+        }
+        /* Adjust main content area to account for sidebar */
+        @media (min-width: 768px) {
+            main.col-md-9 {
+                padding-top: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -29,17 +60,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item" sec:authorize="isAnonymous()">
-                        <a class="nav-link" th:href="@{/login}">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                    </li>
-
-                    <li class="nav-item" sec:authorize="isAnonymous()">
-                        <a class="nav-link" th:href="@{/registration}">
-                            <i class="fas fa-user-plus"></i> Register
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/cart" th:href="@{/cart}">
                             <th:block th:insert="~{partials/cart-item-count}"></th:block>
@@ -74,9 +94,43 @@
         </div>
     </nav>
 
-    <div id="app" class="container">
-        <div layout:fragment="content">
-            <!-- Your Page Content Here -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Side Navbar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <h3 class="p-2">Administration</h3>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin}">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/products}">
+                                <i class="fas fa-box"></i> Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/orders}">
+                                <i class="fas fa-shopping-cart"></i> Orders
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main Content Area -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Admin Dashboard</h1>
+                </div>
+                <div>
+                    <div layout:fragment="content">
+                        <!-- Your Page Content Here -->
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 </main>
