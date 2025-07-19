@@ -77,6 +77,17 @@ public class OrderService {
         return orderRepository.findUserOrders(userId, sort);
     }
 
+    @Transactional(readOnly = true)
+    public OrderStats getOrderStats() {
+        long totalOrders = orderRepository.count();
+        long deliveredOrders = orderRepository.countByStatus(OrderStatus.DELIVERED);
+        long newOrders = orderRepository.countByStatus(OrderStatus.NEW);
+        long inProcessOrders = orderRepository.countByStatus(OrderStatus.IN_PROCESS);
+        long cancelledOrders = orderRepository.countByStatus(OrderStatus.CANCELLED);
+
+        return new OrderStats(totalOrders, deliveredOrders, (newOrders + inProcessOrders), cancelledOrders);
+    }
+
     @Transactional
     public void processNewOrders() {
         List<Order> newOrders = orderRepository.findByStatus(OrderStatus.NEW);
