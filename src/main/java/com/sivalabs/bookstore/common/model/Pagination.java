@@ -54,36 +54,36 @@ public class Pagination<T> {
         if (!hasData() || isFirstPage()) {
             return "#";
         }
-        Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
-        queryParams.put("page", 1);
-        return paginationUrlPrefix + "?" + getQueryString(queryParams);
+        Map<String, Object> queryParamsMap = new HashMap<>(Map.copyOf(this.queryParams));
+        queryParamsMap.put("page", 1);
+        return paginationUrlPrefix + "?" + getQueryString(queryParamsMap);
     }
 
     public String getLastPageLink() {
         if (!hasData() || isLastPage()) {
             return "#";
         }
-        Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
-        queryParams.put("page", pagedResult.totalPages());
-        return paginationUrlPrefix + "?" + getQueryString(queryParams);
+        Map<String, Object> queryParamsMap = new HashMap<>(Map.copyOf(this.queryParams));
+        queryParamsMap.put("page", pagedResult.totalPages());
+        return paginationUrlPrefix + "?" + getQueryString(queryParamsMap);
     }
 
     public String getPreviousPageLink() {
         if (!hasData() || !hasPreviousPage()) {
             return "#";
         }
-        Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
-        queryParams.put("page", pagedResult.currentPageNo() - 1);
-        return paginationUrlPrefix + "?" + getQueryString(queryParams);
+        Map<String, Object> queryParamsMap = new HashMap<>(Map.copyOf(this.queryParams));
+        queryParamsMap.put("page", pagedResult.currentPageNo() - 1);
+        return paginationUrlPrefix + "?" + getQueryString(queryParamsMap);
     }
 
     public String getNextPageLink() {
         if (!hasData() || !hasNextPage()) {
             return "#";
         }
-        Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
-        queryParams.put("page", pagedResult.currentPageNo() + 1);
-        return paginationUrlPrefix + "?" + getQueryString(queryParams);
+        Map<String, Object> queryParamsMap = new HashMap<>(Map.copyOf(this.queryParams));
+        queryParamsMap.put("page", pagedResult.currentPageNo() + 1);
+        return paginationUrlPrefix + "?" + getQueryString(queryParamsMap);
     }
 
     private String getQueryString(Map<String, Object> queryParams) {
