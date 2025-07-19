@@ -3,8 +3,10 @@ package com.sivalabs.bookstore.catalog.core;
 import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import com.sivalabs.bookstore.catalog.core.models.CreateBookCommand;
 import com.sivalabs.bookstore.catalog.core.models.FindBooksQuery;
+import com.sivalabs.bookstore.catalog.core.models.UpdateBookCommand;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,5 +46,20 @@ public class BookService {
     @Cacheable(value = "books", key = "#isbn", unless = "#result == null")
     public Optional<BookDto> findBookByIsbn(String isbn) {
         return bookRepository.findByIsbn(isbn).map(bookMapper::toDto);
+    }
+
+    @Transactional
+    @CacheEvict(value = "books", key = "#cmd.isbn()")
+    public void updateBook(UpdateBookCommand cmd) {
+        BookEntity entity =
+                bookRepository.findByIsbn(cmd.isbn()).orElseThrow(() -> BookNotFoundException.withIsbn(cmd.isbn()));
+
+        entity.setIsbn(cmd.isbn());
+        entity.setName(cmd.name());
+        entity.setDescription(cmd.description());
+        entity.setImageUrl(cmd.imageUrl());
+        entity.setPrice(cmd.price());
+
+        bookRepository.save(entity);
     }
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Book</h1>
+        <a th:href="@{/admin/books}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Books
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${message}" class="alert alert-success" role="alert">
+                <span th:text="${message}">Success message</span>
+            </div>
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text="${error}">Error message</span>
+            </div>
+
+            <form method="post"
+                  th:method="put"
+                  th:action="@{/admin/books/{isbn}(isbn=${bookForm.isbn})}" 
+                  th:object="${bookForm}">
+                <input type="hidden" th:field="*{id}" />
+                
+                <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN*</label>
+                    <input type="text" class="form-control" id="isbn"
+                           readonly="readonly"
+                           th:field="*{isbn}"
+                           th:classappend="${#fields.hasErrors('isbn')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">ISBN Error</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name*</label>
+                    <input type="text" class="form-control" id="name" 
+                           th:field="*{name}"
+                           th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" rows="3" 
+                              th:field="*{description}"
+                              th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">Image URL</label>
+                    <input type="text" class="form-control" id="imageUrl" 
+                           th:field="*{imageUrl}"
+                           th:classappend="${#fields.hasErrors('imageUrl')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">Image URL Error</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price*</label>
+                    <input type="number" step="0.01" class="form-control" id="price" 
+                           th:field="*{price}"
+                           th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a th:href="@{/admin/books}" class="btn btn-secondary me-md-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

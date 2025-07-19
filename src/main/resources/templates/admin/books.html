@@ -7,10 +7,19 @@
 <body>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Products</h1>
+        <h1>Books</h1>
         <a href="#" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Product
+            <i class="fas fa-plus"></i> Add New Book
         </a>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}">Success message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}">Error message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div class="card">
@@ -32,14 +41,14 @@
                         <td th:text="${'$' + book.price}">$10.00</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                <a th:href="@{/admin/books/{isbn}/edit(isbn=${book.isbn})}" class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </div>
                         </td>
                     </tr>
                     <tr th:if="${pagedResult.data.isEmpty()}">
-                        <td colspan="6" class="text-center">No products found</td>
+                        <td colspan="6" class="text-center">No books found</td>
                     </tr>
                     </tbody>
                 </table>
@@ -51,19 +60,19 @@
     <nav aria-label="Page navigation" th:if="${pagedResult.totalPages > 1}" class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!pagedResult.hasPrevious} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/products(page=1,size=${pagedResult.data.size()})}">First</a>
+                <a class="page-link" href="#" th:href="@{/admin/books(page=1,size=${pagedResult.data.size()})}">First</a>
             </li>
             <li class="page-item" th:classappend="${!pagedResult.hasPrevious} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/products(page=${pagedResult.pageNumber - 1},size=${pagedResult.data.size()})}">Previous</a>
+                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.pageNumber - 1},size=${pagedResult.data.size()})}">Previous</a>
             </li>
             <li class="page-item">
                 <span class="page-link" th:text="${pagedResult.pageNumber + ' of ' + pagedResult.totalPages}">1 of 5</span>
             </li>
             <li class="page-item" th:classappend="${!pagedResult.hasNext} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/products(page=${pagedResult.pageNumber + 1},size=${pagedResult.data.size()})}">Next</a>
+                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.pageNumber + 1},size=${pagedResult.data.size()})}">Next</a>
             </li>
             <li class="page-item" th:classappend="${!pagedResult.hasNext} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/products(page=${pagedResult.totalPages},size=${pagedResult.data.size()})}">Last</a>
+                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.totalPages},size=${pagedResult.data.size()})}">Last</a>
             </li>
         </ul>
     </nav>
