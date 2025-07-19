@@ -6,6 +6,8 @@ import com.sivalabs.bookstore.catalog.core.models.FindBooksQuery;
 import com.sivalabs.bookstore.catalog.core.models.UpdateBookCommand;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookService {
+    private static final Logger log = LoggerFactory.getLogger(BookService.class);
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
@@ -30,6 +33,7 @@ public class BookService {
         BookDto book = new BookDto(null, cmd.isbn(), cmd.name(), cmd.description(), cmd.imageUrl(), cmd.price());
         BookEntity entity = bookMapper.toEntity(book);
         bookRepository.save(entity);
+        log.info("Created Book with isbn:{}", cmd.isbn());
     }
 
     @Transactional(readOnly = true)

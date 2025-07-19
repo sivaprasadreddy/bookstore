@@ -2,6 +2,7 @@
 A bookstore application built using SpringBoot as a monolith.
 
 [![GitHub Actions](https://github.com/sivaprasadreddy/bookstore/actions/workflows/maven.yml/badge.svg)](https://github.com/sivaprasadreddy/bookstore/actions/workflows/maven.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sivaprasadreddy_bookstore&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sivaprasadreddy_bookstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sivaprasadreddy_bookstore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sivaprasadreddy_bookstore)
 
 ## Tech Stack:

@@ -32,6 +32,6 @@ class DataInitializer {
             log.info("Data import is disabled.");
             return;
         }
-        booksImporter.importBooks(resource.getInputStream());
+        booksImporter.importBooksAsync(resource.getInputStream());
     }
 }

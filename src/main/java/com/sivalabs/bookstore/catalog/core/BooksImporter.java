@@ -29,6 +29,10 @@ public class BooksImporter {
     }
 
     @Async
+    public void importBooksAsync(InputStream inputStream) throws IOException {
+        this.importBooks(inputStream);
+    }
+
     public void importBooks(InputStream inputStream) throws IOException {
         if (bookRepository.count() > 0) {
             log.info("Book data already imported.");
