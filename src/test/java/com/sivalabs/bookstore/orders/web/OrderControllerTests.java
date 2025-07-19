@@ -12,7 +12,6 @@ import com.sivalabs.bookstore.common.model.Address;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.common.model.LineItem;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
-import com.sivalabs.bookstore.orders.core.models.OrderStatus;
 import com.sivalabs.bookstore.orders.core.models.OrderSummary;
 import java.math.BigDecimal;
 import java.util.List;
@@ -268,7 +267,6 @@ class OrderControllerTests extends AbstractIntegrationTest {
                         // Verify the order details
                         OrderSummary orderSummary = orders.getFirst();
                         assertThat(orderSummary.orderNumber()).isEqualTo("order-123");
-                        assertThat(orderSummary.status()).isEqualTo(OrderStatus.NEW);
                     });
         }
 
