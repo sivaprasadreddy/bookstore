@@ -35,23 +35,23 @@ public class Pagination<T> {
     }
 
     public boolean isFirstPage() {
-        return pagedResult.currentPageNo() == 1;
+        return hasData() && pagedResult.currentPageNo() == 1;
     }
 
     public boolean isLastPage() {
-        return pagedResult.currentPageNo() == pagedResult.totalPages();
+        return hasData() && pagedResult.currentPageNo() == pagedResult.totalPages();
     }
 
     public boolean hasNextPage() {
-        return pagedResult.hasNextPage();
+        return hasData() && pagedResult.hasNextPage();
     }
 
     public boolean hasPreviousPage() {
-        return pagedResult.hasPreviousPage();
+        return hasData() && pagedResult.hasPreviousPage();
     }
 
     public String getFirstPageLink() {
-        if (isFirstPage()) {
+        if (!hasData() || isFirstPage()) {
             return "#";
         }
         Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
@@ -60,7 +60,7 @@ public class Pagination<T> {
     }
 
     public String getLastPageLink() {
-        if (isLastPage()) {
+        if (!hasData() || isLastPage()) {
             return "#";
         }
         Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
@@ -69,7 +69,7 @@ public class Pagination<T> {
     }
 
     public String getPreviousPageLink() {
-        if (!hasPreviousPage()) {
+        if (!hasData() || !hasPreviousPage()) {
             return "#";
         }
         Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
@@ -78,7 +78,7 @@ public class Pagination<T> {
     }
 
     public String getNextPageLink() {
-        if (!hasNextPage()) {
+        if (!hasData() || !hasNextPage()) {
             return "#";
         }
         Map<String, Object> queryParams = new HashMap<>(Map.copyOf(this.queryParams));
