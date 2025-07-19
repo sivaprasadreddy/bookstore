@@ -50,14 +50,28 @@ public class BooksImporter {
                     book.title(),
                     book.description(),
                     book.coverImg(),
-                    RandomGenerator.getBigDecimal());
+                    book.getPriceAsBigDecimal());
         } catch (Exception e) {
             throw new BooksImportException("Error parsing book: {}", e);
         }
     }
 
     record Book(
-            Long id, String title, String description, String language, @JsonProperty("cover_img") String coverImg) {}
+            Long id,
+            String title,
+            String description,
+            String language,
+            @JsonProperty("cover_img") String coverImg,
+            String price) {
+        public BigDecimal getPriceAsBigDecimal() {
+            try {
+                return new BigDecimal(price);
+            } catch (Exception e) {
+                log.warn("Error parsing price: '{}' for id:{}, using random value instead", price, id);
+                return RandomGenerator.getBigDecimal();
+            }
+        }
+    }
 
     record RandomGenerator() {
         static SecureRandom r = new SecureRandom();

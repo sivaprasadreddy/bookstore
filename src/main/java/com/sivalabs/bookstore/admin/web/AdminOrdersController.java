@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.admin.web;
 
+import com.sivalabs.bookstore.common.exceptions.ResourceNotFoundException;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import com.sivalabs.bookstore.common.model.Pagination;
 import com.sivalabs.bookstore.orders.OrdersAPI;
@@ -40,13 +41,13 @@ class AdminOrdersController {
     String showOrderDetails(@PathVariable String orderNumber, Model model) {
         OrderDto order = ordersAPI
                 .findOrderByOrderNumber(orderNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderNumber));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderNumber));
         model.addAttribute("order", order);
         model.addAttribute("statuses", OrderStatus.values());
         return "admin/order-details";
     }
 
-    @PutMapping("/orders/{orderNumber}/update-status")
+    @PutMapping("/orders/{orderNumber}/status")
     String updateOrderStatus(
             @PathVariable String orderNumber,
             @RequestParam OrderStatus status,

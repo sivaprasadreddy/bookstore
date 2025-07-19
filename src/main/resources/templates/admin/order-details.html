@@ -120,7 +120,7 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <form th:action="@{/admin/orders/{orderNumber}/update-status(orderNumber=${order.orderNumber()})}"
+                        <form th:action="@{/admin/orders/{orderNumber}/status(orderNumber=${order.orderNumber()})}"
                               th:method="put"
                               method="post" class="mb-3">
                             <div class="mb-3">
