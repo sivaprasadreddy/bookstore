@@ -57,25 +57,7 @@
     </div>
 
     <!-- Pagination -->
-    <nav aria-label="Page navigation" th:if="${pagedResult.totalPages > 1}" class="mt-4">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!pagedResult.hasPrevious} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/books(page=1,size=${pagedResult.data.size()})}">First</a>
-            </li>
-            <li class="page-item" th:classappend="${!pagedResult.hasPrevious} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.pageNumber - 1},size=${pagedResult.data.size()})}">Previous</a>
-            </li>
-            <li class="page-item">
-                <span class="page-link" th:text="${pagedResult.pageNumber + ' of ' + pagedResult.totalPages}">1 of 5</span>
-            </li>
-            <li class="page-item" th:classappend="${!pagedResult.hasNext} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.pageNumber + 1},size=${pagedResult.data.size()})}">Next</a>
-            </li>
-            <li class="page-item" th:classappend="${!pagedResult.hasNext} ? disabled : ''">
-                <a class="page-link" href="#" th:href="@{/admin/books(page=${pagedResult.totalPages},size=${pagedResult.data.size()})}">Last</a>
-            </li>
-        </ul>
-    </nav>
+    <div th:replace="~{partials/pagination :: pagination}"></div>
 </div>
 </body>
 </html>

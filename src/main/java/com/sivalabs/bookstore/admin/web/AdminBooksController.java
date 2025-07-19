@@ -5,6 +5,7 @@ import com.sivalabs.bookstore.catalog.core.models.BookDto;
 import com.sivalabs.bookstore.catalog.core.models.UpdateBookCommand;
 import com.sivalabs.bookstore.common.exceptions.ResourceNotFoundException;
 import com.sivalabs.bookstore.common.model.PagedResult;
+import com.sivalabs.bookstore.common.model.Pagination;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,9 @@ class AdminBooksController {
             @RequestParam(name = "size", defaultValue = "10") int pageSize,
             Model model) {
         PagedResult<BookDto> pagedResult = catalogAPI.findBooks(pageNo, pageSize);
+        var pagination = new Pagination<>(pagedResult, "/admin/books");
         model.addAttribute("pagedResult", pagedResult);
+        model.addAttribute("pagination", pagination);
         return "admin/books";
     }
 

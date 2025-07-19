@@ -1,6 +1,7 @@
 package com.sivalabs.bookstore.admin.web;
 
 import com.sivalabs.bookstore.common.model.PagedResult;
+import com.sivalabs.bookstore.common.model.Pagination;
 import com.sivalabs.bookstore.orders.OrdersAPI;
 import com.sivalabs.bookstore.orders.core.models.OrderDto;
 import com.sivalabs.bookstore.orders.core.models.OrderStatus;
@@ -29,7 +30,9 @@ class AdminOrdersController {
             @RequestParam(name = "size", defaultValue = "10") int pageSize,
             Model model) {
         PagedResult<OrderSummary> pagedResult = ordersAPI.findAllOrders(pageNo, pageSize);
+        var pagination = new Pagination<>(pagedResult, "/admin/orders");
         model.addAttribute("pagedResult", pagedResult);
+        model.addAttribute("pagination", pagination);
         return "admin/orders";
     }
 

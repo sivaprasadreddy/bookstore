@@ -1,17 +1,28 @@
 <div th:fragment="pagination">
-    <nav aria-label="Page navigation" th:if="${booksPage.totalPages() > 1 }">
+    <nav aria-label="Page navigation" th:if="${pagination.totalPages() > 1 }">
         <ul class="pagination pagination justify-content-center">
-            <li class="page-item" th:classappend="${!booksPage.hasPrevious()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/books?page=1'}">First</a>
+            <li class="page-item" th:classappend="${!pagination.hasPreviousPage()} ? disabled : ''">
+                <a class="page-link" href="#"
+                   th:href="@{${pagination.getFirstPageLink()}}">First</a>
             </li>
-            <li class="page-item" th:classappend="${!booksPage.hasPrevious()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.pageNumber() - 1)}">Previous</a>
+            <li class="page-item" th:classappend="${!pagination.hasPreviousPage()} ? disabled : ''">
+                <a class="page-link" href="#"
+                   th:href="@{${pagination.getPreviousPageLink()}}">Previous</a>
             </li>
-            <li class="page-item" th:classappend="${!booksPage.hasNext()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.pageNumber() + 1)}">Next</a>
+            <li class="page-item disabled">
+                <span class="page-link">
+                    <span>Page</span> <span id="current-page" th:text="${pagination.currentPageNo()}">1</span>
+                    <span>of</span> <span id="total-pages" th:text="${pagination.totalPages()}">1</span>
+                    (<span id="total-elements" th:text="${pagination.totalElements()}">1</span>)
+                </span>
             </li>
-            <li class="page-item" th:classappend="${!booksPage.hasNext()} ? disabled : ''">
-                <a class="page-link" href="#" th:href="${'/books?page='+(booksPage.totalPages())}">Last</a>
+            <li class="page-item" th:classappend="${!pagination.hasNextPage()} ? disabled : ''">
+                <a class="page-link" href="#"
+                   th:href="@{${pagination.getNextPageLink()}}">Next</a>
+            </li>
+            <li class="page-item" th:classappend="${!pagination.hasNextPage()} ? disabled : ''">
+                <a class="page-link" href="#"
+                   th:href="@{${pagination.getLastPageLink()}}">Last</a>
             </li>
         </ul>
     </nav>

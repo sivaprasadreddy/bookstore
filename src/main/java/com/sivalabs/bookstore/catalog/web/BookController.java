@@ -4,6 +4,7 @@ import com.sivalabs.bookstore.ApplicationProperties;
 import com.sivalabs.bookstore.catalog.core.BookNotFoundException;
 import com.sivalabs.bookstore.catalog.core.BookService;
 import com.sivalabs.bookstore.catalog.core.models.FindBooksQuery;
+import com.sivalabs.bookstore.common.model.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,9 @@ class BookController {
         log.info("Fetching books for page: {}", page);
         var query = new FindBooksQuery(page, properties.pageSize());
         var booksPage = bookService.findBooks(query);
+        var pagination = new Pagination<>(booksPage, "/books");
         model.addAttribute("booksPage", booksPage);
+        model.addAttribute("pagination", pagination);
         return "catalog/books";
     }
 
