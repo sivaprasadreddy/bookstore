@@ -10,15 +10,20 @@ import org.testcontainers.utility.DockerImageName;
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
 
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+
+    static GenericContainer<?> redis =
+            new GenericContainer<>(DockerImageName.parse("redis:8.0.3")).withExposedPorts(6379);
+
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgres() {
-        return new PostgreSQLContainer<>("postgres:17-alpine");
+        return postgres;
     }
 
     @Bean
     @ServiceConnection(name = "redis")
     GenericContainer<?> redisContainer() {
-        return new GenericContainer<>(DockerImageName.parse("redis:8.0.3")).withExposedPorts(6379);
+        return redis;
     }
 }
