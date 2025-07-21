@@ -5,11 +5,12 @@ import com.sivalabs.bookstore.catalog.core.BooksImporter;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
 
 @Configuration
 class DataInitializer {
@@ -23,15 +24,21 @@ class DataInitializer {
     }
 
     @Bean
-    ApplicationRunner catalogInitializer(@Value("classpath:/data/books.jsonlines") Resource resource) {
-        return args -> importData(resource);
+    ApplicationRunner catalogInitializer() {
+        return args -> importData();
     }
 
-    private void importData(Resource resource) throws IOException {
+    private void importData() throws IOException {
         if (!properties.dataImportEnabled()) {
             log.info("Data import is disabled.");
             return;
         }
+        String importFile = properties.dataImportFile();
+        if (!StringUtils.hasLength(importFile)) {
+            log.info("Import file is empty. Skipping import.");
+            return;
+        }
+        Resource resource = new ClassPathResource(importFile);
         booksImporter.importBooksAsync(resource.getInputStream());
     }
 }
