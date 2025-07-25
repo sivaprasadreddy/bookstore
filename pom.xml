@@ -18,7 +18,7 @@
     <properties>
         <java.version>24</java.version>
         <dockerImageName>sivaprasadreddy/bookstore</dockerImageName>
-        <spring-modulith.version>1.4.1</spring-modulith.version>
+        <spring-modulith.version>1.4.2</spring-modulith.version>
         <htmx-spring-boot-thymeleaf.version>4.0.1</htmx-spring-boot-thymeleaf.version>
         <bootstrap.version>5.3.7</bootstrap.version>
         <htmx.version>2.0.6</htmx.version>
