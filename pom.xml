@@ -23,7 +23,7 @@
         <bootstrap.version>5.3.7</bootstrap.version>
         <htmx.version>2.0.6</htmx.version>
         <jquery.version>3.7.1</jquery.version>
-        <font_awesome.version>6.7.2</font_awesome.version>
+        <font_awesome.version>7.0.0</font_awesome.version>
         <error-prone.version>2.41.0</error-prone.version>
         <spotless.version>2.46.1</spotless.version>
         <archunit.version>1.4.1</archunit.version>
