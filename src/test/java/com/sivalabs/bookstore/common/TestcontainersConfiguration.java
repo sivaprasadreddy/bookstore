@@ -13,7 +13,7 @@ public class TestcontainersConfiguration {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
 
     static GenericContainer<?> redis =
-            new GenericContainer<>(DockerImageName.parse("redis:8.0.3")).withExposedPorts(6379);
+            new GenericContainer<>(DockerImageName.parse("redis:8.2.0")).withExposedPorts(6379);
 
     @Bean
     @ServiceConnection
