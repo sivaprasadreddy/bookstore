@@ -36,7 +36,7 @@ services:
       - "5432:5432"
 
   redis:
-    image: redis:8.2.0
+    image: redis:8.2.1
     ports:
       - "6379:6379"
     environment:
