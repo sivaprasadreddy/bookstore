@@ -1,11 +1,12 @@
 package com.sivalabs.bookstore.users.core;
 
+import com.sivalabs.bookstore.common.model.BaseEntity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-class User implements Serializable {
+class User extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq")
@@ -23,9 +24,6 @@ class User implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @Version
-    private long version;
 
     public User() {}
 

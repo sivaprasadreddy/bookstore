@@ -1,17 +1,17 @@
 package com.sivalabs.bookstore.orders.core;
 
 import com.sivalabs.bookstore.common.model.Address;
+import com.sivalabs.bookstore.common.model.BaseEntity;
 import com.sivalabs.bookstore.common.model.Customer;
 import com.sivalabs.bookstore.orders.core.models.OrderStatus;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Set;
 import org.jspecify.annotations.NullUnmarked;
 
 @Entity
 @Table(name = "orders")
 @NullUnmarked
-class Order {
+class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")
@@ -53,15 +53,6 @@ class Order {
 
     private String comments;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @Version
-    private long version;
-
     public Long getId() {
         return this.id;
     }
@@ -98,14 +89,6 @@ class Order {
         return this.comments;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return this.updatedAt;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -132,13 +115,5 @@ class Order {
 
     public void setComments(String comments) {
         this.comments = comments;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

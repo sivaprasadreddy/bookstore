@@ -1,5 +1,6 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.common.model.BaseEntity;
 import com.sivalabs.bookstore.orders.core.models.PaymentStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import org.jspecify.annotations.NullUnmarked;
 @Entity
 @Table(name = "payments")
 @NullUnmarked
-class Payment {
+class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_id_generator")
@@ -36,14 +37,8 @@ class Payment {
     @Column(name = "error_description")
     private String errorDescription;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
-
-    @Version
-    private long version;
 
     protected Payment() {}
 
@@ -53,7 +48,6 @@ class Payment {
         this.amount = amount;
         this.currency = currency;
         this.status = PaymentStatus.INITIATED;
-        this.createdAt = LocalDateTime.now();
     }
 
     static Payment initiated(Order order, long amount, String currency) {

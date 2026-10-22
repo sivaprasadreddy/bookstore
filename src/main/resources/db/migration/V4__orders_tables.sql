@@ -25,13 +25,15 @@ create table orders
 
 create table order_items
 (
-    id        bigint  not null default nextval('order_item_id_seq'),
-    isbn      varchar not null,
-    name      varchar not null,
-    price     numeric not null,
-    image_url varchar,
-    quantity  integer not null,
-    order_id  bigint  not null references orders (id),
-    version   bigint  not null default 0,
+    id         bigint    not null default nextval('order_item_id_seq'),
+    isbn       varchar   not null,
+    name       varchar   not null,
+    price      numeric   not null,
+    image_url  varchar,
+    quantity   integer   not null,
+    order_id   bigint    not null references orders (id),
+    created_at timestamp not null default CURRENT_TIMESTAMP,
+    updated_at timestamp,
+    version    bigint    not null default 0,
     primary key (id)
 );

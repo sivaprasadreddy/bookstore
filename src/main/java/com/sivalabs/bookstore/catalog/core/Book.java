@@ -1,11 +1,12 @@
 package com.sivalabs.bookstore.catalog.core;
 
+import com.sivalabs.bookstore.common.model.BaseEntity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "books")
-class Book {
+class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq")
@@ -23,9 +24,6 @@ class Book {
 
     @Column(nullable = false)
     private BigDecimal price;
-
-    @Version
-    private long version;
 
     public Book(Long id, String isbn, String name, String description, String imageUrl, BigDecimal price) {
         this.id = id;

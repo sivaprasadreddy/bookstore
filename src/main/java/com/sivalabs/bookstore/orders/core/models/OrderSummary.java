@@ -1,5 +1,5 @@
 package com.sivalabs.bookstore.orders.core.models;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-public record OrderSummary(Long id, String orderNumber, OrderStatus status, LocalDateTime createdAt) {}
+public record OrderSummary(Long id, String orderNumber, OrderStatus status, Instant createdAt) {}

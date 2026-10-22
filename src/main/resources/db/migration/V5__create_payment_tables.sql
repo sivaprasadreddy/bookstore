@@ -9,7 +9,8 @@ create table payments
     currency          varchar(3)  not null,
     status            varchar(20) not null,
     error_description text,
-    created_at        timestamp   not null default current_timestamp,
+    created_at        timestamp   not null default CURRENT_TIMESTAMP,
+    updated_at        timestamp,
     completed_at      timestamp,
     version           bigint      not null default 0,
     primary key (id)

@@ -1,11 +1,12 @@
 package com.sivalabs.bookstore.orders.core;
 
+import com.sivalabs.bookstore.common.model.BaseEntity;
 import com.sivalabs.bookstore.common.model.LineItem;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "order_items")
-class OrderItem {
+class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_id_generator")
@@ -26,9 +27,6 @@ class OrderItem {
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
-
-    @Version
-    private long version;
 
     public Long getId() {
         return this.id;
