@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "books")
-class BookEntity {
+class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq")
@@ -24,7 +24,10 @@ class BookEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    public BookEntity(Long id, String isbn, String name, String description, String imageUrl, BigDecimal price) {
+    @Version
+    private long version;
+
+    public Book(Long id, String isbn, String name, String description, String imageUrl, BigDecimal price) {
         this.id = id;
         this.isbn = isbn;
         this.name = name;
@@ -33,7 +36,7 @@ class BookEntity {
         this.price = price;
     }
 
-    public BookEntity() {}
+    public Book() {}
 
     public Long getId() {
         return id;

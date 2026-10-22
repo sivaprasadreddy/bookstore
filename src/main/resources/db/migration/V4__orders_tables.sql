@@ -19,6 +19,7 @@ create table orders
     comments                  text,
     created_at                timestamp not null default current_timestamp,
     updated_at                timestamp,
+    version                   bigint    not null default 0,
     primary key (id)
 );
 
@@ -31,5 +32,6 @@ create table order_items
     image_url varchar,
     quantity  integer not null,
     order_id  bigint  not null references orders (id),
+    version   bigint  not null default 0,
     primary key (id)
 );

@@ -27,6 +27,9 @@ class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Version
+    private long version;
+
     public Long getId() {
         return this.id;
     }

@@ -23,7 +23,7 @@ class WebSecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain webSecurityFilterChain(HttpSecurity http) {
         String[] unsecuredPaths = {
             "/login", "/registration", "/registration/success", "/add-to-cart",
         };

@@ -1,19 +1,11 @@
 package com.sivalabs.bookstore.users.core;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq")
@@ -31,6 +23,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Version
+    private long version;
 
     public User() {}
 

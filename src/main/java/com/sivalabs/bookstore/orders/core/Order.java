@@ -59,6 +59,9 @@ class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Version
+    private long version;
+
     public Long getId() {
         return this.id;
     }

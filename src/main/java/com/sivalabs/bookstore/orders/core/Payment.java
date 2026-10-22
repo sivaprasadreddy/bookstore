@@ -42,6 +42,9 @@ class Payment {
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
+    @Version
+    private long version;
+
     protected Payment() {}
 
     private Payment(Order order, long amount, String currency) {

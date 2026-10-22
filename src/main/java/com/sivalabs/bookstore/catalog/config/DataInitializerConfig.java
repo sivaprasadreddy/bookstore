@@ -13,12 +13,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
 @Configuration
-class DataInitializer {
-    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
+class DataInitializerConfig {
+    private static final Logger log = LoggerFactory.getLogger(DataInitializerConfig.class);
     private final BooksImporter booksImporter;
     private final ApplicationProperties properties;
 
-    DataInitializer(BooksImporter booksImporter, ApplicationProperties properties) {
+    DataInitializerConfig(BooksImporter booksImporter, ApplicationProperties properties) {
         this.booksImporter = booksImporter;
         this.properties = properties;
     }

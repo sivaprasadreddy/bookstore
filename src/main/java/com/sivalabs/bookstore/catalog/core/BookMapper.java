@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 class BookMapper {
 
-    public BookDto toDto(BookEntity book) {
+    public BookDto toDto(Book book) {
         return new BookDto(
                 book.getId(),
                 book.getIsbn(),

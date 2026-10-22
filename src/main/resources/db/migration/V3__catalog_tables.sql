@@ -8,5 +8,6 @@ create table books
     description varchar,
     image_url   varchar,
     price       numeric not null,
+    version     bigint  not null default 0,
     primary key (id)
 );

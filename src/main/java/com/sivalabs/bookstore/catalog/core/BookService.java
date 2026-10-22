@@ -30,8 +30,7 @@ public class BookService {
 
     @Transactional
     public void createBook(CreateBookCommand cmd) {
-        BookEntity entity =
-                new BookEntity(null, cmd.isbn(), cmd.name(), cmd.description(), cmd.imageUrl(), cmd.price());
+        Book entity = new Book(null, cmd.isbn(), cmd.name(), cmd.description(), cmd.imageUrl(), cmd.price());
         bookRepository.save(entity);
         log.info("Created Book with isbn:{}", cmd.isbn());
     }
@@ -55,7 +54,7 @@ public class BookService {
     @Transactional
     @CacheEvict(value = "books", key = "#cmd.isbn()")
     public void updateBook(UpdateBookCommand cmd) {
-        BookEntity entity =
+        Book entity =
                 bookRepository.findByIsbn(cmd.isbn()).orElseThrow(() -> BookNotFoundException.withIsbn(cmd.isbn()));
 
         entity.setIsbn(cmd.isbn());

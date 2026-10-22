@@ -25,19 +25,19 @@ class BookRepositoryTest {
     void setUp() {
         bookRepository.deleteAllInBatch();
 
-        bookRepository.save(new BookEntity(null, "P100", "Book 1", "Book 1 desc", null, BigDecimal.TEN));
-        bookRepository.save(new BookEntity(null, "P101", "Book 2", "Book 2 desc", null, BigDecimal.valueOf(24)));
+        bookRepository.save(new Book(null, "P100", "Book 1", "Book 1 desc", null, BigDecimal.TEN));
+        bookRepository.save(new Book(null, "P101", "Book 2", "Book 2 desc", null, BigDecimal.valueOf(24)));
     }
 
     @Test
     void shouldFailToSaveBookWithDuplicateIsbn() {
-        var product = new BookEntity(null, "P100", "Book name", "Book desc", null, BigDecimal.TEN);
+        var product = new Book(null, "P100", "Book name", "Book desc", null, BigDecimal.TEN);
         assertThrows(DataIntegrityViolationException.class, () -> bookRepository.saveAndFlush(product));
     }
 
     @Test
     void shouldGetBookByIsbn() {
-        Optional<BookEntity> optionalBook = bookRepository.findByIsbn("P100");
+        Optional<Book> optionalBook = bookRepository.findByIsbn("P100");
         assertThat(optionalBook).isNotEmpty();
         assertThat(optionalBook.get().getIsbn()).isEqualTo("P100");
         assertThat(optionalBook.get().getName()).isEqualTo("Book 1");

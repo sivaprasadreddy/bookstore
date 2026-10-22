@@ -6,9 +6,9 @@ import com.sivalabs.bookstore.catalog.core.models.FindBooksQuery;
 import com.sivalabs.bookstore.catalog.core.models.UpdateBookCommand;
 import com.sivalabs.bookstore.common.model.PagedResult;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class CatalogAPI {
 
     private final BookService bookService;
