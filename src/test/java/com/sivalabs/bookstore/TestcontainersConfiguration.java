@@ -19,6 +19,6 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection(name = "redis")
     GenericContainer<?> redisContainer() {
-        return new GenericContainer<>(DockerImageName.parse("redis:8.10.0")).withExposedPorts(6379);
+        return new GenericContainer<>(DockerImageName.parse("redis:8.10.2")).withExposedPorts(6379);
     }
 }
