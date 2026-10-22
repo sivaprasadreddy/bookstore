@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 class PaymentController {
 
+    private static final String PAYMENT_VIEW = "orders/payment";
+
     private final PaymentService paymentService;
     private final OrderService orderService;
     private final UsersAPI usersAPI;
@@ -37,7 +39,7 @@ class PaymentController {
     String showPaymentPage(@PathVariable String orderNumber, Model model) {
         model.addAttribute("order", getUserOrder(orderNumber));
         model.addAttribute("paymentForm", PaymentForm.empty());
-        return "orders/payment";
+        return PAYMENT_VIEW;
     }
 
     @PostMapping("/orders/{orderNumber}/payment")
@@ -49,14 +51,14 @@ class PaymentController {
         OrderDto order = getUserOrder(orderNumber);
         model.addAttribute("order", order);
         if (bindingResult.hasErrors()) {
-            return "orders/payment";
+            return PAYMENT_VIEW;
         }
 
         long amountInPaise = order.getTotalAmount().movePointRight(2).longValueExact();
         var result = paymentService.processPayment(orderNumber, amountInPaise, paymentForm.toCommand());
         if (!result.successful()) {
             bindingResult.reject("payment.failed", result.message());
-            return "orders/payment";
+            return PAYMENT_VIEW;
         }
         return "redirect:/orders/" + orderNumber + "?payment=success";
     }

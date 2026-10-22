@@ -79,7 +79,8 @@ public class BooksImporter {
 
     record RandomGenerator() {
         static SecureRandom r = new SecureRandom();
-        static int max = 100, min = 10;
+        static int max = 100;
+        static int min = 10;
 
         public static int getInt() {
             return r.nextInt(max - min + 1) + min;

@@ -54,17 +54,13 @@ public class CacheConfig implements BeanClassLoaderAware {
     @Primary
     public JsonMapper jsonMapper() {
         var typeValidatorBbuilder = BasicPolymorphicTypeValidator.builder()
-                // .allowIfSubType("com.sivalabs.")
                 .allowIfBaseType(Object.class)
                 .allowIfSubTypeIsArray();
-        // var typeValidator = typeValidatorBbuilder.build();
 
         return JsonMapper.builder()
                 .addModules(SecurityJacksonModules.getModules(this.loader, typeValidatorBbuilder))
-                // .addMixIn(SecurityUser.class, SecurityUserMixin.class)
                 .enable(IGNORE_UNKNOWN)
                 .disable(FAIL_ON_UNKNOWN_PROPERTIES)
-                // .activateDefaultTypingAsProperty(typeValidator, DefaultTyping.NON_CONCRETE_AND_ARRAYS, "@class")
                 .build();
     }
 }
