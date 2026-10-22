@@ -1,0 +1,51 @@
+name: 'bookstore'
+services:
+  bookstore:
+    image: sivaprasadreddy/bookstore
+    container_name: bookstore
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://bookstore-postgres:5432/postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      METRICS_EXPORT_URL: http://grafana-lgtm:4318/v1/metrics
+      TRACES_EXPORT_URL: http://grafana-lgtm:4318/v1/traces
+      LOGS_EXPORT_URL: http://grafana-lgtm:4318/v1/logs
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - bookstore-postgres
+      - redis
+      - grafana-lgtm
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  bookstore-postgres:
+    image: postgres:18-alpine
+    container_name: bookstore-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8.10.0
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
+
+  grafana-lgtm:
+    image: 'grafana/otel-lgtm:0.37.0'
+    ports:
+      - '3000:3000'
+      - '4317:4317'
+      - '4318:4318'

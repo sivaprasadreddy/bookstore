@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<body>
+<div layout:fragment="content">
+    <div class="mb-4 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-slate-900">Books</h1>
+        <a href="#" class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">
+            <i class="fas fa-plus"></i> <span class="ml-2">Add New Book</span>
+        </a>
+    </div>
+
+    <div th:if="${message}" class="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700" role="alert">
+        <span th:text="${message}">Success message</span>
+    </div>
+    <div th:if="${error}" class="mb-3 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+        <span th:text="${error}">Error message</span>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <thead class="bg-slate-900 text-left text-slate-100">
+                <tr>
+                    <th class="px-4 py-3 font-semibold">ISBN</th>
+                    <th class="px-4 py-3 font-semibold">Name</th>
+                    <th class="px-4 py-3 font-semibold">Price</th>
+                    <th class="px-4 py-3 font-semibold">Actions</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                <tr th:each="book : ${pagedResult.data}" class="hover:bg-slate-50">
+                    <td class="px-4 py-3" th:text="${book.isbn}">ISBN123</td>
+                    <td class="px-4 py-3" th:text="${book.name}">Book Name</td>
+                    <td class="px-4 py-3" th:text="${'$' + book.price}">$10.00</td>
+                    <td class="px-4 py-3">
+                        <a th:href="@{/admin/books/{isbn}/edit(isbn=${book.isbn})}" class="inline-flex items-center rounded-md border border-sky-600 px-3 py-1 text-sky-700 transition hover:bg-sky-50">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${pagedResult.data.isEmpty()}">
+                    <td class="px-4 py-3 text-center text-slate-500" colspan="6">No books found</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="~{partials/pagination :: pagination}"></div>
+</div>
+</body>
+</html>

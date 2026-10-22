@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="mx-auto w-full max-w-4xl">
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div class="bg-slate-900 px-6 py-4 text-center text-white">
+                <h2 class="text-2xl font-semibold">Place Order</h2>
+            </div>
+            <div class="p-6">
+                <form class="grid grid-cols-1 gap-4 md:grid-cols-2" method="post" th:action="@{/orders}" th:object="${orderForm}">
+                    <div>
+                        <label for="customerName" class="mb-1 block text-sm font-medium text-slate-700">Customer Name</label>
+                        <input type="text" class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="customerName"
+                               name="customer.name"
+                               th:field="*{customer.name}"/>
+                        <p th:if="${#fields.hasErrors('customer.name')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{customer.name}"></p>
+                    </div>
+                    <div>
+                        <label for="customerEmail" class="mb-1 block text-sm font-medium text-slate-700">Customer Email</label>
+                        <input type="email" class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="customerEmail"
+                               name="customer.email"
+                               th:field="*{customer.email}">
+                        <p th:if="${#fields.hasErrors('customer.email')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{customer.email}"></p>
+                    </div>
+                    <div>
+                        <label for="customerPhone" class="mb-1 block text-sm font-medium text-slate-700">Customer Phone</label>
+                        <input type="text" class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="customerPhone"
+                               name="customer.phone"
+                               th:field="*{customer.phone}">
+                        <p th:if="${#fields.hasErrors('customer.phone')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{customer.phone}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressLine1" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Line 1</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressLine1"
+                               name="deliveryAddress.addressLine1"
+                               th:field="*{deliveryAddress.addressLine1}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.addressLine1')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.addressLine1}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressLine2" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Line 2</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressLine2"
+                               name="deliveryAddress.addressLine2"
+                               th:field="*{deliveryAddress.addressLine2}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.addressLine2')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.addressLine2}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressCity" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address City</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressCity"
+                               name="deliveryAddress.city"
+                               th:field="*{deliveryAddress.city}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.city')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.city}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressState" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address State</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressState"
+                               name="deliveryAddress.state"
+                               th:field="*{deliveryAddress.state}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.state')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.state}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressZipCode" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address ZipCode</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressZipCode"
+                               name="deliveryAddress.zipCode"
+                               th:field="*{deliveryAddress.zipCode}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.zipCode')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.zipCode}"></p>
+                    </div>
+                    <div>
+                        <label for="deliveryAddressCountry" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Country</label>
+                        <input class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               id="deliveryAddressCountry"
+                               name="deliveryAddress.country"
+                               th:field="*{deliveryAddress.country}"/>
+                        <p th:if="${#fields.hasErrors('deliveryAddress.country')}" class="mt-1 text-sm text-rose-600"
+                           th:errors="*{deliveryAddress.country}"></p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Continue to Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

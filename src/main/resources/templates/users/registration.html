@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Registration</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="mx-auto w-full max-w-xl">
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div class="bg-slate-900 px-6 py-4 text-center text-white">
+                <h3 class="text-xl font-semibold">Registration Form</h3>
+            </div>
+            <div class="p-6">
+                <div class="mb-3 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert" th:if="${errorMessage}">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <form id="registrationForm" method="post" th:action="@{/registration}" th:object="${user}">
+
+                    <div class="mb-4">
+                        <label for="email" class="mb-1 block text-sm font-medium text-slate-700">Email*</label>
+                        <input type="text" id="email" name="email"
+                               th:field="*{email}"
+                               class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               th:classappend="${#fields.hasErrors('email')} ? ' border-rose-500' : ''"
+                               placeholder="Enter email" />
+                        <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="mb-1 block text-sm font-medium text-slate-700">Password*</label>
+                        <input type="password" id="password" name="password"
+                               th:field="*{password}"
+                               class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               th:classappend="${#fields.hasErrors('password')} ? ' border-rose-500' : ''"
+                               placeholder="Enter password" />
+                        <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="mb-1 block text-sm font-medium text-slate-700">Name*</label>
+                        <input type="text" id="name" name="name"
+                               th:field="*{name}"
+                               class="w-full rounded-md border border-slate-300 px-3 py-2"
+                               th:classappend="${#fields.hasErrors('name')} ? ' border-rose-500' : ''"
+                               placeholder="Enter name"/>
+                        <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+                    </div>
+                    <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Submit</button>
+                </form>
+                <div class="mt-4 text-sm text-slate-700">
+                    Already registered? <a class="font-semibold text-sky-700 hover:underline" href="/login">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

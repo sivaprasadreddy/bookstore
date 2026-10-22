@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div>
+        <h2 class="mb-4 text-2xl font-bold text-slate-900">Order Statistics</h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-xl bg-sky-600 p-4 text-white shadow-sm">
+                <div class="text-center text-lg font-bold">Total Orders</div>
+                <div class="mt-2 text-center">
+                    <h1 class="text-4xl font-bold" th:text="${orderStats.totalOrders}">0</h1>
+                </div>
+            </div>
+            <div class="rounded-xl bg-emerald-600 p-4 text-white shadow-sm">
+                <div class="text-center text-lg font-bold">Delivered Orders</div>
+                <div class="mt-2 text-center">
+                    <h1 class="text-4xl font-bold" th:text="${orderStats.deliveredOrders}">0</h1>
+                </div>
+            </div>
+            <div class="rounded-xl bg-amber-500 p-4 text-white shadow-sm">
+                <div class="text-center text-lg font-bold">Pending Orders</div>
+                <div class="mt-2 text-center">
+                    <h1 class="text-4xl font-bold" th:text="${orderStats.pendingOrders}">0</h1>
+                </div>
+            </div>
+            <div class="rounded-xl bg-rose-600 p-4 text-white shadow-sm">
+                <div class="text-center text-lg font-bold">Cancelled Orders</div>
+                <div class="mt-2 text-center">
+                    <h1 class="text-4xl font-bold" th:text="${orderStats.cancelledOrders}">0</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

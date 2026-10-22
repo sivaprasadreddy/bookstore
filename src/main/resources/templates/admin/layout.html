@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>BookStore - Admin</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/webjars/font-awesome/css/all.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+<main>
+    <nav class="fixed inset-x-0 top-0 z-50 border-b border-slate-700 bg-slate-900 text-slate-100 shadow">
+        <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+            <a class="flex items-center gap-2 text-lg font-bold" href="#" th:href="@{/}">
+                <img src="/images/books.png" alt="Books Logo" width="40" height="40"> BookStore
+            </a>
+
+            <button id="admin-menu-toggle" type="button"
+                    class="inline-flex items-center rounded-md border border-slate-600 px-3 py-2 text-sm md:hidden"
+                    aria-controls="admin-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div id="admin-menu" class="hidden w-full md:block md:w-auto">
+                <ul class="mt-4 flex flex-col gap-2 md:mt-0 md:flex-row md:items-center md:gap-4">
+                    <li>
+                        <a class="block rounded px-3 py-2 text-sm font-medium transition hover:bg-slate-800" href="/cart" th:href="@{/cart}">
+                            <th:block th:insert="~{partials/cart-item-count}"></th:block>
+                        </a>
+                    </li>
+                    <li class="relative" sec:authorize="isAuthenticated()">
+                        <button id="admin-user-dropdown-toggle" type="button"
+                                class="flex items-center gap-2 rounded px-3 py-2 text-sm font-medium transition hover:bg-slate-800"
+                                aria-expanded="false" aria-controls="admin-user-dropdown-menu">
+                            <img src="/images/user.jpg" alt="User Avatar" width="30" height="30" class="h-8 w-8 rounded-full object-cover">
+                            <span sec:authentication="principal.name">User</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <ul id="admin-user-dropdown-menu" class="absolute right-0 mt-2 hidden w-52 overflow-hidden rounded-md border border-slate-200 bg-white text-slate-800 shadow-lg">
+                            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a class="block px-4 py-2 text-sm hover:bg-slate-100" href="/admin">
+                                    <i class="fas fa-cog"></i> Administration
+                                </a>
+                            </li>
+                            <li>
+                                <a class="block px-4 py-2 text-sm hover:bg-slate-100" href="/orders">
+                                    <i class="fas fa-list-alt"></i> My Orders
+                                </a>
+                            </li>
+                            <li><hr class="border-slate-200"></li>
+                            <li>
+                                <a class="block px-4 py-2 text-sm hover:bg-slate-100" th:href="@{/logout}">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-8 pt-24 sm:px-6 md:flex-row lg:px-8">
+        <nav id="sidebar" class="w-full shrink-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:sticky md:top-24 md:w-64 md:self-start">
+            <h3 class="mb-4 px-2 text-lg font-semibold">Administration</h3>
+            <ul class="space-y-1">
+                <li>
+                    <a class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900" th:href="@{/admin}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900" th:href="@{/admin/books}">
+                        <i class="fas fa-box"></i> Books
+                    </a>
+                </li>
+                <li>
+                    <a class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900" th:href="@{/admin/orders}">
+                        <i class="fas fa-shopping-cart"></i> Orders
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <section class="min-w-0 flex-1">
+            <div layout:fragment="content">
+                <!-- Your Page Content Here -->
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="/webjars/jquery/jquery.js"></script>
+<script src="/webjars/htmx.org/dist/htmx.min.js"></script>
+<script>
+    (() => {
+        const menuToggle = document.getElementById('admin-menu-toggle');
+        const mainMenu = document.getElementById('admin-menu');
+        const userToggle = document.getElementById('admin-user-dropdown-toggle');
+        const userMenu = document.getElementById('admin-user-dropdown-menu');
+
+        menuToggle?.addEventListener('click', () => {
+            mainMenu?.classList.toggle('hidden');
+        });
+
+        userToggle?.addEventListener('click', () => {
+            userMenu?.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!userToggle || !userMenu) {
+                return;
+            }
+            if (!userToggle.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+    })();
+</script>
+<div layout:fragment="pageScripts">
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+name: 'bookstore'
+services:
+  bookstore-postgres:
+    image: postgres:18-alpine
+    container_name: bookstore-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432"
+
+  redis:
+    image: redis:8.10.0
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
+
+  grafana-lgtm:
+    image: 'grafana/otel-lgtm:0.37.0'
+    ports:
+      - '3000:3000'
+      - '4317:4317'
+      - '4318:4318'

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div th:insert="~{partials/cart}"></div>
+    <div th:if="${cart.itemCount > 0 }" class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <div>
+            <a class="inline-flex items-center rounded-md border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-100" th:href="@{/books}">Continue Shopping</a>
+        </div>
+        <div>
+            <a class="inline-flex items-center rounded-md bg-sky-600 px-5 py-3 text-base font-semibold text-white transition hover:bg-sky-700" th:href="@{/orders/checkout}">Checkout</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

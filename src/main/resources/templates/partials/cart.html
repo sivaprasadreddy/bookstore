@@ -1,0 +1,57 @@
+<div id="cart" hx-swap-oob="true">
+    <div class="mx-auto w-full max-w-5xl">
+        <div th:if="${cart.itemCount <= 0 }" class="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+            <h3 class="text-xl font-semibold text-slate-700">Your cart is empty. <a class="text-sky-600 hover:text-sky-700 hover:underline" href="/">Continue shopping</a></h3>
+        </div>
+        <div th:if="${cart.itemCount > 0 }" class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-sm">
+                    <thead class="bg-slate-900 text-left text-slate-100">
+                    <tr>
+                        <th class="px-4 py-3 font-semibold">Image</th>
+                        <th class="px-4 py-3 font-semibold">Book Name</th>
+                        <th class="px-4 py-3 font-semibold">Price</th>
+                        <th class="px-4 py-3 font-semibold">Quantity</th>
+                        <th class="px-4 py-3 font-semibold">Sub Total</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 bg-white">
+                    <tr th:each="item: ${cart.items}" class="hover:bg-slate-50">
+                        <td class="px-4 py-3" data-label="Image">
+                            <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/books.png'}"
+                                 alt="Book Image"
+                                 class="h-20 w-16 rounded object-cover"
+                                 height="80"
+                                 width="60"
+                            />
+                        </td>
+                        <td class="px-4 py-3 font-medium text-slate-700" data-label="Book Name">[[${item.name}]]</td>
+                        <td class="px-4 py-3" data-label="Price">[[${item.price}]]</td>
+                        <td class="px-4 py-3" data-label="Quantity">
+                            <form>
+                                <input type="hidden" name="isbn" th:value="${item.isbn}"/>
+                                <input type="number" min="0"
+                                       class="w-20 rounded-md border border-slate-300 px-2 py-1 text-center"
+                                       name="quantity"
+                                       th:value="${item.quantity}"
+                                       hx-post="/update-cart"
+                                       hx-swap="none"
+                                />
+                            </form>
+                        </td>
+                        <td class="px-4 py-3 font-medium" data-label="Sub Total">[[${item.quantity * item.price}]]</td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="bg-slate-100 text-slate-800">
+                    <tr>
+                        <th class="px-4 py-3" colspan="4"></th>
+                        <th class="px-4 py-3 text-left font-semibold" colspan="1">
+                            Total Amount: [[${cart.totalAmount}]]
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

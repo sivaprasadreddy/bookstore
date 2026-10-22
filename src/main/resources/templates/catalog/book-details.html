@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="grid gap-6 md:grid-cols-12">
+            <div class="md:col-span-4">
+                <img th:src="${book.imageUrl}"
+                     src="/images/books.png"
+                     alt="Book Image"
+                     class="w-full rounded-lg object-cover"
+                     height="400" width="300"
+                />
+            </div>
+            <div class="md:col-span-8">
+                <h2 class="text-3xl font-bold text-slate-900" th:text="${book.name}">Book Name</h2>
+                <p class="mt-4"><strong>ISBN:</strong> <span th:text="${book.isbn}">ISBN</span></p>
+                <p class="mt-1"><strong>Price:</strong> <span th:text="${'$'+book.price}">Price</span></p>
+                <div class="mb-4 mt-6">
+                    <h4 class="text-lg font-semibold">Description</h4>
+                    <p class="mt-2 text-slate-700" th:text="${book.description}">Book Description</p>
+                </div>
+                <form method="post" th:action="@{/add-to-cart}">
+                    <div class="grid max-w-xs gap-2">
+                        <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                        <button class="inline-flex items-center justify-center rounded-md bg-sky-600 px-5 py-3 text-base font-semibold text-white transition hover:bg-sky-700"
+                                hx-post="/add-to-cart"
+                                hx-swap="none">
+                            Add to Cart
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-4">
+                    <a th:href="@{/books}" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Back to Books</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

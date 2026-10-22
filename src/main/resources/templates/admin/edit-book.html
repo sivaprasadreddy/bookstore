@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<body>
+<div layout:fragment="content">
+    <div class="mb-4 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-slate-900">Edit Book</h1>
+        <a th:href="@{/admin/books}" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
+            <i class="fas fa-arrow-left"></i> <span class="ml-2">Back to Books</span>
+        </a>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div th:if="${message}" class="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700" role="alert">
+            <span th:text="${message}">Success message</span>
+        </div>
+        <div th:if="${error}" class="mb-3 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+            <span th:text="${error}">Error message</span>
+        </div>
+
+        <form method="post"
+              th:method="put"
+              th:action="@{/admin/books/{isbn}(isbn=${bookForm.isbn})}"
+              th:object="${bookForm}">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-4">
+                <label for="isbn" class="mb-1 block text-sm font-medium text-slate-700">ISBN*</label>
+                <input type="text" class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2" id="isbn"
+                       readonly="readonly"
+                       th:field="*{isbn}"
+                       th:classappend="${#fields.hasErrors('isbn')} ? ' border-rose-500' : ''">
+                <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">ISBN Error</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="name" class="mb-1 block text-sm font-medium text-slate-700">Name*</label>
+                <input type="text" class="w-full rounded-md border border-slate-300 px-3 py-2" id="name"
+                       th:field="*{name}"
+                       th:classappend="${#fields.hasErrors('name')} ? ' border-rose-500' : ''">
+                <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="description" class="mb-1 block text-sm font-medium text-slate-700">Description</label>
+                <textarea class="w-full rounded-md border border-slate-300 px-3 py-2" id="description" rows="3"
+                          th:field="*{description}"
+                          th:classappend="${#fields.hasErrors('description')} ? ' border-rose-500' : ''"></textarea>
+                <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="imageUrl" class="mb-1 block text-sm font-medium text-slate-700">Image URL</label>
+                <input type="text" class="w-full rounded-md border border-slate-300 px-3 py-2" id="imageUrl"
+                       th:field="*{imageUrl}"
+                       th:classappend="${#fields.hasErrors('imageUrl')} ? ' border-rose-500' : ''">
+                <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">Image URL Error</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="price" class="mb-1 block text-sm font-medium text-slate-700">Price*</label>
+                <input type="number" step="0.01" class="w-full rounded-md border border-slate-300 px-3 py-2" id="price"
+                       th:field="*{price}"
+                       th:classappend="${#fields.hasErrors('price')} ? ' border-rose-500' : ''">
+                <div class="mt-1 text-sm text-rose-600" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</div>
+            </div>
+
+            <div class="flex flex-wrap justify-end gap-2">
+                <a th:href="@{/admin/books}" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">Cancel</a>
+                <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

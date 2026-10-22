@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div th:replace="~{partials/pagination :: pagination}"></div>
+    <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div th:each="book : ${ booksPage.data}">
+            <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                <a th:href="@{/books/{id}(id=${book.isbn})}">
+                    <img th:src="${book.imageUrl}"
+                         src="/images/books.png"
+                         alt="Book Image"
+                         class="h-72 w-full object-cover"
+                         height="300" width="200"
+                    />
+                </a>
+
+                <div class="flex flex-1 flex-col p-4">
+                    <h6 class="min-h-[3rem] text-sm font-semibold text-slate-800"
+                        data-toggle="tooltip"
+                        data-placement="top">
+                        <a th:href="@{/books/{id}(id=${book.isbn})}"
+                           th:text="${book.getDisplayName()}"
+                           class="hover:text-sky-700">book.name</a>
+                    </h6>
+                    <p class="mt-2 text-base font-semibold text-rose-600"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       th:text="${'Price: $'+book.price}">book.price</p>
+                </div>
+                <div class="p-4 pt-0">
+                    <form method="post" th:action="@{/add-to-cart}">
+                        <div class="grid gap-2">
+                            <input type="hidden" name="isbn" th:value="${book.isbn}"/>
+                            <button class="inline-flex w-full items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700"
+                                    hx-post="/add-to-cart"
+                                    hx-swap="none">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{partials/pagination :: pagination}"></div>
+</div>
+</body>
+</html>

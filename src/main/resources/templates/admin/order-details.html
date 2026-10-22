@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<body>
+<div layout:fragment="content">
+    <div class="mb-4 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-slate-900">Order Details</h1>
+        <a th:href="@{/admin/orders}" class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
+            <i class="fas fa-arrow-left"></i> <span class="ml-2">Back to Orders</span>
+        </a>
+    </div>
+
+    <div th:if="${message}" class="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700" role="alert">
+        <span th:text="${message}">Success message</span>
+    </div>
+    <div th:if="${error}" class="mb-3 rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+        <span th:text="${error}">Error message</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h5 class="mb-4 text-lg font-semibold text-slate-900">Order Summary</h5>
+            <div class="space-y-2 text-sm">
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Order Number:</div><div class="col-span-2" th:text="${order.orderNumber()}">ORD123</div></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="font-semibold">Status:</div>
+                    <div class="col-span-2">
+                        <span class="inline-flex rounded-full bg-sky-100 px-2 py-1 text-xs font-semibold text-sky-700"
+                              th:if="${order.status().name() == 'NEW'}"
+                              th:text="${order.status()}">NEW</span>
+                        <span class="inline-flex rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700"
+                              th:if="${order.status().name() == 'IN_PROCESS'}"
+                              th:text="${order.status()}">IN_PROCESS</span>
+                        <span class="inline-flex rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700"
+                              th:if="${order.status().name() == 'DELIVERED'}"
+                              th:text="${order.status()}">DELIVERED</span>
+                        <span class="inline-flex rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700"
+                              th:if="${order.status().name() == 'CANCELLED'}"
+                              th:text="${order.status()}">CANCELLED</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Total Amount:</div><div class="col-span-2" th:text="${'$' + order.getTotalAmount()}">$123.45</div></div>
+            </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h5 class="mb-4 text-lg font-semibold text-slate-900">Customer Information</h5>
+            <div class="space-y-2 text-sm">
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Name:</div><div class="col-span-2" th:text="${order.customer().name()}">John Doe</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Email:</div><div class="col-span-2" th:text="${order.customer().email()}">john@example.com</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Phone:</div><div class="col-span-2" th:text="${order.customer().phone()}">123-456-7890</div></div>
+            </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h5 class="mb-4 text-lg font-semibold text-slate-900">Delivery Address</h5>
+            <div class="space-y-2 text-sm">
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Address Line 1:</div><div class="col-span-2" th:text="${order.deliveryAddress().addressLine1()}">123 Main St</div></div>
+                <div class="grid grid-cols-3 gap-2" th:if="${order.deliveryAddress().addressLine2() != null}"><div class="font-semibold">Address Line 2:</div><div class="col-span-2" th:text="${order.deliveryAddress().addressLine2()}">Apt 4B</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">City:</div><div class="col-span-2" th:text="${order.deliveryAddress().city()}">New York</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">State:</div><div class="col-span-2" th:text="${order.deliveryAddress().state()}">NY</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Zip Code:</div><div class="col-span-2" th:text="${order.deliveryAddress().zipCode()}">10001</div></div>
+                <div class="grid grid-cols-3 gap-2"><div class="font-semibold">Country:</div><div class="col-span-2" th:text="${order.deliveryAddress().country()}">USA</div></div>
+            </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h5 class="mb-4 text-lg font-semibold text-slate-900">Order Actions</h5>
+            <form th:action="@{/admin/orders/{orderNumber}/status(orderNumber=${order.orderNumber()})}"
+                  th:method="put"
+                  method="post" class="space-y-4">
+                <div>
+                    <label for="status" class="mb-1 block text-sm font-medium text-slate-700">Update Status</label>
+                    <select id="status" name="status" class="w-full rounded-md border border-slate-300 px-3 py-2">
+                        <option th:each="status : ${statuses}"
+                                th:value="${status}"
+                                th:text="${status}"
+                                th:selected="${status == order.status()}">
+                            NEW
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label for="comments" class="mb-1 block text-sm font-medium text-slate-700">Comments</label>
+                    <textarea id="comments" name="comments" class="w-full rounded-md border border-slate-300 px-3 py-2" rows="3" th:text="${order.comments()}"></textarea>
+                </div>
+                <button type="submit" class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Update Status</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h5 class="mb-4 text-lg font-semibold text-slate-900">Order Items</h5>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <thead class="bg-slate-900 text-left text-slate-100">
+                <tr>
+                    <th class="px-4 py-3 font-semibold">ISBN</th>
+                    <th class="px-4 py-3 font-semibold">Name</th>
+                    <th class="px-4 py-3 font-semibold">Price</th>
+                    <th class="px-4 py-3 font-semibold">Quantity</th>
+                    <th class="px-4 py-3 font-semibold">Subtotal</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                <tr th:each="item : ${order.items()}" class="hover:bg-slate-50">
+                    <td class="px-4 py-3" th:text="${item.isbn()}">1234567890</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <img th:if="${item.imageUrl() != null}" th:src="${item.imageUrl()}" alt="Book Cover" class="h-auto w-12 rounded">
+                            <span th:text="${item.name()}">Book Title</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3" th:text="${'$' + item.price()}">$19.99</td>
+                    <td class="px-4 py-3" th:text="${item.quantity()}">2</td>
+                    <td class="px-4 py-3" th:text="${'$' + item.getSubTotal()}">$39.98</td>
+                </tr>
+                </tbody>
+                <tfoot class="bg-slate-100">
+                <tr>
+                    <td colspan="4" class="px-4 py-3 text-right font-semibold">Total:</td>
+                    <td class="px-4 py-3 font-semibold" th:text="${'$' + order.getTotalAmount()}">$123.45</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

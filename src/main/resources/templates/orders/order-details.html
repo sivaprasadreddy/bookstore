@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div>
+        <div th:if="${param.payment != null and param.payment[0] == 'success'}"
+             class="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+             role="status">
+            Payment completed successfully.
+        </div>
+        <h4 class="text-xl font-semibold">Order Number: <span th:text="${order.orderNumber}">orderNumber</span></h4>
+        <h4 class="mt-2 text-xl font-semibold">Order Status: <span th:text="${order.status}">status</span></h4>
+        <hr class="my-4 border-slate-200"/>
+        <div>
+            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm">
+                        <thead class="bg-slate-900 text-left text-slate-100">
+                        <tr>
+                            <th class="px-4 py-3 font-semibold" scope="col">Image</th>
+                            <th class="px-4 py-3 font-semibold" scope="col">Name</th>
+                            <th class="px-4 py-3 font-semibold" scope="col">Price</th>
+                            <th class="px-4 py-3 font-semibold" scope="col">Quantity</th>
+                            <th class="px-4 py-3 font-semibold" scope="col">Sub Total</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                        <tr th:each="item : ${order.items}" class="hover:bg-slate-50">
+                            <td class="px-4 py-3" data-label="Image">
+                                <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/books.png'}"
+                                     alt="Book Image"
+                                     class="h-20 w-16 rounded object-cover"
+                                     height="80"
+                                     width="60"/>
+                            </td>
+                            <td class="px-4 py-3" th:text="${item.name}">name</td>
+                            <td class="px-4 py-3" th:text="${item.price}">price</td>
+                            <td class="px-4 py-3" th:text="${item.quantity}">quantity</td>
+                            <td class="px-4 py-3" th:text="${item.quantity * item.price}">SubTotal</td>
+                        </tr>
+                        </tbody>
+                        <tfoot class="bg-slate-100 text-slate-800">
+                        <tr>
+                            <th class="px-4 py-3" colspan="4"></th>
+                            <th class="px-4 py-3 text-left font-semibold" colspan="1">
+                                Total Amount: <span th:text="${order.totalAmount}">totalAmount</span>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <form class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2" method="post">
+                <div>
+                    <label for="customerName" class="mb-1 block text-sm font-medium text-slate-700">Customer Name</label>
+                    <input type="text" class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="customerName"
+                           name="customerName"
+                           readonly
+                           th:value="${order.customer.name}"/>
+                </div>
+                <div>
+                    <label for="customerEmail" class="mb-1 block text-sm font-medium text-slate-700">Customer Email</label>
+                    <input type="email" class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="customerEmail"
+                           name="customerEmail"
+                           readonly
+                           th:value="${order.customer.email}">
+                </div>
+                <div>
+                    <label for="customerPhone" class="mb-1 block text-sm font-medium text-slate-700">Customer Phone</label>
+                    <input type="text" class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="customerPhone"
+                           name="customerPhone"
+                           readonly
+                           th:value="${order.customer.phone}">
+                </div>
+                <div>
+                    <label for="deliveryAddressLine1" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Line 1</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressLine1"
+                           name="deliveryAddressLine1"
+                           readonly
+                           th:value="${order.deliveryAddress.addressLine1}"/>
+                </div>
+                <div>
+                    <label for="deliveryAddressLine2" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Line 2</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressLine2"
+                           name="deliveryAddressLine2"
+                           readonly
+                           th:value="${order.deliveryAddress.addressLine2}"/>
+                </div>
+                <div>
+                    <label for="deliveryAddressCity" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address City</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressCity"
+                           name="deliveryAddressCity"
+                           readonly
+                           th:value="${order.deliveryAddress.city}"/>
+                </div>
+                <div>
+                    <label for="deliveryAddressState" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address State</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressState"
+                           name="deliveryAddressState"
+                           readonly
+                           th:value="${order.deliveryAddress.state}"/>
+                </div>
+                <div>
+                    <label for="deliveryAddressZipCode" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address ZipCode</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressZipCode"
+                           name="deliveryAddressZipCode"
+                           readonly
+                           th:value="${order.deliveryAddress.zipCode}"/>
+                </div>
+                <div>
+                    <label for="deliveryAddressCountry" class="mb-1 block text-sm font-medium text-slate-700">Delivery Address Country</label>
+                    <input class="w-full rounded-md border border-slate-300 bg-slate-100 px-3 py-2"
+                           id="deliveryAddressCountry"
+                           name="deliveryAddressCountry"
+                           readonly
+                           th:value="${order.deliveryAddress.country}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
