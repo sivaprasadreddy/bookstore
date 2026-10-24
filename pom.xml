@@ -27,7 +27,7 @@
         <font_awesome.version>7.3.0</font_awesome.version>
         <spotless.version>3.10.4</spotless.version>
         <palantir-java-format.version>2.102.0</palantir-java-format.version>
-        <taikai.version>2.2.0</taikai.version>
+        <taikai.version>2.3.0</taikai.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>75%</jacoco.minimum.coverage>
         <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
