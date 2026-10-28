@@ -1,44 +1,67 @@
 package com.sivalabs.bookstore;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
 
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.core.importer.ImportOption;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tngtech.archunit.core.domain.Dependency;
+import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
+import jakarta.persistence.Entity;
+import org.junit.jupiter.api.Order;
+import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Service;
 
+@Order(1)
+@AnalyzeClasses(packages = ArchUnitTests.BASE_PACKAGE)
 class ArchUnitTests {
-    private static final String ROOT_PACKAGE = "com.sivalabs.bookstore";
+    public static final String BASE_PACKAGE = "com.sivalabs.bookstore";
 
-    JavaClasses importedClasses = new ClassFileImporter()
-            .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-            .importPackages(ROOT_PACKAGE);
+    @ArchTest
+    static final ArchRule repositoriesShouldNotBePublic =
+            classes().that().areAssignableTo(Repository.class).should().notBePublic();
 
-    @Test
-    void shouldNotUseFieldInjection() {
-        noFields().should().beAnnotatedWith(Autowired.class).check(importedClasses);
-    }
+    @ArchTest
+    static final ArchRule entitiesShouldNotBePublic =
+            classes().that().areAnnotatedWith(Entity.class).should().notBePublic();
 
-    @Test
-    void shouldNotUseJunit4Classes() {
-        JavaClasses classes = new ClassFileImporter().importPackages(ROOT_PACKAGE);
+    @ArchTest
+    static final ArchRule controllersShouldNotBeAccessedByDomain = noClasses()
+            .that()
+            .resideInAPackage("..domain..")
+            .should()
+            .accessClassesThat()
+            .resideInAPackage("..web..");
 
-        noClasses()
-                .should()
-                .accessClassesThat()
-                .resideInAnyPackage("org.junit")
-                .because("Tests should use Junit5 instead of Junit4")
-                .check(classes);
+    // Services are public (accessible to inbound handlers in the same module),
+    // but must only be accessed from within their own module — other modules must go through *API facades.
+    @ArchTest
+    static final ArchRule servicesShouldNotBeUsedFromOtherModules = classes()
+            .that()
+            .areAnnotatedWith(Service.class)
+            .should(new ArchCondition<>("only be accessed from same module") {
+                @Override
+                public void check(JavaClass service, ConditionEvents events) {
+                    String serviceModule = moduleOf(service);
+                    for (Dependency dependency : service.getDirectDependenciesToSelf()) {
+                        JavaClass origin = dependency.getOriginClass();
+                        String originModule = moduleOf(origin);
+                        if (!serviceModule.equals(originModule)) {
+                            String message =
+                                    origin.getName() + " accesses " + service.getName() + " from another module";
+                            events.add(SimpleConditionEvent.violated(dependency, message));
+                        }
+                    }
+                }
+            });
 
-        noMethods()
-                .should()
-                .beAnnotatedWith("org.junit.Test")
-                .orShould()
-                .beAnnotatedWith("org.junit.Ignore")
-                .because("Tests should use Junit5 instead of Junit4")
-                .check(classes);
+    private static String moduleOf(JavaClass clazz) {
+        String pkg = clazz.getPackageName();
+        String[] parts = pkg.split("\\.");
+        return parts[BASE_PACKAGE.split("\\.").length];
     }
 }
