@@ -22,7 +22,7 @@
         <spring-modulith.version>2.1.2</spring-modulith.version>
         <datasource-micrometer-spring-boot.version>2.3.0</datasource-micrometer-spring-boot.version>
         <htmx-spring-boot-thymeleaf.version>6.0.1</htmx-spring-boot-thymeleaf.version>
-        <htmx.version>4.0.0</htmx.version>
+        <htmx.version>4.0.1</htmx.version>
         <jquery.version>4.0.0</jquery.version>
         <font_awesome.version>7.3.0</font_awesome.version>
         <spotless.version>3.10.4</spotless.version>
