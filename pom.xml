@@ -27,7 +27,7 @@
         <font_awesome.version>7.3.0</font_awesome.version>
         <spotless.version>3.12.0</spotless.version>
         <palantir-java-format.version>2.102.0</palantir-java-format.version>
-        <taikai.version>2.9.0</taikai.version>
+        <taikai.version>3.0.0</taikai.version>
         <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>75%</jacoco.minimum.coverage>
         <sonar-maven-plugin.version>5.9.0.7382</sonar-maven-plugin.version>
@@ -99,12 +99,12 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-logback-appender-1.0</artifactId>
-            <version>2.28.1-alpha</version>
+            <version>2.33.1-alpha</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-api-incubator</artifactId>
-            <version>1.62.0-alpha</version>
+            <version>1.67.0-alpha</version>
         </dependency>
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
